@@ -7,6 +7,9 @@ class GameScene extends Phaser.Scene {
         this.load.image('policia', '/Personajes/police.png');
         this.load.image('ladron', '/Personajes/ladron.png');
         this.load.image('red', '/Objetos/red.png');
+        this.load.image('rosquilla', '/Objetos/rosquilla.png');
+        this.load.image('cepo', '/Objetos/cepo.png');
+        this.load.image('reloj', '/Objetos/reloj.png');
         this.load.image('background', 'path/to/background.png');
         this.load.image('Suelo', '/Objetos/suelo.png');
         this.load.image('Pared', '/Objetos/Pared.png')
@@ -15,27 +18,52 @@ class GameScene extends Phaser.Scene {
     create() {
         // Agregar los personajes con físicas
         this.playerPolicia = this.physics.add.sprite(100, 300, 'policia');
-        this.playerLadron = this.physics.add.sprite(400, 300, 'ladron');
-        //this.objectRed = this.physics.add.sprite(250,300,'red');
+        this.playerLadron = this.physics.add.sprite(800, 300, 'ladron');
 
         // Ajustar el collider de los personajes
         this.playerPolicia.body.setSize(40, 85);  // Collider del policía
         this.playerLadron.body.setSize(40, 85);    // Collider del ladrón
 
+        // Configurar el temporizador inicial de 2 minutos (120 segundos)
+        this.timeLeft = 120;
+
+         // Crear el texto del temporizador, centrado en el eje X y en la parte superior de la pantalla
+         this.centerX = this.cameras.main.width / 2;
+         this.timerText = this.add.text(this.centerX, 60, this.formatTime(this.timeLeft), {
+             font: '80px Arial',
+             fill: '#fff'
+         }).setOrigin(0.5, 0);  // Centrar en X y poner en la parte superior
+
+         // Configurar evento de tiempo que reduce el contador cada segundo
+        this.timerEvent = this.time.addEvent({
+            delay: 1000,  // Cada segundo
+            callback: this.updateTimer,
+            callbackScope: this,
+            loop: true
+        });
+
         // Agregar objetos y suelo
-        this.objectRed = this.physics.add.staticImage(250,300,'red'); //red estática
-        this.objectSuelo = this.physics.add.staticImage(400, 500, 'Suelo');  // Suelo estático
-        this.objectPared = this.physics.add.staticImage(800, 300, 'Pared');  // Pared estática
+        this.objectRed = this.physics.add.staticImage(1200, 800, 'red'); //red estática
+        this.objectRosquilla = this.physics.add.staticImage(450, 800, 'rosquilla'); //rosquilla estatica
+        this.ObjectTrampa = this.physics.add.staticImage(1000, 400, 'cepo'); // Cepo estático
+        this.ObjectReloj = this.physics.add.staticImage(1500, 800,'reloj'); //Reloj estático
+        this.objectSuelo = this.physics.add.staticImage(500, 900, 'Suelo');  // Suelo estático
+        this.objectSuelo2 = this.physics.add.staticImage(1400, 900, 'Suelo');  // Suelo estático
+        this.objectPared = this.physics.add.staticImage(1000, 900, 'Pared');  // Pared estática
 
         // Lógica de control del ladrón
         this.LadronMovement = true;
+        this.PoliciaVelocity = 350;
+        this.LadronVelocity = 500;
 
         // Colisiones entre los personajes y el suelo
         this.physics.add.collider(this.playerPolicia, this.objectSuelo, this.resetJumpPolicia, null, this);
+        this.physics.add.collider(this.playerLadron, this.objectSuelo2, this.resetJumpLadron, null, this);
+        this.physics.add.collider(this.playerPolicia, this.objectSuelo2, this.resetJumpPolicia, null, this);
         this.physics.add.collider(this.playerLadron, this.objectSuelo, this.resetJumpLadron, null, this);
         this.physics.add.collider(this.playerPolicia, this.objectPared, this.handleWallCollisionPolicia, null, this);
         this.physics.add.collider(this.playerLadron, this.objectPared, this.handleWallCollisionLadron, null, this);
-        
+
         // Colisiones entre el policía y el objeto red
         this.physics.add.collider(this.playerPolicia, this.objectRed, () => {
             this.LadronMovement = false;
@@ -43,6 +71,31 @@ class GameScene extends Phaser.Scene {
             this.time.delayedCall(2000, () => {
                 this.LadronMovement = true;
             });
+        });
+
+        // Colisiones entre el policía y el objeto rosquilla
+        this.physics.add.collider(this.playerPolicia, this.objectRosquilla, () => {
+            this.PoliciaVelocity *= 2;  // Multiplicar la velocidad por 2
+            this.objectRosquilla.destroy();  // Destruir la rosquilla
+            this.time.delayedCall(3000, () => {  // Después de 5 segundos
+                this.PoliciaVelocity /= 2;  // Volver la velocidad a su valor original
+            });
+        });
+
+        // Colisiones entre el policía y el objeto trampa
+        this.physics.add.collider(this.playerPolicia, this.ObjectTrampa, () => {
+            this.LadronVelocity /= 2;  // Reducir la velocidad del ladron a la mitad
+            this.ObjectTrampa.destroy();  // Destruir la trampa
+            this.time.delayedCall(3000, () => {  // Después de 3 segundos
+                this.LadronVelocity *= 2;  // Volver la velocidad a su valor original
+            });
+        });
+
+        // Colisiones entre el policía y el reloj
+        this.physics.add.collider(this.playerPolicia, this.ObjectReloj, () => {
+            this.timeLeft += 20;  // Añadir 15 segundos al temporizador
+            this.timerText.setText(this.formatTime(this.timeLeft)); // Actualizar el texto del temporizador
+            this.ObjectReloj.destroy();  // Destruir el objeto reloj después de la colisión
         });
 
         // Controles del jugador (policía y ladrón)
@@ -59,13 +112,10 @@ class GameScene extends Phaser.Scene {
         this.isWallSlidingLadron = false;
         this.wallSlideTimePolicia = 0;
         this.wallSlideTimeLadron = 0;
-        this.wallSlideDuration = 1000;  // Duración de la "pegada" a la pared en milisegundos
-
-        // Crear texto para mostrar el contador de saltos
-        this.jumpText = this.add.text(20, 20, 'Jump Count: ', { font: '20px Arial', fill: '#fff' });
+        this.wallSlideDuration = 5000;  // Duración de la "pegada" a la pared en milisegundos
 
         // Asegurarse de que los jugadores no caigan fuera de los límites
-        this.playerPolicia.setCollideWorldBounds(true);  
+        this.playerPolicia.setCollideWorldBounds(true);
         this.playerLadron.setCollideWorldBounds(true);
 
         // Variables de control de tiempo para evitar múltiples saltos por tick
@@ -84,17 +134,17 @@ class GameScene extends Phaser.Scene {
 
         // Movimiento del policía con las flechas
         if (this.cursors.left.isDown) {
-            this.playerPolicia.setVelocityX(-300);
+            this.playerPolicia.setVelocityX(-this.PoliciaVelocity);
         } else if (this.cursors.right.isDown) {
-            this.playerPolicia.setVelocityX(300);
+            this.playerPolicia.setVelocityX(this.PoliciaVelocity);
         }
 
         // Movimiento del ladrón con las teclas WASD
         if (this.LadronMovement) {
             if (this.wasd.left.isDown) {
-                this.playerLadron.setVelocityX(-400);
+                this.playerLadron.setVelocityX(-this.LadronVelocity);
             } else if (this.wasd.right.isDown) {
-                this.playerLadron.setVelocityX(400);
+                this.playerLadron.setVelocityX(this.LadronVelocity);
             }
         }
 
@@ -108,10 +158,10 @@ class GameScene extends Phaser.Scene {
                 // Si está pegado a la pared, salta hacia el lado contrario
                 if (this.playerPolicia.body.blocked.left) {
                     this.playerPolicia.setVelocityY(-500);
-                    this.playerPolicia.setVelocityX(200); // Salta hacia la derecha
+                    this.playerPolicia.setVelocityX(2000); // Salta hacia la derecha
                 } else if (this.playerPolicia.body.blocked.right) {
                     this.playerPolicia.setVelocityY(-500);
-                    this.playerPolicia.setVelocityX(-200); // Salta hacia la izquierda
+                    this.playerPolicia.setVelocityX(-2000); // Salta hacia la izquierda
                 }
                 this.isWallSlidingPolicia = false;  // Dejar de estar pegado a la pared
             } else if (this.playerPolicia.body.touching.down || this.jumpCountPolicia < this.maxJumpCount) {
@@ -131,10 +181,10 @@ class GameScene extends Phaser.Scene {
                 // Si está pegado a la pared, salta hacia el lado contrario
                 if (this.playerLadron.body.blocked.left) {
                     this.playerLadron.setVelocityY(-500);
-                    this.playerLadron.setVelocityX(200); // Salta hacia la derecha
+                    this.playerLadron.setVelocityX(2000); // Salta hacia la derecha
                 } else if (this.playerLadron.body.blocked.right) {
                     this.playerLadron.setVelocityY(-500);
-                    this.playerLadron.setVelocityX(-200); // Salta hacia la izquierda
+                    this.playerLadron.setVelocityX(-2000); // Salta hacia la izquierda
                 }
                 this.isWallSlidingLadron = false;  // Dejar de estar pegado a la pared
             } else if (this.playerLadron.body.touching.down || this.jumpCountLadron < this.maxJumpCount) {
@@ -147,9 +197,22 @@ class GameScene extends Phaser.Scene {
                 this.canJumpLadron = true;  // Reactivar el salto después del cooldown
             });
         }
+    }
 
-        // Actualizar el texto para mostrar el contador de saltos
-        this.jumpText.setText(`Jump Count Policía: ${this.jumpCountPolicia}\nJump Count Ladrón: ${this.jumpCountLadron}`);
+    updateTimer() {
+        if (this.timeLeft > 0) {
+            this.timeLeft--;
+            this.timerText.setText(this.formatTime(this.timeLeft));
+        } else {
+            this.timerEvent.remove();
+            this.scene.start('ThiefVictoryScene');
+        }
+    }
+
+    formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const partInSeconds = seconds % 60;
+        return `${minutes}:${partInSeconds.toString().padStart(2, '0')}`;
     }
 
     // Detectar si el jugador está pegado a la pared
@@ -216,7 +279,7 @@ class GameScene extends Phaser.Scene {
     onCollision() {
         console.log('¡Colisión entre Policía y Ladrón!');
         // Aquí puedes poner lo que deseas hacer cuando los personajes colisionan (por ejemplo, reiniciar el juego o cambiar de escena)
-        this.scene.start('EndScene');
+        this.scene.start('PoliceVictoryScene');
     }
 }
 

@@ -8,21 +8,11 @@ html, body {
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
+ 
     background-color: #0308;
     overflow: hidden;
     
 }
 
-div {
-    width: 825px;          /* Ajusta al tamaño de tu juego */
-    height: 625px;
-    background-color: yellowgreen;
-    padding: 10px;
-    justify-content:center ;
-    /* Estilos del borde */
-    border-radius: 10px;          /* Bordes redondeados (opcional) */
 
-}
 
