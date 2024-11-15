@@ -10,7 +10,7 @@ class MainMenuScene extends Phaser.Scene {
 
     create() {
         // Añadir la imagen del botón y hacerla interactiva
-        const playButton = this.add.image(400, 300, 'boton')
+        const playButton = this.add.image(900, 500, 'boton')
             .setOrigin(0.5)
             .setInteractive();
 

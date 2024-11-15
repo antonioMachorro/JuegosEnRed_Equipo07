@@ -13,9 +13,37 @@ class GameScene extends Phaser.Scene {
         this.load.image('background', 'path/to/background.png');
         this.load.image('Suelo', '/Objetos/suelo.png');
         this.load.image('Pared', '/Objetos/Pared.png')
+        this.load.image('Modificador', '/Objetos/modificadores.png');
+        this.load.image('icono','/Objectos/icono.png');
+        this.load.image('trampilla', '/Objetos/trampilla.png');
+        this.load.image('cajaItems','/Objetos/cajaItems.png');
     }
 
     create() {
+
+        this.items = {
+            red:{
+                nombre: "red",
+                imagen: "red"
+            },
+
+            cepo:{
+                nombre: "cepo",
+                imagen:"cepo"
+            },
+            reloj:{
+                nombre: "reloj",
+                imagen:"reloj"
+            },
+            rosquilla:{
+                nombre: "rosquilla",
+                imagen:"rosquilla"
+            },
+        }
+
+        // Variable de trampilla
+        this.canUseTrampilla = true;
+
         // Agregar los personajes con físicas
         this.playerPolicia = this.physics.add.sprite(100, 300, 'policia');
         this.playerLadron = this.physics.add.sprite(800, 300, 'ladron');
@@ -43,13 +71,14 @@ class GameScene extends Phaser.Scene {
         });
 
         // Agregar objetos y suelo
-        this.objectRed = this.physics.add.staticImage(1200, 800, 'red'); //red estática
-        this.objectRosquilla = this.physics.add.staticImage(450, 800, 'rosquilla'); //rosquilla estatica
-        this.ObjectTrampa = this.physics.add.staticImage(1000, 400, 'cepo'); // Cepo estático
-        this.ObjectReloj = this.physics.add.staticImage(1500, 800,'reloj'); //Reloj estático
         this.objectSuelo = this.physics.add.staticImage(500, 900, 'Suelo');  // Suelo estático
         this.objectSuelo2 = this.physics.add.staticImage(1400, 900, 'Suelo');  // Suelo estático
         this.objectPared = this.physics.add.staticImage(1000, 900, 'Pared');  // Pared estática
+        this.ObjectCajaItems = this.add.image(1750, 100, 'cajaItems'); // Inventario del policia
+        this.objectIcono = this.add.image(1750, 100,'icono');
+        this.ObjectTrampilla1 = this.physics.add.staticImage(300, 800, 'trampilla');
+        this.ObjectTrampilla2 = this.physics.add.staticImage(1200, 800, 'trampilla');
+       
 
         // Lógica de control del ladrón
         this.LadronMovement = true;
@@ -64,39 +93,20 @@ class GameScene extends Phaser.Scene {
         this.physics.add.collider(this.playerPolicia, this.objectPared, this.handleWallCollisionPolicia, null, this);
         this.physics.add.collider(this.playerLadron, this.objectPared, this.handleWallCollisionLadron, null, this);
 
-        // Colisiones entre el policía y el objeto red
-        this.physics.add.collider(this.playerPolicia, this.objectRed, () => {
-            this.LadronMovement = false;
-            this.objectRed.destroy();
-            this.time.delayedCall(2000, () => {
-                this.LadronMovement = true;
-            });
-        });
-
-        // Colisiones entre el policía y el objeto rosquilla
-        this.physics.add.collider(this.playerPolicia, this.objectRosquilla, () => {
-            this.PoliciaVelocity *= 2;  // Multiplicar la velocidad por 2
-            this.objectRosquilla.destroy();  // Destruir la rosquilla
-            this.time.delayedCall(3000, () => {  // Después de 5 segundos
-                this.PoliciaVelocity /= 2;  // Volver la velocidad a su valor original
-            });
-        });
-
-        // Colisiones entre el policía y el objeto trampa
-        this.physics.add.collider(this.playerPolicia, this.ObjectTrampa, () => {
-            this.LadronVelocity /= 2;  // Reducir la velocidad del ladron a la mitad
-            this.ObjectTrampa.destroy();  // Destruir la trampa
-            this.time.delayedCall(3000, () => {  // Después de 3 segundos
-                this.LadronVelocity *= 2;  // Volver la velocidad a su valor original
-            });
-        });
-
-        // Colisiones entre el policía y el reloj
-        this.physics.add.collider(this.playerPolicia, this.ObjectReloj, () => {
-            this.timeLeft += 20;  // Añadir 15 segundos al temporizador
-            this.timerText.setText(this.formatTime(this.timeLeft)); // Actualizar el texto del temporizador
-            this.ObjectReloj.destroy();  // Destruir el objeto reloj después de la colisión
-        });
+        // Colisiones entre el ladrón y las trampillas
+        this.physics.add.overlap(this.playerLadron, this.ObjectTrampilla1, () => {
+            if (this.canUseTrampilla) {
+                this.teleportLadron(this.ObjectTrampilla2); // Teletransporta al ladrón a la trampilla 2
+                this.startTrampillaCooldown(); // Activar el cooldown
+            }
+        }, null, this);
+        
+        this.physics.add.overlap(this.playerLadron, this.ObjectTrampilla2, () => {
+            if (this.canUseTrampilla) {
+                this.teleportLadron(this.ObjectTrampilla1); // Teletransporta al ladrón a la trampilla 1
+                this.startTrampillaCooldown(); // Activar el cooldown
+            }
+        }, null, this);
 
         // Controles del jugador (policía y ladrón)
         this.cursors = this.input.keyboard.createCursorKeys();  // Para el policía (flecha arriba)
@@ -125,6 +135,96 @@ class GameScene extends Phaser.Scene {
 
         // Colisión entre los jugadores (policía y ladrón)
         this.physics.add.collider(this.playerPolicia, this.playerLadron, this.onCollision, null, this);
+
+        // Pool de objetos y coordenadas
+        this.objectPool = ['reloj', 'rosquilla', 'red', 'cepo'];
+        this.positionPool = [
+            { x: 500, y: 800 },
+            { x: 1300, y: 800 }
+        ];
+  
+        // Inventario del policia (vacio inicialmente)
+        this.policiaInventory = null;
+        this.objectIcono.setTexture(this.objectIcono.image);
+
+        // Generar un objeto Modificador en una posición aleatoria
+        this.spawnRandomModifier();
+
+        // Detectar cuando se presione la tecla Enter
+        this.input.keyboard.on('keydown-ENTER', (event) => {
+            this.useModifier();
+            
+        });
+    }
+
+    spawnRandomModifier() {
+        // Seleccionar una posición aleatoria de la pool
+        //const randomPos = Phaser.Utils.Array.RemoveRandomElement(this.positionPool);
+        if(this.policiaInventory == null){
+
+        const randomPos = this.positionPool[Math.floor(Math.random() * this.positionPool.length)];
+
+        // Crear un sprite en esa posición con la imagen de 'Modificador'
+        this.currentModifier = this.physics.add.staticImage(randomPos.x, randomPos.y, 'Modificador');
+
+        // Añadir colisión con el policía para recoger el modificador
+        this.physics.add.overlap(this.playerPolicia, this.currentModifier, this.collectModifier, null, this);
+        }
+    }
+
+    collectModifier() {
+        // Seleccionar un modificador aleatorio de la pool
+        const randomModifier = Phaser.Utils.Array.GetRandom(this.objectPool);
+        const key = this.items[randomModifier];
+        this.policiaInventory = randomModifier;
+
+        // Actualizar el texto de inventario en pantalla
+        //this.inventoryText.setText('Inventario: ' + randomModifier);
+        this.objectIcono.setTexture(key.imagen);
+        
+
+        // Eliminar el sprite del modificador del juego
+        this.currentModifier.destroy();
+    }
+
+    useModifier() {
+        if (!this.policiaInventory) return;
+
+        // Aplicar el efecto del modificador actual
+        switch (this.policiaInventory) {
+            case 'reloj':
+                this.timeLeft += 20;
+                this.timerText.setText(this.formatTime(this.timeLeft));
+                break;
+            case 'rosquilla':
+                this.PoliciaVelocity *= 2;
+                this.time.delayedCall(3000, () => {
+                    this.PoliciaVelocity /= 2;
+                });
+                break;
+            case 'red':
+                this.LadronMovement = false;
+                this.time.delayedCall(2000, () => {
+                    this.LadronMovement = true;
+                });
+                break;
+            case 'cepo':
+                this.LadronVelocity /= 2;
+                this.time.delayedCall(3000, () => {
+                    this.LadronVelocity *= 2;
+                });
+                break;
+        }
+
+        // Limpiar el inventario después de usar el modificador
+        this.policiaInventory = null;
+        this.objectIcono.setTexture(this.objectIcono.image);
+
+        // Generar un nuevo modificador después de usarlo
+        setTimeout(() => {
+            this.spawnRandomModifier()
+        }, 3000)
+        
     }
 
     update(time, delta) {
@@ -264,6 +364,28 @@ class GameScene extends Phaser.Scene {
         } else {
             this.isWallSlidingLadron = false;  // Terminar el tiempo pegado
         }
+    }
+
+    teleportLadron(targetTrampilla) {
+        // Cambiar las coordenadas del ladrón a las de la trampilla de destino
+        this.playerLadron.setX(targetTrampilla.x);
+        this.playerLadron.setY(targetTrampilla.y);
+    
+        // Añadir un pequeño salto hacia arriba
+        this.playerLadron.setVelocityY(-300);  // Valor negativo para saltar hacia arriba
+    
+        // Añadir un efecto visual opcional (como un parpadeo)
+        this.playerLadron.alpha = 0.5; // Cambiar temporalmente la opacidad
+        this.time.delayedCall(200, () => {
+            this.playerLadron.alpha = 1; // Restaurar la opacidad después de 200ms
+        });
+    }
+
+    startTrampillaCooldown() {
+        this.canUseTrampilla = false;
+        this.time.delayedCall(1000, () => {
+            this.canUseTrampilla = true;
+        });
     }
 
     // Resetear los contadores de saltos cuando los personajes tocan el suelo
