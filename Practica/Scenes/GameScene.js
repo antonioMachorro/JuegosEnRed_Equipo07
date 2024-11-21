@@ -4,19 +4,19 @@ class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('policia', '/Personajes/police.png');
-        this.load.image('ladron', '/Personajes/ladron.png');
-        this.load.image('red', '/Objetos/red.png');
-        this.load.image('rosquilla', '/Objetos/rosquilla.png');
-        this.load.image('cepo', '/Objetos/cepo.png');
-        this.load.image('reloj', '/Objetos/reloj.png');
+        this.load.image('policia', './Personajes/police.png');
+        this.load.image('ladron', './Personajes/ladron.png');
+        this.load.image('red', './Objetos/red.png');
+        this.load.image('rosquilla', './Objetos/rosquilla.png');
+        this.load.image('cepo', './Objetos/cepo.png');
+        this.load.image('reloj', './Objetos/reloj.png');
         this.load.image('background', 'path/to/background.png');
-        this.load.image('Suelo', '/Objetos/suelo.png');
-        this.load.image('Pared', '/Objetos/Pared.png')
-        this.load.image('Modificador', '/Objetos/modificadores.png');
-        this.load.image('icono','/Objectos/icono.png');
-        this.load.image('trampilla', '/Objetos/trampilla.png');
-        this.load.image('cajaItems','/Objetos/cajaItems.png');
+        this.load.image('Suelo', './Objetos/suelo.png');
+        this.load.image('Pared', './Objetos/Pared.png')
+        this.load.image('Modificador', './Objetos/modificadores.png');
+        this.load.image('icono','./Objectos/icono.png');
+        this.load.image('trampilla', './Objetos/trampilla.png');
+        this.load.image('cajaItems','./Objetos/cajaItems.png');
     }
 
     create() {
@@ -120,9 +120,16 @@ class GameScene extends Phaser.Scene {
         // Variables para el control del pegado a la pared
         this.isWallSlidingPolicia = false;
         this.isWallSlidingLadron = false;
+
         this.wallSlideTimePolicia = 0;
         this.wallSlideTimeLadron = 0;
         this.wallSlideDuration = 5000;  // Duración de la "pegada" a la pared en milisegundos
+
+        this.isWallSlideJumpingPolicia = false;
+        this.isWallSlideJumpingLadron = false;
+
+        this.wallSlideJumpPositionPolicia = 0;
+        this.wallSlideJumpPositionLadron = 0;
 
         // Asegurarse de que los jugadores no caigan fuera de los límites
         this.playerPolicia.setCollideWorldBounds(true);
@@ -228,23 +235,43 @@ class GameScene extends Phaser.Scene {
     }
 
     update(time, delta) {
-        // Establecer la velocidad en X a cero antes de procesar el movimiento
-        this.playerPolicia.setVelocityX(0);
-        this.playerLadron.setVelocityX(0);
+        // Establecer la velocidad en X a cero antes de procesar el movimiento si no está en el salto de pared.
+        if(!this.isWallSlideJumpingPolicia){
+            this.playerPolicia.setVelocityX(0);
+        } else {
+            if(this.playerPolicia.body.x === this.wallSlideJumpPositionPolicia)
+            {
+                this.isWallSlideJumpingPolicia = false;
+            }
+        }
+
+        if(!this.isWallSlideJumpingLadron){
+            this.playerLadron.setVelocityX(0);
+        } else {
+            if(this.playerLadron.body.x === this.wallSlideJumpPositionLadron)
+            {
+                this.isWallSlideJumpingLadron = false;
+            }
+        }
 
         // Movimiento del policía con las flechas
-        if (this.cursors.left.isDown) {
-            this.playerPolicia.setVelocityX(-this.PoliciaVelocity);
-        } else if (this.cursors.right.isDown) {
-            this.playerPolicia.setVelocityX(this.PoliciaVelocity);
+        if(!this.isWallSlideJumpingPolicia)
+        {
+            if (this.cursors.left.isDown) {
+                this.playerPolicia.setVelocityX(-this.PoliciaVelocity);
+            } else if (this.cursors.right.isDown) {
+                this.playerPolicia.setVelocityX(this.PoliciaVelocity);
+            }
         }
 
         // Movimiento del ladrón con las teclas WASD
-        if (this.LadronMovement) {
-            if (this.wasd.left.isDown) {
-                this.playerLadron.setVelocityX(-this.LadronVelocity);
-            } else if (this.wasd.right.isDown) {
-                this.playerLadron.setVelocityX(this.LadronVelocity);
+        if(!this.isWallSlideJumpingLadron) {
+            if (this.LadronMovement) {
+                if (this.wasd.left.isDown) {
+                    this.playerLadron.setVelocityX(-this.LadronVelocity);
+                } else if (this.wasd.right.isDown) {
+                    this.playerLadron.setVelocityX(this.LadronVelocity);
+                }
             }
         }
 
@@ -257,11 +284,15 @@ class GameScene extends Phaser.Scene {
             if (this.isWallSlidingPolicia) {
                 // Si está pegado a la pared, salta hacia el lado contrario
                 if (this.playerPolicia.body.blocked.left) {
-                    this.playerPolicia.setVelocityY(-500);
-                    this.playerPolicia.setVelocityX(2000); // Salta hacia la derecha
+                    this.isWallSlideJumpingPolicia = true;
+                    this.wallSlideJumpPositionPolicia = this.playerPolicia.body.x + 30;
+                    this.playerPolicia.setVelocityY(-600);
+                    this.playerPolicia.setVelocityX(300); // Salta hacia la derecha
                 } else if (this.playerPolicia.body.blocked.right) {
-                    this.playerPolicia.setVelocityY(-500);
-                    this.playerPolicia.setVelocityX(-2000); // Salta hacia la izquierda
+                    this.isWallSlideJumpingPolicia = true;
+                    this.wallSlideJumpPositionPolicia = this.playerPolicia.body.x - 30;
+                    this.playerPolicia.setVelocityY(-600);
+                    this.playerPolicia.setVelocityX(-300); // Salta hacia la izquierda
                 }
                 this.isWallSlidingPolicia = false;  // Dejar de estar pegado a la pared
             } else if (this.playerPolicia.body.touching.down || this.jumpCountPolicia < this.maxJumpCount) {
@@ -280,11 +311,15 @@ class GameScene extends Phaser.Scene {
             if (this.isWallSlidingLadron) {
                 // Si está pegado a la pared, salta hacia el lado contrario
                 if (this.playerLadron.body.blocked.left) {
-                    this.playerLadron.setVelocityY(-500);
-                    this.playerLadron.setVelocityX(2000); // Salta hacia la derecha
+                    this.isWallSlideJumpingLadron = true;
+                    this.wallSlideJumpPositionLadron = this.playerLadron.body.x + 30;
+                    this.playerLadron.setVelocityY(-600);
+                    this.playerLadron.setVelocityX(300); // Salta hacia la derecha
                 } else if (this.playerLadron.body.blocked.right) {
-                    this.playerLadron.setVelocityY(-500);
-                    this.playerLadron.setVelocityX(-2000); // Salta hacia la izquierda
+                    this.isWallSlideJumpingLadron = true;
+                    this.wallSlideJumpPositionLadron = this.playerLadron.body.x - 30;
+                    this.playerLadron.setVelocityY(-600);
+                    this.playerLadron.setVelocityX(-300); // Salta hacia la izquierda
                 }
                 this.isWallSlidingLadron = false;  // Dejar de estar pegado a la pared
             } else if (this.playerLadron.body.touching.down || this.jumpCountLadron < this.maxJumpCount) {
@@ -347,7 +382,7 @@ class GameScene extends Phaser.Scene {
             this.playerPolicia.setVelocityY(0);  // Detener la caída
             this.wallSlideTimePolicia -= 10;  // Reducir el tiempo de pegado (cada tick)
             // Reiniciar contador de saltos cuando colisiona con la pared
-            this.jumpCountPolicia = 0;
+            this.jumpCountPolicia = 1;
         } else {
             this.isWallSlidingPolicia = false;  // Terminar el tiempo pegado
         }
@@ -360,7 +395,7 @@ class GameScene extends Phaser.Scene {
             this.playerLadron.setVelocityY(0);  // Detener la caída
             this.wallSlideTimeLadron -= 10;  // Reducir el tiempo de pegado (cada tick)
             // Reiniciar contador de saltos cuando colisiona con la pared
-            this.jumpCountLadron = 0;
+            this.jumpCountLadron = 1;
         } else {
             this.isWallSlidingLadron = false;  // Terminar el tiempo pegado
         }
