@@ -3,6 +3,17 @@ class GameScene extends Phaser.Scene {
         super({ key: 'GameScene' });
     }
 
+    init() {
+        if (this.registry.get('policeRounds') === undefined) {
+            this.registry.set('policeRounds', 0);
+        }
+        if (this.registry.get('thiefRounds') === undefined) {
+            this.registry.set('thiefRounds', 0);
+        }
+
+        this.collisionDetected = false;
+    }
+
     preload() {
         this.load.image('policia', './Personajes/police.png');
         this.load.image('ladron', './Personajes/ladron.png');
@@ -20,6 +31,11 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+
+        this.roundsText = this.add.text(0, 0, this.registry.get('policeRounds'), {
+            font: '80px Arial',
+            fill: '#fff'
+        }).setOrigin(0.5);
 
         this.items = {
             red:{
@@ -258,9 +274,9 @@ class GameScene extends Phaser.Scene {
         if(!this.isWallSlideJumpingPolicia)
         {
             if (this.cursors.left.isDown) {
-                this.playerPolicia.setVelocityX(-this.PoliciaVelocity);
+                this.playerPolicia.setVelocityX(-this.PoliciaVelocity * this.time.timeScale);
             } else if (this.cursors.right.isDown) {
-                this.playerPolicia.setVelocityX(this.PoliciaVelocity);
+                this.playerPolicia.setVelocityX(this.PoliciaVelocity * this.time.timeScale);
             }
         }
 
@@ -268,9 +284,9 @@ class GameScene extends Phaser.Scene {
         if(!this.isWallSlideJumpingLadron) {
             if (this.LadronMovement) {
                 if (this.wasd.left.isDown) {
-                    this.playerLadron.setVelocityX(-this.LadronVelocity);
+                    this.playerLadron.setVelocityX(-this.LadronVelocity * this.time.timeScale);
                 } else if (this.wasd.right.isDown) {
-                    this.playerLadron.setVelocityX(this.LadronVelocity);
+                    this.playerLadron.setVelocityX(this.LadronVelocity * this.time.timeScale);
                 }
             }
         }
@@ -286,18 +302,18 @@ class GameScene extends Phaser.Scene {
                 if (this.playerPolicia.body.blocked.left) {
                     this.isWallSlideJumpingPolicia = true;
                     this.wallSlideJumpPositionPolicia = this.playerPolicia.body.x + 30;
-                    this.playerPolicia.setVelocityY(-600);
-                    this.playerPolicia.setVelocityX(300); // Salta hacia la derecha
+                    this.playerPolicia.setVelocityY(-600 * this.time.timeScale);
+                    this.playerPolicia.setVelocityX(300 * this.time.timeScale); // Salta hacia la derecha
                 } else if (this.playerPolicia.body.blocked.right) {
                     this.isWallSlideJumpingPolicia = true;
                     this.wallSlideJumpPositionPolicia = this.playerPolicia.body.x - 30;
-                    this.playerPolicia.setVelocityY(-600);
-                    this.playerPolicia.setVelocityX(-300); // Salta hacia la izquierda
+                    this.playerPolicia.setVelocityY(-600 * this.time.timeScale);
+                    this.playerPolicia.setVelocityX(-300 * this.time.timeScale); // Salta hacia la izquierda
                 }
                 this.isWallSlidingPolicia = false;  // Dejar de estar pegado a la pared
             } else if (this.playerPolicia.body.touching.down || this.jumpCountPolicia < this.maxJumpCount) {
                 // Si toca el suelo o tiene saltos disponibles, permite el salto
-                this.playerPolicia.setVelocityY(-500);
+                this.playerPolicia.setVelocityY(-500 * this.time.timeScale);
                 this.jumpCountPolicia++;  // Incrementa el contador de saltos
             }
             this.canJumpPolicia = false;  // Desactivar el salto por un tiempo
@@ -313,18 +329,18 @@ class GameScene extends Phaser.Scene {
                 if (this.playerLadron.body.blocked.left) {
                     this.isWallSlideJumpingLadron = true;
                     this.wallSlideJumpPositionLadron = this.playerLadron.body.x + 30;
-                    this.playerLadron.setVelocityY(-600);
-                    this.playerLadron.setVelocityX(300); // Salta hacia la derecha
+                    this.playerLadron.setVelocityY(-600 * this.time.timeScale);
+                    this.playerLadron.setVelocityX(300 * this.time.timeScale); // Salta hacia la derecha
                 } else if (this.playerLadron.body.blocked.right) {
                     this.isWallSlideJumpingLadron = true;
                     this.wallSlideJumpPositionLadron = this.playerLadron.body.x - 30;
-                    this.playerLadron.setVelocityY(-600);
-                    this.playerLadron.setVelocityX(-300); // Salta hacia la izquierda
+                    this.playerLadron.setVelocityY(-600 * this.time.timeScale);
+                    this.playerLadron.setVelocityX(-300 * this.time.timeScale); // Salta hacia la izquierda
                 }
                 this.isWallSlidingLadron = false;  // Dejar de estar pegado a la pared
             } else if (this.playerLadron.body.touching.down || this.jumpCountLadron < this.maxJumpCount) {
                 // Si toca el suelo o tiene saltos disponibles, permite el salto
-                this.playerLadron.setVelocityY(-500);
+                this.playerLadron.setVelocityY(-500 * this.time.timeScale);
                 this.jumpCountLadron++;  // Incrementa el contador de saltos
             }
             this.canJumpLadron = false;  // Desactivar el salto por un tiempo
@@ -340,7 +356,17 @@ class GameScene extends Phaser.Scene {
             this.timerText.setText(this.formatTime(this.timeLeft));
         } else {
             this.timerEvent.remove();
-            this.scene.start('ThiefVictoryScene');
+
+            const thiefRounds = this.registry.get('thiefRounds');
+            this.registry.set('thiefRounds', thiefRounds);
+
+            if(thiefRounds >= 3)
+            {
+                this.scene.start('ThiefVictoryScene');
+                this.registry.set('thiefRounds', 0);
+            } else {
+                this.playRoundWin('Thief');
+            }
         }
     }
 
@@ -407,7 +433,7 @@ class GameScene extends Phaser.Scene {
         this.playerLadron.setY(targetTrampilla.y);
     
         // Añadir un pequeño salto hacia arriba
-        this.playerLadron.setVelocityY(-300);  // Valor negativo para saltar hacia arriba
+        this.playerLadron.setVelocityY(-300 * this.time.timeScale);  // Valor negativo para saltar hacia arriba
     
         // Añadir un efecto visual opcional (como un parpadeo)
         this.playerLadron.alpha = 0.5; // Cambiar temporalmente la opacidad
@@ -434,9 +460,49 @@ class GameScene extends Phaser.Scene {
 
     // Función que se llama cuando los jugadores colisionan
     onCollision() {
+        if(this.collisionDetected) return;
+
         console.log('¡Colisión entre Policía y Ladrón!');
+        this.collisionDetected = true;
+        
+        const policeRounds = this.registry.get('policeRounds') + 1;
+        this.registry.set('policeRounds', policeRounds);
+
         // Aquí puedes poner lo que deseas hacer cuando los personajes colisionan (por ejemplo, reiniciar el juego o cambiar de escena)
-        this.scene.start('PoliceVictoryScene');
+        if(policeRounds >= 3)
+        {
+            this.scene.start('PoliceVictoryScene');
+            this.registry.set('policeRounds', 0);
+        } else {
+            this.playRoundWin('Police');
+        }
+        
+    }
+
+    playRoundWin(winner)
+    {
+        this.time.timeScale = 0.1;
+        //this.input.keyboard.enabled = false;
+
+        const winnerText = this.add.text(this.centerX, this.cameras.main.height / 2,
+            `${winner} Wins This Round!`,
+            {
+                font: '80px Arial',
+                fill: '#fff',
+                backgroundColor: '#000'
+            }).setOrigin(0.5);
+
+        winnerText.setDepth(9999);
+
+        const fadeDuration = 300;
+        //this.cameras.main.fadeOut(fadeDuration, 0, 0, 0);
+
+        this.time.delayedCall(fadeDuration, () => {
+            this.time.timeScale = 1;
+            //this.cameras.main.fadeIn(0);
+            this.scene.restart();
+            this.input.keyboard.enabled = true;
+        })
     }
 }
 

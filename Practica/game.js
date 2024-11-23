@@ -11,7 +11,7 @@ const config = {
     width: 1920, //Cambiar la ventana de juego aqui y en el archivo CSS
     height: 1080,
     parent: 'gameContainer',  // Contenedor en el HTML
-    scene: [MainMenuScene,GameScene, ThiefVictoryScene, PoliceVictoryScene, CreditsScene],  // Agrega todas tus escenas aquí
+    scene: [MainMenuScene, GameScene, ThiefVictoryScene, PoliceVictoryScene, CreditsScene],  // Agrega todas tus escenas aquí
     physics: {
         default: 'arcade',
         arcade: {
