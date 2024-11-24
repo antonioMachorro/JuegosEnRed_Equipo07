@@ -3,7 +3,7 @@ class GameScene extends Phaser.Scene {
         super({ key: 'GameScene' });
     }
 
-    init() {
+    init(data) {
         if (this.registry.get('policeRounds') === undefined) {
             this.registry.set('policeRounds', 0);
         }
@@ -12,6 +12,7 @@ class GameScene extends Phaser.Scene {
         }
 
         this.collisionDetected = false;
+        this.player1IsPolice = data.player1IsPolice;
     }
 
     preload() {
@@ -31,11 +32,6 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
-
-        this.roundsText = this.add.text(0, 0, this.registry.get('policeRounds'), {
-            font: '80px Arial',
-            fill: '#fff'
-        }).setOrigin(0.5);
 
         this.items = {
             red:{
@@ -125,6 +121,14 @@ class GameScene extends Phaser.Scene {
         }, null, this);
 
         // Controles del jugador (policía y ladrón)
+        if(this.player1IsPolice){
+            this.policeControls = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });
+            this.thiefControls = this.input.keyboard.createCursorKeys();
+        } else {
+            this.policeControls = this.input.keyboard.createCursorKeys();
+            this.thiefControls = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });
+        }
+
         this.cursors = this.input.keyboard.createCursorKeys();  // Para el policía (flecha arriba)
         this.wasd = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });  // Para el ladrón (W)
 
@@ -273,9 +277,9 @@ class GameScene extends Phaser.Scene {
         // Movimiento del policía con las flechas
         if(!this.isWallSlideJumpingPolicia)
         {
-            if (this.cursors.left.isDown) {
+            if (this.policeControls.left.isDown) {
                 this.playerPolicia.setVelocityX(-this.PoliciaVelocity * this.time.timeScale);
-            } else if (this.cursors.right.isDown) {
+            } else if (this.policeControls.right.isDown) {
                 this.playerPolicia.setVelocityX(this.PoliciaVelocity * this.time.timeScale);
             }
         }
@@ -283,9 +287,9 @@ class GameScene extends Phaser.Scene {
         // Movimiento del ladrón con las teclas WASD
         if(!this.isWallSlideJumpingLadron) {
             if (this.LadronMovement) {
-                if (this.wasd.left.isDown) {
+                if (this.thiefControls.left.isDown) {
                     this.playerLadron.setVelocityX(-this.LadronVelocity * this.time.timeScale);
-                } else if (this.wasd.right.isDown) {
+                } else if (this.thiefControls.right.isDown) {
                     this.playerLadron.setVelocityX(this.LadronVelocity * this.time.timeScale);
                 }
             }
@@ -296,7 +300,7 @@ class GameScene extends Phaser.Scene {
         this.checkWallSlide(this.playerLadron);
 
         // Salto del policía (doble salto)
-        if (this.cursors.up.isDown && this.canJumpPolicia) {
+        if (this.policeControls.up.isDown && this.canJumpPolicia) {
             if (this.isWallSlidingPolicia) {
                 // Si está pegado a la pared, salta hacia el lado contrario
                 if (this.playerPolicia.body.blocked.left) {
@@ -323,7 +327,7 @@ class GameScene extends Phaser.Scene {
         }
 
         // Salto del ladrón (doble salto)
-        if (this.wasd.up.isDown && this.canJumpLadron) {
+        if (this.thiefControls.up.isDown && this.canJumpLadron) {
             if (this.isWallSlidingLadron) {
                 // Si está pegado a la pared, salta hacia el lado contrario
                 if (this.playerLadron.body.blocked.left) {

@@ -32,7 +32,7 @@ class MainMenuScene extends Phaser.Scene {
             .setTint(0xff7d7d)
             .setInteractive();
         creditsButton.on('pointerdown', () => {
-            this.scene.start('CreditsScene');
+            this.scene.start('RoleSelectScene');
         })
     }
 }
