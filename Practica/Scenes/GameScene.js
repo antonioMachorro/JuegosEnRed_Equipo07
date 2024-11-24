@@ -4,15 +4,18 @@ class GameScene extends Phaser.Scene {
     }
 
     init(data) {
-        if (this.registry.get('policeRounds') === undefined) {
-            this.registry.set('policeRounds', 0);
+        if (this.registry.get('player1Rounds') === undefined) {
+            this.registry.set('player1Rounds', 0);
         }
-        if (this.registry.get('thiefRounds') === undefined) {
-            this.registry.set('thiefRounds', 0);
+        if (this.registry.get('player2Rounds') === undefined) {
+            this.registry.set('player2Rounds', 0);
+        }
+
+        if(this.registry.get('player1IsPolice') === undefined) {
+            this.registry.set('player1IsPolice', data.player1IsPolice);
         }
 
         this.collisionDetected = false;
-        this.player1IsPolice = data.player1IsPolice;
     }
 
     preload() {
@@ -32,6 +35,8 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+
+        const { width, height } = this.scale;
 
         this.items = {
             red:{
@@ -65,7 +70,7 @@ class GameScene extends Phaser.Scene {
         this.playerLadron.body.setSize(40, 85);    // Collider del ladrón
 
         // Configurar el temporizador inicial de 2 minutos (120 segundos)
-        this.timeLeft = 120;
+        this.timeLeft = 20;
 
          // Crear el texto del temporizador, centrado en el eje X y en la parte superior de la pantalla
          this.centerX = this.cameras.main.width / 2;
@@ -121,7 +126,7 @@ class GameScene extends Phaser.Scene {
         }, null, this);
 
         // Controles del jugador (policía y ladrón)
-        if(this.player1IsPolice){
+        if(this.registry.get('player1IsPolice')){
             this.policeControls = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });
             this.thiefControls = this.input.keyboard.createCursorKeys();
         } else {
@@ -129,8 +134,8 @@ class GameScene extends Phaser.Scene {
             this.thiefControls = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });
         }
 
-        this.cursors = this.input.keyboard.createCursorKeys();  // Para el policía (flecha arriba)
-        this.wasd = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });  // Para el ladrón (W)
+        //this.cursors = this.input.keyboard.createCursorKeys();  // Para el policía (flecha arriba)
+        //this.wasd = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });  // Para el ladrón (W)
 
         // Variables para manejar el doble salto
         this.jumpCountPolicia = 0;  // Contador de saltos del policía
@@ -182,6 +187,9 @@ class GameScene extends Phaser.Scene {
             this.useModifier();
             
         });
+
+        this.add.text(width/4, 50, `Jugador 1: ${this.registry.get('player1Rounds')}`, {fontSize: '32px', fill:'#ffff'}).setOrigin(0.5);
+        this.add.text(width - width/4, 50, `Jugador 2: ${this.registry.get('player2Rounds')}`, {fontSize: '32px', fill:'#ffff'}).setOrigin(0.5);
     }
 
     spawnRandomModifier() {
@@ -361,15 +369,34 @@ class GameScene extends Phaser.Scene {
         } else {
             this.timerEvent.remove();
 
-            const thiefRounds = this.registry.get('thiefRounds');
-            this.registry.set('thiefRounds', thiefRounds);
+            let player1IsPolice = this.registry.get('player1IsPolice');
+            this.registry.set('player1IsPolice', !player1IsPolice)
 
-            if(thiefRounds >= 3)
+            if(player1IsPolice)
             {
-                this.scene.start('ThiefVictoryScene');
-                this.registry.set('thiefRounds', 0);
+                const player2Rounds = this.registry.get('player2Rounds') + 1;
+                this.registry.set('player2Rounds', player2Rounds);
+
+                if(player2Rounds >= 3)
+                {
+                    this.scene.start('VictoryScene', {winner: 'Jugador 2'});
+                    this.registry.set('player1Rounds', 0)
+                    this.registry.set('player2Rounds', 0);
+                } else {
+                    this.playRoundWin('Ladrón');
+                }
             } else {
-                this.playRoundWin('Thief');
+                const player1Rounds = this.registry.get('player1Rounds') + 1;
+                this.registry.set('player1Rounds', player1Rounds);
+
+                if(player1Rounds >= 3)
+                {
+                    this.scene.start('VictoryScene', {winner: 'Jugador 1'});
+                    this.registry.set('player1Rounds', 0)
+                    this.registry.set('player2Rounds', 0);
+                } else {
+                    this.playRoundWin('Ladrón');
+                }
             }
         }
     }
@@ -469,18 +496,36 @@ class GameScene extends Phaser.Scene {
         console.log('¡Colisión entre Policía y Ladrón!');
         this.collisionDetected = true;
         
-        const policeRounds = this.registry.get('policeRounds') + 1;
-        this.registry.set('policeRounds', policeRounds);
+        let player1IsPolice = this.registry.get('player1IsPolice');
+        this.registry.set('player1IsPolice', !player1IsPolice)
 
         // Aquí puedes poner lo que deseas hacer cuando los personajes colisionan (por ejemplo, reiniciar el juego o cambiar de escena)
-        if(policeRounds >= 3)
+        if(player1IsPolice)
         {
-            this.scene.start('PoliceVictoryScene');
-            this.registry.set('policeRounds', 0);
+            const player1Rounds = this.registry.get('player1Rounds') + 1;
+            this.registry.set('player1Rounds', player1Rounds);
+
+            if(player1Rounds >= 3)
+            {
+                this.scene.start('VictoryScene', {winner: 'Jugador 1'});
+                this.registry.set('player1Rounds', 0);
+                this.registry.set('player2Rounds', 0);
+            } else {
+                this.playRoundWin('Policia');
+            }
         } else {
-            this.playRoundWin('Police');
+            const player2Rounds = this.registry.get('player2Rounds') + 1;
+            this.registry.set('player2Rounds', player2Rounds);
+
+            if(player2Rounds >= 3)
+            {
+                this.scene.start('VictoryScene', {winner: 'Jugador 2'});
+                this.registry.set('player1Rounds', 0);
+                this.registry.set('player2Rounds', 0);
+            } else {
+                this.playRoundWin('Policia');
+            }
         }
-        
     }
 
     playRoundWin(winner)
