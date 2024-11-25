@@ -427,6 +427,19 @@ class GameScene extends Phaser.Scene {
                 this.canJumpLadron = true;  // Reactivar el salto después del cooldown
             });
         }
+
+        // Detectar si el ladrón está acelerando
+        if (this.thiefControls.down.isDown && !this.isBoosting) {
+            this.isBoosting = true; // Bloquea nuevas aceleraciones
+            this.LadronVelocity += 300; // Incrementa la velocidad
+            this.time.delayedCall(200, () => {
+        this.LadronVelocity -= 300; // Restaura la velocidad normal
+            });
+            // Reinicia la capacidad de acelerar después de 2 segundos
+            this.time.delayedCall(2000, () => {
+            this.isBoosting = false; // Permite volver a acelerar
+            });
+        }
     }
 
     updateTimer() {
