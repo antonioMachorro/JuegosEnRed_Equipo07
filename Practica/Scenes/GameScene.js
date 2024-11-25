@@ -119,6 +119,12 @@ class GameScene extends Phaser.Scene {
         this.ground.create(1800, 650, 'Suelo');
         this.ground.create(1000, 900, 'Pared');
 
+        const physicsCollider = this.physics.add.staticImage(200, 800)
+            .setSize(50, 500)
+            .setVisible(false);
+        
+        this.ground.add(physicsCollider);
+
         this.ObjectCajaItems = this.add.image(1750, 100, 'cajaItems'); // Inventario del policia
         this.objectIcono = this.add.image(1750, 100,'icono');
         this.ObjectTrampilla1 = this.physics.add.staticImage(300, 800, 'trampilla');
@@ -149,6 +155,8 @@ class GameScene extends Phaser.Scene {
 
         this.physics.add.collider(this.playerPolicia, this.objectClosedDoor);
         this.physics.add.collider(this.playerLadron, this.objectClosedDoor);
+
+        this.physics.add.collider(this.playerLadron, this.rect, this.handleBlockCollisionPolicia, null, this);
 
         // Colisiones entre el ladrón y las trampillas
         this.physics.add.overlap(this.playerLadron, this.ObjectTrampilla1, () => {
@@ -189,6 +197,7 @@ class GameScene extends Phaser.Scene {
                     this.aDoorIsClosed = false;
                 })
             }
+
         })
 
         //this.cursors = this.input.keyboard.createCursorKeys();  // Para el policía (flecha arriba)
@@ -289,6 +298,27 @@ class GameScene extends Phaser.Scene {
         if (!this.policiaInventory) return;
 
         // Aplicar el efecto del modificador actual
+        let itemImage = this.add.image(this.playerPolicia.x, this.playerPolicia.y - 50, `${this.policiaInventory}`).setOrigin(0.5).setScale(1);
+
+        this.tweens.add({
+            targets: itemImage,
+            y: itemImage.y - 50,
+            ease: 'Power1',
+            duration: 500,
+            onComplete: () => {
+                console.log("DONE");
+                this.tweens.add({
+                    targets: itemImage,
+                    alpha: 0,
+                    duration: 200,
+                    ease: 'Linear',
+                    onComplete: () => {
+                        itemImage.destroy();
+                    }
+                });
+            }
+        });
+
         switch (this.policiaInventory) {
             case 'reloj':
                 this.timeLeft += 20;
