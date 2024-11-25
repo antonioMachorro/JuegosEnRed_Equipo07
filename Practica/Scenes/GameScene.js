@@ -32,6 +32,9 @@ class GameScene extends Phaser.Scene {
         this.load.image('icono','./Objectos/icono.png');
         this.load.image('trampilla', './Objetos/trampilla.png');
         this.load.image('cajaItems','./Objetos/cajaItems.png');
+        this.load.image('escenario', './Objetos/escenario.png');
+        this.load.image('openDoor', './Objetos/openDoor.png');
+        this.load.image('closedDoor', './Objetos/closeddoor.png');
     }
 
     create() {
@@ -61,8 +64,11 @@ class GameScene extends Phaser.Scene {
         // Variable de trampilla
         this.canUseTrampilla = true;
 
+        //Variable de puerta
+        this.aDoorIsClosed = false;
+
         // Agregar los personajes con físicas
-        this.playerPolicia = this.physics.add.sprite(100, 300, 'policia');
+        this.playerPolicia = this.physics.add.sprite(10, 10, 'policia');
         this.playerLadron = this.physics.add.sprite(800, 300, 'ladron');
 
         // Ajustar el collider de los personajes
@@ -70,7 +76,7 @@ class GameScene extends Phaser.Scene {
         this.playerLadron.body.setSize(40, 85);    // Collider del ladrón
 
         // Configurar el temporizador inicial de 2 minutos (120 segundos)
-        this.timeLeft = 20;
+        this.timeLeft = 120;
 
          // Crear el texto del temporizador, centrado en el eje X y en la parte superior de la pantalla
          this.centerX = this.cameras.main.width / 2;
@@ -88,13 +94,30 @@ class GameScene extends Phaser.Scene {
         });
 
         // Agregar objetos y suelo
-        this.objectSuelo = this.physics.add.staticImage(500, 900, 'Suelo');  // Suelo estático
-        this.objectSuelo2 = this.physics.add.staticImage(1400, 900, 'Suelo');  // Suelo estático
-        this.objectPared = this.physics.add.staticImage(1000, 900, 'Pared');  // Pared estática
+        this.ground = this.physics.add.staticGroup();
+
+        this.ground.create(500, 900, 'Suelo');
+        this.ground.create(1400, 900, 'Suelo');
+        this.ground.create(1800, 650, 'Suelo');
+        this.ground.create(1000, 900, 'Pared');
+
         this.ObjectCajaItems = this.add.image(1750, 100, 'cajaItems'); // Inventario del policia
         this.objectIcono = this.add.image(1750, 100,'icono');
         this.ObjectTrampilla1 = this.physics.add.staticImage(300, 800, 'trampilla');
         this.ObjectTrampilla2 = this.physics.add.staticImage(1200, 800, 'trampilla');
+
+        this.objectOpenDoor = this.physics.add.staticImage(1400, 780, 'openDoor').setScale(0.05);
+        this.objectOpenDoor.refreshBody();
+        this.objectOpenDoor.body.setSize(this.objectOpenDoor.width * 0.05 * 1.5, this.objectOpenDoor.height * 0.05);
+        this.objectOpenDoor.body.setOffset(-((this.objectOpenDoor.width * 0.05 * 1.5) - this.objectOpenDoor.width * 0.05) / 2, 0);
+
+        this.objectClosedDoor = this.physics.add.staticImage(1400, 780, 'closedDoor').setScale(0.13);
+        this.objectClosedDoor.refreshBody();
+        this.objectClosedDoor.body.setSize(this.objectClosedDoor.width * 0.13 * 0.3, this.objectClosedDoor.height * 0.13);
+        this.objectClosedDoor.body.setOffset(((this.objectClosedDoor.width * 0.13) - this.objectClosedDoor.width * 0.13 * 0.3) / 2, 0);
+
+        this.objectClosedDoor.setVisible(false);
+        this.objectClosedDoor.body.enable = false;
        
 
         // Lógica de control del ladrón
@@ -103,12 +126,11 @@ class GameScene extends Phaser.Scene {
         this.LadronVelocity = 500;
 
         // Colisiones entre los personajes y el suelo
-        this.physics.add.collider(this.playerPolicia, this.objectSuelo, this.resetJumpPolicia, null, this);
-        this.physics.add.collider(this.playerLadron, this.objectSuelo2, this.resetJumpLadron, null, this);
-        this.physics.add.collider(this.playerPolicia, this.objectSuelo2, this.resetJumpPolicia, null, this);
-        this.physics.add.collider(this.playerLadron, this.objectSuelo, this.resetJumpLadron, null, this);
-        this.physics.add.collider(this.playerPolicia, this.objectPared, this.handleWallCollisionPolicia, null, this);
-        this.physics.add.collider(this.playerLadron, this.objectPared, this.handleWallCollisionLadron, null, this);
+        this.physics.add.collider(this.playerPolicia, this.ground, this.handleBlockCollisionPolicia, null, this);
+        this.physics.add.collider(this.playerLadron, this.ground, this.handleBlockCollisionLadron, null, this);
+
+        this.physics.add.collider(this.playerPolicia, this.objectClosedDoor);
+        this.physics.add.collider(this.playerLadron, this.objectClosedDoor);
 
         // Colisiones entre el ladrón y las trampillas
         this.physics.add.overlap(this.playerLadron, this.ObjectTrampilla1, () => {
@@ -129,10 +151,37 @@ class GameScene extends Phaser.Scene {
         if(this.registry.get('player1IsPolice')){
             this.policeControls = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });
             this.thiefControls = this.input.keyboard.createCursorKeys();
+            this.thiefInteract = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         } else {
             this.policeControls = this.input.keyboard.createCursorKeys();
             this.thiefControls = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });
         }
+
+        //Cierre de puertas
+        this.physics.add.overlap(this.playerLadron, this.objectOpenDoor, () => {
+            if(this.thiefInteract.isDown && !this.aDoorIsClosed){
+                console.log("Crossed a door");
+                //Here objectOpenDoor is temporarily disabled.
+
+                this.objectOpenDoor.setVisible(false);
+                this.objectOpenDoor.body.enable = false;
+
+                this.objectClosedDoor.setVisible(true);
+                this.objectClosedDoor.body.enable = true;
+
+                this.aDoorIsClosed = true;
+
+                this.time.delayedCall(10000, () => {
+                    this.objectOpenDoor.setVisible(true);
+                    this.objectOpenDoor.body.enable = true;
+
+                    this.objectClosedDoor.setVisible(false);
+                    this.objectClosedDoor.body.enable = false;
+
+                    this.aDoorIsClosed = false;
+                })
+            }
+        })
 
         //this.cursors = this.input.keyboard.createCursorKeys();  // Para el policía (flecha arriba)
         //this.wasd = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });  // Para el ladrón (W)
@@ -405,6 +454,44 @@ class GameScene extends Phaser.Scene {
         const minutes = Math.floor(seconds / 60);
         const partInSeconds = seconds % 60;
         return `${minutes}:${partInSeconds.toString().padStart(2, '0')}`;
+    }
+
+    handleBlockCollisionPolicia(player, block){
+        const playerBottom = player.body.bottom;
+        const playerLeft = player.body.left;
+        const playerRight = player.body.right;
+
+        const blockTop = block.body.top;
+        const blockLeft = block.body.left;
+        const blockRight = block.body.right;
+
+        if(playerBottom <= blockTop + 5) {
+            this.resetJumpPolicia();
+        }
+        else if(playerRight >= blockLeft && player.body.touching.right) {
+            this.handleWallCollisionPolicia();
+        } else if(playerLeft <= blockRight && player.body.touching.left) {
+            this.handleWallCollisionPolicia();
+        }
+    }
+
+    handleBlockCollisionLadron(player, block){
+        const playerBottom = player.body.bottom;
+        const playerLeft = player.body.left;
+        const playerRight = player.body.right;
+
+        const blockTop = block.body.top;
+        const blockLeft = block.body.left;
+        const blockRight = block.body.right;
+
+        if(playerBottom <= blockTop + 5) {
+            this.resetJumpLadron();
+        }
+        else if(playerRight >= blockLeft && player.body.touching.right) {
+            this.handleWallCollisionLadron();
+        } else if(playerLeft <= blockRight && player.body.touching.left) {
+            this.handleWallCollisionLadron();
+        }
     }
 
     // Detectar si el jugador está pegado a la pared

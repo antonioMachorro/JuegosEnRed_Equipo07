@@ -7,7 +7,7 @@ class RoleSelectScene extends Phaser.Scene {
         this.load.image('policia', './Personajes/police.png');
         this.load.image('ladron', './Personajes/ladron.png');
         this.load.image('wasd', './Interfaz/wasd.png');
-        this.load.image('controller', './Interfaz/controller.png');
+        this.load.image('arrows', './Interfaz/arrowKeys.png');
         this.load.image('dice', './Interfaz/dice.png');
         this.load.image('button', './Interfaz/boton.png');
     }
@@ -23,11 +23,9 @@ class RoleSelectScene extends Phaser.Scene {
         const wasdPosition = jugador1Text.x;
 
         const wasdButton = this.add.image(jugador1Text.x, jugador1Text.y + 200, 'wasd')
-            .setScale(0.2)
             .setInteractive();
         
-        const controllerButton = this.add.image(jugador2Text.x, jugador2Text.y + 200, 'controller')
-            .setScale(0.2)
+        const arrowButton = this.add.image(jugador2Text.x, jugador2Text.y + 200, 'arrows')
             .setInteractive();
 
         const diceButton = this.add.image(width/2, height/2, 'dice')
@@ -37,7 +35,7 @@ class RoleSelectScene extends Phaser.Scene {
         diceButton.on('pointerdown', ()=>{
             diceButton.disableInteractive();
             wasdButton.disableInteractive();
-            controllerButton.disableInteractive();
+            arrowButton.disableInteractive();
 
             const scene = this;
 
@@ -46,12 +44,12 @@ class RoleSelectScene extends Phaser.Scene {
 
             function animate() {
                 scene.tweens.add({
-                    targets: [jugador1Text, jugador2Text, wasdButton, controllerButton],
+                    targets: [jugador1Text, jugador2Text, wasdButton, arrowButton],
                     x: function(target) {
                         if(target === jugador1Text) return jugador2Text.x;
                         if(target === jugador2Text) return jugador1Text.x;
-                        if(target === wasdButton) return controllerButton.x;
-                        if(target === controllerButton) return wasdButton.x;
+                        if(target === wasdButton) return arrowButton.x;
+                        if(target === arrowButton) return wasdButton.x;
                     },
                     ease: 'Power1',
                     duration: 100,
@@ -61,7 +59,7 @@ class RoleSelectScene extends Phaser.Scene {
                         else {
                             diceButton.setInteractive();
                             wasdButton.setInteractive();
-                            controllerButton.setInteractive();
+                            arrowButton.setInteractive();
                         }
                     }
                 })
@@ -71,11 +69,11 @@ class RoleSelectScene extends Phaser.Scene {
         });
         
         wasdButton.on('pointerdown', ()=>{
-            this.changePlayerButton(jugador1Text, jugador2Text, wasdButton, controllerButton);
+            this.changePlayerButton(jugador1Text, jugador2Text, wasdButton, arrowButton);
         });
 
-        controllerButton.on('pointerdown', ()=>{
-            this.changePlayerButton(jugador1Text, jugador2Text, wasdButton, controllerButton);
+        arrowButton.on('pointerdown', ()=>{
+            this.changePlayerButton(jugador1Text, jugador2Text, wasdButton, arrowButton);
         })
         
 
