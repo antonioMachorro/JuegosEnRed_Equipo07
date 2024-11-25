@@ -16,10 +16,19 @@ class RoleSelectScene extends Phaser.Scene {
         const { width, height } = this.scale;
         this.policeIsOnTheLeft = true;
 
-        const personajesText = this.add.text(width/2, 200, 'PERSONAJES', { fontSize: '64px', fill: '#fff' }).setOrigin(0.5);
+        const personajesText = this.add.text(width/2, 200, 'PERSONAJES', { 
+            fontFamily: 'retro-computer',
+            fontSize: '64px', 
+            fill: '#fff' }).setOrigin(0.5);
 
-        const jugador1Text = this.add.text(200, personajesText.y + 100, 'Player 1', { fontSize: '32px', fill: '#ff0000'}).setOrigin(0.5);
-        const jugador2Text = this.add.text(width - 200, personajesText.y + 100, 'Player 2', { fontSize: '32px', fill: '#0000ff'}).setOrigin(0.5);
+        const jugador1Text = this.add.text(200, personajesText.y + 100, 'Player 1', { 
+            fontFamily: 'retro-computer',
+            fontSize: '32px', 
+            fill: '#ff0000'}).setOrigin(0.5);
+        const jugador2Text = this.add.text(width - 200, personajesText.y + 100, 'Player 2', { 
+            fontFamily: 'retro-computer',
+            fontSize: '32px', 
+            fill: '#0000ff'}).setOrigin(0.5);
 
         this.add.image(jugador1Text.x, jugador1Text.y + 200, 'wasd').setOrigin(0.5);
         
@@ -31,6 +40,15 @@ class RoleSelectScene extends Phaser.Scene {
         const thiefButton = this.add.image(personajesText.x + 300, personajesText.y + 300, 'ladron')
             .setScale(3)
             .setInteractive();
+
+        const policeText = this.add.text(policeButton.x, policeButton.y + (policeButton.displayHeight / 2) + 50, 'POLICIA', {
+                fontFamily: 'retro-computer',
+                fontSize: '32px', 
+                fill: '#fff'}).setOrigin(0.5);
+        const thiefText = this.add.text(thiefButton.x, thiefButton.y + (thiefButton.displayHeight / 2) + 50, 'LADRON', {
+                fontFamily: 'retro-computer',
+                fontSize: '32px', 
+                fill: '#fff'}).setOrigin(0.5);
 
         const diceButton = this.add.image(width/2, height/2, 'dice')
             .setScale(0.2)
@@ -48,10 +66,12 @@ class RoleSelectScene extends Phaser.Scene {
 
             function animate() {
                 scene.tweens.add({
-                    targets: [policeButton, thiefButton],
+                    targets: [policeButton, thiefButton, policeText, thiefText],
                     x: function(target) {
                         if(target === policeButton) return thiefButton.x;
                         if(target === thiefButton) return policeButton.x;
+                        if(target === policeText) return thiefText.x;
+                        if(target === thiefText) return policeText.x;
                     },
                     ease: 'Power1',
                     duration: 100,
@@ -75,19 +95,17 @@ class RoleSelectScene extends Phaser.Scene {
         });
 
         policeButton.on('pointerdown', ()=>{
-            this.changePlayerButton(policeButton, thiefButton);
+            this.changePlayerButton(policeButton, thiefButton, policeText, thiefText);
         });
 
         thiefButton.on('pointerdown', ()=>{
-            this.changePlayerButton(policeButton, thiefButton);
+            this.changePlayerButton(policeButton, thiefButton, policeText, thiefText);
         })
-        
 
-        this.add.text(policeButton.x, policeButton.y + (policeButton.displayHeight / 2) + 50, 'POLICIA', {fontSize: '32px', fill: '#fff'}).setOrigin(0.5);
-        this.add.text(thiefButton.x, thiefButton.y + (thiefButton.displayHeight / 2) + 50, 'LADRON', {fontSize: '32px', fill: '#fff'}).setOrigin(0.5);
-
-
-        const returnButton = this.add.text(150, height - 100, 'REGRESAR', { fontSize: '32px', fill: '#fff' })
+        const returnButton = this.add.text(150, height - 100, 'REGRESAR', { 
+            fontFamily: 'retro-computer',
+            fontSize: '32px', 
+            fill: '#fff' })
             .setOrigin(0.5)
             .setInteractive();
         returnButton.on('pointerdown', () => {
@@ -107,15 +125,17 @@ class RoleSelectScene extends Phaser.Scene {
             });
     }
 
-    changePlayerButton(button1, button2) {
+    changePlayerButton(button1, button2, text1, text2) {
         button1.disableInteractive();
         button2.disableInteractive();
 
         this.tweens.add({
-            targets: [button1, button2],
+            targets: [button1, button2, text1, text2],
             x: function(target) {
                 if(target === button1) return button2.x;
                 if(target === button2) return button1.x;
+                if(target === text1) return text2.x;
+                if(target === text2) return text1.x;
             },
             ease: 'Power1',
             duration: 500,

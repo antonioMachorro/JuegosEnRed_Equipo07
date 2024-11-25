@@ -11,7 +11,7 @@ class MainMenuScene extends Phaser.Scene {
     create() {
         const { width, height } = this.scale;
 
-        const title = this.add.text(0, 0, 'HOTLINE MIAUMI', { fontSize: '64px', fill: '#fff', align: 'center' }).setOrigin(0.5);
+        const title = this.add.text(0, 0, 'HOTLINE MIAUMI', { fontFamily: 'retro-computer', fontSize: '64px', fill: '#fff', align: 'center' }).setOrigin(0.5);
 
         title.setPosition(width / 2, height / 10);
 

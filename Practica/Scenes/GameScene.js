@@ -92,8 +92,9 @@ class GameScene extends Phaser.Scene {
          // Crear el texto del temporizador, centrado en el eje X y en la parte superior de la pantalla
          this.centerX = this.cameras.main.width / 2;
          this.timerText = this.add.text(this.centerX, 60, this.formatTime(this.timeLeft), {
-             font: '80px Arial',
-             fill: '#fff'
+            fontFamily: 'retro-computer',
+            fontSize: '80px',
+            fill: '#fff'
          }).setOrigin(0.5, 0);  // Centrar en X y poner en la parte superior
 
          // Configurar evento de tiempo que reduce el contador cada segundo
@@ -238,8 +239,14 @@ class GameScene extends Phaser.Scene {
             
         });
 
-        this.add.text(width/4, 50, `Jugador 1: ${this.registry.get('player1Rounds')}`, {fontSize: '32px', fill:'#ffff'}).setOrigin(0.5);
-        this.add.text(width - width/4, 50, `Jugador 2: ${this.registry.get('player2Rounds')}`, {fontSize: '32px', fill:'#ffff'}).setOrigin(0.5);
+        this.add.text(width/4, 50, `Jugador 1: ${this.registry.get('player1Rounds')}`, {
+            fontFamily: 'retro-computer',
+            fontSize: '32px', 
+            fill:'#ffff'}).setOrigin(0.5);
+        this.add.text(width - width/4, 50, `Jugador 2: ${this.registry.get('player2Rounds')}`, {
+            fontFamily: 'retro-computer',
+            fontSize: '32px', 
+            fill:'#ffff'}).setOrigin(0.5);
 
         this.input.keyboard.on('keydown-ESC', () =>{
             this.scene.launch('PauseScene');
@@ -627,9 +634,9 @@ class GameScene extends Phaser.Scene {
         //this.input.keyboard.enabled = false;
 
         const winnerText = this.add.text(this.centerX, this.cameras.main.height / 2,
-            `${winner} Wins This Round!`,
-            {
-                font: '80px Arial',
+            `${winner} Gana Este Round!`, {
+                fontFamily: 'retro-computer',
+                fontSize: '80px',
                 fill: '#fff',
                 backgroundColor: '#000'
             }).setOrigin(0.5);

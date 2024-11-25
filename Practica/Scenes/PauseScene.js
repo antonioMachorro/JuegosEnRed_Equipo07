@@ -11,12 +11,14 @@ class PauseScene extends Phaser.Scene {
         this.overlay.fillRect(0, 0, width, height);
 
         const pausedText = this.add.text(width / 2, 300, 'PAUSED', {
-            font: '82px Arial',
+            fontFamily: 'retro-computer',
+            fontSize: '82px',
             fill: '#fff',
         }).setOrigin(0.5);
 
         const continueButton = this.add.text(width / 2, pausedText.y + 200, 'CONTINUE', {
-            font: '32px Arial',
+            fontFamily: 'retro-computer',
+            fontSize: '32px',
             fill: '#fff',
         }).setOrigin(0.5)
         .setInteractive();
@@ -27,7 +29,8 @@ class PauseScene extends Phaser.Scene {
         });
 
         const stopButton = this.add.text(width / 2, continueButton.y + 150, 'QUIT', {
-            font: '32px Arial',
+            fontFamily: 'retro-computer',
+            fontSize: '32px',
             fill: '#fff',
         }).setOrigin(0.5)
         .setInteractive();

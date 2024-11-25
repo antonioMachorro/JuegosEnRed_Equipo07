@@ -6,9 +6,9 @@ class CreditsScene extends Phaser.Scene {
     create() {
         const { width, height } = this.scale;
 
-        this.add.text(width/2, 250, 'Aqui van a ir nuestros nombrezukis', { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
+        this.add.text(width/2, 250, 'CREDITOS', { fontFamily: 'retro-computer', fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
 
-        const restartButton = this.add.text(width/2, 350, 'Volver al menú', { fontSize: '32px', fill: '#fff' })
+        const restartButton = this.add.text(150, height - 100, 'REGRESAR', { fontSize: '32px', fill: '#fff' })
             .setOrigin(0.5)
             .setInteractive();
 
