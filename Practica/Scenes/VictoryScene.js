@@ -10,9 +10,15 @@ class VictoryScene extends Phaser.Scene {
     create() {
         const { width, height } = this.scale;
 
-        this.add.text(width/2, 250, `¡Ha ganado el ${this.winner}!`, { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
+        this.add.text(width/2, 250, `¡Ha ganado el ${this.winner}!`, { 
+            fontFamily: 'retro-computer',
+            fontSize: '32px', 
+            fill: '#fff' }).setOrigin(0.5);
 
-        const restartButton = this.add.text(width/2, 350, 'Volver al menú', { fontSize: '32px', fill: '#fff' })
+        const restartButton = this.add.text(width/2, 350, 'Volver al menú', { 
+            fontFamily: 'retro-computer',
+            fontSize: '32px', 
+            fill: '#fff' })
             .setOrigin(0.5)
             .setInteractive();
 

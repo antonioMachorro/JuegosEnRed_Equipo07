@@ -68,10 +68,12 @@ class GameScene extends Phaser.Scene {
         // Controles del jugador (policía y ladrón)
         if(this.registry.get('player1IsPolice')){
             this.policeControls = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });
+            this.policeInteract = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
             this.thiefControls = this.input.keyboard.createCursorKeys();
             this.thiefInteract = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         } else {
             this.policeControls = this.input.keyboard.createCursorKeys();
+            this.policeInteract = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
             this.thiefControls = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });
             this.thiefInteract = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         }
@@ -236,12 +238,6 @@ class GameScene extends Phaser.Scene {
 
         // Generar un objeto Modificador en una posición aleatoria
         this.spawnRandomModifier();
-
-        // Detectar cuando se presione la tecla Enter
-        this.input.keyboard.on('keydown-ENTER', (event) => {
-            this.useModifier();
-            
-        });
 
         this.add.text(width/4, 50, `Jugador 1: ${this.registry.get('player1Rounds')}`, {
             fontFamily: 'retro-computer',
@@ -440,6 +436,12 @@ class GameScene extends Phaser.Scene {
             this.isBoosting = false; // Permite volver a acelerar
             });
         }
+
+        // Detectar cuando se presione la tecla Enter
+        if(this.policeInteract.isDown){
+            console.log("Usar item");
+            this.useModifier();
+        };
     }
 
     updateTimer() {
