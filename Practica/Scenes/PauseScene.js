@@ -26,7 +26,7 @@ class PauseScene extends Phaser.Scene {
             this.scene.stop();
         });
 
-        const stopButton = this.add.text(width / 2, continueButton.y + 150, 'STOP', {
+        const stopButton = this.add.text(width / 2, continueButton.y + 150, 'QUIT', {
             font: '32px Arial',
             fill: '#fff',
         }).setOrigin(0.5)

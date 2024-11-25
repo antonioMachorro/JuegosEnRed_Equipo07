@@ -61,6 +61,17 @@ class GameScene extends Phaser.Scene {
             },
         }
 
+        // Controles del jugador (policía y ladrón)
+        if(this.registry.get('player1IsPolice')){
+            this.policeControls = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });
+            this.thiefControls = this.input.keyboard.createCursorKeys();
+            this.thiefInteract = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+        } else {
+            this.policeControls = this.input.keyboard.createCursorKeys();
+            this.thiefControls = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });
+            this.thiefInteract = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        }
+
         // Variable de trampilla
         this.canUseTrampilla = true;
 
@@ -134,28 +145,18 @@ class GameScene extends Phaser.Scene {
 
         // Colisiones entre el ladrón y las trampillas
         this.physics.add.overlap(this.playerLadron, this.ObjectTrampilla1, () => {
-            if (this.canUseTrampilla) {
+            if (this.thiefInteract.isDown && this.canUseTrampilla) {
                 this.teleportLadron(this.ObjectTrampilla2); // Teletransporta al ladrón a la trampilla 2
                 this.startTrampillaCooldown(); // Activar el cooldown
             }
         }, null, this);
         
         this.physics.add.overlap(this.playerLadron, this.ObjectTrampilla2, () => {
-            if (this.canUseTrampilla) {
+            if (this.thiefInteract.isDown && this.canUseTrampilla) {
                 this.teleportLadron(this.ObjectTrampilla1); // Teletransporta al ladrón a la trampilla 1
                 this.startTrampillaCooldown(); // Activar el cooldown
             }
         }, null, this);
-
-        // Controles del jugador (policía y ladrón)
-        if(this.registry.get('player1IsPolice')){
-            this.policeControls = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });
-            this.thiefControls = this.input.keyboard.createCursorKeys();
-            this.thiefInteract = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
-        } else {
-            this.policeControls = this.input.keyboard.createCursorKeys();
-            this.thiefControls = this.input.keyboard.addKeys({ up: 'W', left: 'A', down: 'S', right: 'D' });
-        }
 
         //Cierre de puertas
         this.physics.add.overlap(this.playerLadron, this.objectOpenDoor, () => {
