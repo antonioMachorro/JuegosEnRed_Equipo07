@@ -5,6 +5,7 @@ import CreditsScene from './Scenes/CreditsScene.js';
 import RoleSelectScene from './Scenes/RoleSelectScene.js';
 import VictoryScene from './Scenes/VictoryScene.js';
 import PauseScene from './Scenes/PauseScene.js';
+import GameModeScene from './Scenes/GameModeScene.js';
 
 
 const config = {
@@ -12,7 +13,7 @@ const config = {
     width: 1920, //Cambiar la ventana de juego aqui y en el archivo CSS
     height: 1080,
     parent: 'gameContainer',  // Contenedor en el HTML
-    scene: [MainMenuScene, RoleSelectScene, GameScene, PauseScene, VictoryScene, CreditsScene],  // Agrega todas tus escenas aquí
+    scene: [MainMenuScene, GameModeScene, RoleSelectScene, GameScene, PauseScene, VictoryScene, CreditsScene],
     physics: {
         default: 'arcade',
         arcade: {

@@ -23,7 +23,7 @@ class MainMenuScene extends Phaser.Scene {
 
         // Escuchar el evento de clic en el botón
         playButton.on('pointerdown', () => {
-            this.scene.start('RoleSelectScene');
+            this.scene.start('GameModeScene');
         });
 
         const creditsButton = this.add.image(width/2, height/1.5, 'boton')

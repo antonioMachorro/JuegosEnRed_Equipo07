@@ -14,52 +14,58 @@ class RoleSelectScene extends Phaser.Scene {
 
     create() {
         const { width, height } = this.scale;
+        this.policeIsOnTheLeft = true;
 
         const personajesText = this.add.text(width/2, 200, 'PERSONAJES', { fontSize: '64px', fill: '#fff' }).setOrigin(0.5);
 
         const jugador1Text = this.add.text(200, personajesText.y + 100, 'Player 1', { fontSize: '32px', fill: '#ff0000'}).setOrigin(0.5);
         const jugador2Text = this.add.text(width - 200, personajesText.y + 100, 'Player 2', { fontSize: '32px', fill: '#0000ff'}).setOrigin(0.5);
 
-        const wasdPosition = jugador1Text.x;
-
-        const wasdButton = this.add.image(jugador1Text.x, jugador1Text.y + 200, 'wasd')
-            .setInteractive();
+        this.add.image(jugador1Text.x, jugador1Text.y + 200, 'wasd').setOrigin(0.5);
         
-        const arrowButton = this.add.image(jugador2Text.x, jugador2Text.y + 200, 'arrows')
+        this.add.image(jugador2Text.x, jugador2Text.y + 200, 'arrows').setOrigin(0.5);
+
+        const policeButton = this.add.image(personajesText.x - 300, personajesText.y + 300, 'policia')
+            .setScale(3)
+            .setInteractive();
+        const thiefButton = this.add.image(personajesText.x + 300, personajesText.y + 300, 'ladron')
+            .setScale(3)
             .setInteractive();
 
         const diceButton = this.add.image(width/2, height/2, 'dice')
             .setScale(0.2)
             .setInteractive();
-
-        diceButton.on('pointerdown', ()=>{
+        diceButton.on('pointerdown', () => {
             diceButton.disableInteractive();
-            wasdButton.disableInteractive();
-            arrowButton.disableInteractive();
+            policeButton.disableInteractive();
+            thiefButton.disableInteractive();
 
             const scene = this;
 
             const randomSwitch = Phaser.Math.Between(3, 6);
+            console.log(randomSwitch);
             let count = 0;
 
             function animate() {
                 scene.tweens.add({
-                    targets: [jugador1Text, jugador2Text, wasdButton, arrowButton],
+                    targets: [policeButton, thiefButton],
                     x: function(target) {
-                        if(target === jugador1Text) return jugador2Text.x;
-                        if(target === jugador2Text) return jugador1Text.x;
-                        if(target === wasdButton) return arrowButton.x;
-                        if(target === arrowButton) return wasdButton.x;
+                        if(target === policeButton) return thiefButton.x;
+                        if(target === thiefButton) return policeButton.x;
                     },
                     ease: 'Power1',
                     duration: 100,
                     onComplete: () => {
                         count++;
-                        if(count < randomSwitch) animate();
+                        if(count < randomSwitch) {
+                            scene.policeIsOnTheLeft = !scene.policeIsOnTheLeft;
+                            animate();
+                        }
                         else {
+                            scene.policeIsOnTheLeft = !scene.policeIsOnTheLeft;
                             diceButton.setInteractive();
-                            wasdButton.setInteractive();
-                            arrowButton.setInteractive();
+                            policeButton.setInteractive();
+                            thiefButton.setInteractive();
                         }
                     }
                 })
@@ -67,29 +73,25 @@ class RoleSelectScene extends Phaser.Scene {
 
             animate();
         });
-        
-        wasdButton.on('pointerdown', ()=>{
-            this.changePlayerButton(jugador1Text, jugador2Text, wasdButton, arrowButton);
+
+        policeButton.on('pointerdown', ()=>{
+            this.changePlayerButton(policeButton, thiefButton);
         });
 
-        arrowButton.on('pointerdown', ()=>{
-            this.changePlayerButton(jugador1Text, jugador2Text, wasdButton, arrowButton);
+        thiefButton.on('pointerdown', ()=>{
+            this.changePlayerButton(policeButton, thiefButton);
         })
         
 
-        const policeImage = this.add.image(personajesText.x - 300, personajesText.y + 300, 'policia').setScale(3);
-        const thiefImage = this.add.image(personajesText.x + 300, personajesText.y + 300, 'ladron').setScale(3);
-
-        this.add.text(policeImage.x, policeImage.y + (policeImage.displayHeight / 2) + 50, 'POLICIA', {fontSize: '32px', fill: '#fff'}).setOrigin(0.5);
-        this.add.text(thiefImage.x, thiefImage.y + (thiefImage.displayHeight / 2) + 50, 'LADRON', {fontSize: '32px', fill: '#fff'}).setOrigin(0.5);
+        this.add.text(policeButton.x, policeButton.y + (policeButton.displayHeight / 2) + 50, 'POLICIA', {fontSize: '32px', fill: '#fff'}).setOrigin(0.5);
+        this.add.text(thiefButton.x, thiefButton.y + (thiefButton.displayHeight / 2) + 50, 'LADRON', {fontSize: '32px', fill: '#fff'}).setOrigin(0.5);
 
 
         const returnButton = this.add.text(150, height - 100, 'REGRESAR', { fontSize: '32px', fill: '#fff' })
             .setOrigin(0.5)
             .setInteractive();
-
         returnButton.on('pointerdown', () => {
-            this.scene.start('MainMenuScene');
+            this.scene.start('GameModeScene');
         });
 
         this.add.image(width - 150, height - 100, 'button')
@@ -97,7 +99,7 @@ class RoleSelectScene extends Phaser.Scene {
             .setScale(0.2)
             .setInteractive()
             .on('pointerdown', () => {
-                if(jugador1Text.x === wasdPosition){
+                if(this.policeIsOnTheLeft){
                     this.scene.start('GameScene', {player1IsPolice: true});
                 } else {
                     this.scene.start('GameScene', {player1IsPolice: false});
@@ -105,21 +107,20 @@ class RoleSelectScene extends Phaser.Scene {
             });
     }
 
-    changePlayerButton(text1, text2, button1, button2) {
+    changePlayerButton(button1, button2) {
         button1.disableInteractive();
         button2.disableInteractive();
 
         this.tweens.add({
-            targets: [text1, text2, button1, button2],
+            targets: [button1, button2],
             x: function(target) {
-                if(target === text1) return text2.x;
-                if(target === text2) return text1.x;
                 if(target === button1) return button2.x;
                 if(target === button2) return button1.x;
             },
             ease: 'Power1',
-            duration: 1000,
+            duration: 500,
             onComplete: () => {
+                this.policeIsOnTheLeft = !this.policeIsOnTheLeft;
                 button1.setInteractive();
                 button2.setInteractive();
             }
