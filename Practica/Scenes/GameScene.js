@@ -239,6 +239,11 @@ class GameScene extends Phaser.Scene {
 
         this.add.text(width/4, 50, `Jugador 1: ${this.registry.get('player1Rounds')}`, {fontSize: '32px', fill:'#ffff'}).setOrigin(0.5);
         this.add.text(width - width/4, 50, `Jugador 2: ${this.registry.get('player2Rounds')}`, {fontSize: '32px', fill:'#ffff'}).setOrigin(0.5);
+
+        this.input.keyboard.on('keydown-ESC', () =>{
+            this.scene.launch('PauseScene');
+            this.scene.pause();
+        })
     }
 
     spawnRandomModifier() {
