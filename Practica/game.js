@@ -6,6 +6,7 @@ import RoleSelectScene from './Scenes/RoleSelectScene.js';
 import VictoryScene from './Scenes/VictoryScene.js';
 import PauseScene from './Scenes/PauseScene.js';
 import GameModeScene from './Scenes/GameModeScene.js';
+import AudioManager from './AudioManager.js';
 
 
 const config = {
@@ -29,3 +30,5 @@ const config = {
 
 // Inicializar el juego
 const game = new Phaser.Game(config);
+
+game.audioManager = new AudioManager(game);

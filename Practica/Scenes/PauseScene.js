@@ -24,6 +24,7 @@ class PauseScene extends Phaser.Scene {
         .setInteractive();
 
         continueButton.on('pointerdown', () => {
+            this.game.audioManager.setVolume(1);
             this.scene.resume('GameScene');
             this.scene.stop();
         });
@@ -36,6 +37,7 @@ class PauseScene extends Phaser.Scene {
         .setInteractive();
 
         stopButton.on('pointerdown', () => {
+            this.game.audioManager.setVolume(1);
             this.scene.stop('GameScene');
             this.registry.set('player1Rounds', 0);
             this.registry.set('player2Rounds', 0);
@@ -44,6 +46,7 @@ class PauseScene extends Phaser.Scene {
         });
 
         this.input.keyboard.on('keydown-ESC', () =>{
+            this.game.audioManager.setVolume(1);
             this.scene.resume('GameScene');
             this.scene.stop();
         })

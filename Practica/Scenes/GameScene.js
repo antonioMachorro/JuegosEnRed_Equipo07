@@ -35,9 +35,13 @@ class GameScene extends Phaser.Scene {
         this.load.image('escenario', './Objetos/escenario.png');
         this.load.image('openDoor', './Objetos/openDoor.png');
         this.load.image('closedDoor', './Objetos/closeddoor.png');
+
+        this.load.audio('game_music', './Musica/GAMEPLAYYYY.wav');
     }
 
     create() {
+
+        this.game.audioManager.playMusic('game_music');
 
         const { width, height } = this.scale;
 
@@ -249,6 +253,7 @@ class GameScene extends Phaser.Scene {
             fill:'#ffff'}).setOrigin(0.5);
 
         this.input.keyboard.on('keydown-ESC', () =>{
+            this.game.audioManager.setVolume(0.2);
             this.scene.launch('PauseScene');
             this.scene.pause();
         })

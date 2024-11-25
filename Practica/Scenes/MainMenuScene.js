@@ -5,10 +5,13 @@ class MainMenuScene extends Phaser.Scene {
 
     preload() {
         // Cargar la imagen del botón
-        this.load.image('boton', 'Interfaz/boton.png');
+        this.load.image('boton', './Interfaz/boton.png');
+        this.load.audio('menu_music', './Musica/MENUU.wav');
     }
 
     create() {
+        this.game.audioManager.playMusic('menu_music');
+
         const { width, height } = this.scale;
 
         const title = this.add.text(0, 0, 'HOTLINE MIAUMI', { fontFamily: 'retro-computer', fontSize: '64px', fill: '#fff', align: 'center' }).setOrigin(0.5);
