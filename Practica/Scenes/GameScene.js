@@ -155,6 +155,14 @@ class GameScene extends Phaser.Scene {
             .setSize(385, 16)
             .setVisible(false);
 
+            const sueloViga1 = this.physics.add.staticImage(1163, 500)
+            .setSize(133, 20)
+            .setVisible(false);
+
+            const sueloViga2 = this.physics.add.staticImage(1175, 421)
+            .setSize(110, 20)
+            .setVisible(false);
+
         this.ground.add(busColl);
         this.ground.add(sueloCasaColl);
         this.ground.add(marcoSupColl);
@@ -162,6 +170,8 @@ class GameScene extends Phaser.Scene {
         this.ground.add(marcoIzqColl);
         this.ground.add(marcoInfColl);
         this.ground.add(sueloSub1Coll);
+        this.ground.add(sueloViga1);
+        this.ground.add(sueloViga2);
 
 
         this.ObjectCajaItems = this.add.image(1750, 100, 'cajaItems'); // Inventario del policia
