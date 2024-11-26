@@ -19,6 +19,7 @@ class GameScene extends Phaser.Scene {
     }
 
     preload() {
+        this.load.image('escenario', './Escenario/Escenario.png');
         this.load.image('policia', './Personajes/police.png');
         this.load.image('ladron', './Personajes/ladron.png');
         this.load.image('red', './Objetos/red.png');
@@ -40,6 +41,7 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+        
 
         this.game.audioManager.playMusic('game_music');
 
@@ -84,8 +86,17 @@ class GameScene extends Phaser.Scene {
         //Variable de puerta
         this.aDoorIsClosed = false;
 
+        // Agregar objetos y suelo
+        this.ground = this.physics.add.staticGroup();
+
+        this.ground.create(960,540,'escenario').setDepth(-1);
+        // this.ground.create(500, 900, 'Suelo');
+        //this.ground.create(1400, 900, 'Suelo');
+        //this.ground.create(1800, 650, 'Suelo');
+        //this.ground.create(1000, 900, 'Pared');
+
         // Agregar los personajes con físicas
-        this.playerPolicia = this.physics.add.sprite(10, 10, 'policia');
+        this.playerPolicia = this.physics.add.sprite(960, 540, 'policia');
         this.playerLadron = this.physics.add.sprite(800, 300, 'ladron');
 
         // Ajustar el collider de los personajes
@@ -111,19 +122,47 @@ class GameScene extends Phaser.Scene {
             loop: true
         });
 
-        // Agregar objetos y suelo
-        this.ground = this.physics.add.staticGroup();
+        //Ajustar la camara
+        const camera = this.cameras.main;
+        camera.setBounds(370, 210, 960, 540);
+        camera.setZoom(2.6);
 
-        this.ground.create(500, 900, 'Suelo');
-        this.ground.create(1400, 900, 'Suelo');
-        this.ground.create(1800, 650, 'Suelo');
-        this.ground.create(1000, 900, 'Pared');
-
-        const physicsCollider = this.physics.add.staticImage(200, 800)
-            .setSize(50, 500)
+        const busColl = this.physics.add.staticImage(920, 550)
+            .setSize(90, 110)
             .setVisible(false);
         
-        this.ground.add(physicsCollider);
+            const sueloCasaColl = this.physics.add.staticImage(855,613)
+            .setSize(360, 21)
+            .setVisible(false);
+
+            const marcoSupColl = this.physics.add.staticImage(960,337)
+            .setSize(960, 5)
+            .setVisible(false);
+
+            const marcoInfColl = this.physics.add.staticImage(960,746)
+            .setSize(960, 5)
+            .setVisible(false);
+
+            const marcoDerColl = this.physics.add.staticImage(1303,337)
+            .setSize(5, 960)
+            .setVisible(false);
+
+            const marcoIzqColl = this.physics.add.staticImage(618,337)
+            .setSize(5, 960)
+            .setVisible(false);
+
+            const sueloSub1Coll = this.physics.add.staticImage(872,675)
+            .setSize(385, 16)
+            .setVisible(false);
+
+        this.ground.add(busColl);
+        this.ground.add(sueloCasaColl);
+        this.ground.add(marcoSupColl);
+        this.ground.add(marcoDerColl);
+        this.ground.add(marcoIzqColl);
+        this.ground.add(marcoInfColl);
+        this.ground.add(sueloSub1Coll);
+
 
         this.ObjectCajaItems = this.add.image(1750, 100, 'cajaItems'); // Inventario del policia
         this.objectIcono = this.add.image(1750, 100,'icono');
