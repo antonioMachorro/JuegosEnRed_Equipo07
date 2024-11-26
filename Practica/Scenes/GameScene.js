@@ -34,6 +34,7 @@ class GameScene extends Phaser.Scene {
     this.load.image("escenario", "./Objetos/escenario.png");
     this.load.image("openDoor", "./Objetos/openDoor.png");
     this.load.image("closedDoor", "./Objetos/closeddoor.png");
+    this.load.image("Marcador", "./Escenario/Marcador.png");
 
     this.load.atlas(
       "policia",
@@ -122,9 +123,9 @@ class GameScene extends Phaser.Scene {
 
     this.ground.create(960, 540, "escenario").setDepth(-1);
     // this.ground.create(500, 900, 'Suelo');
-    //this.ground.create(1400, 900, 'Suelo');
-    //this.ground.create(1800, 650, 'Suelo');
-    //this.ground.create(1000, 900, 'Pared');
+    // this.ground.create(1400, 900, 'Suelo');
+    // this.ground.create(1800, 650, 'Suelo');
+    // this.ground.create(1000, 900, 'Pared');
 
     // Agregar los personajes con físicas
     this.playerPolicia = this.physics.add.sprite(1215, 705, "policia");
@@ -405,13 +406,21 @@ class GameScene extends Phaser.Scene {
     this.registry.get('player1IsPolice') ? this.objectIcono = this.add.image(710, 350, "icono") : this.objectIcono = this.add.image(1210, 350, "icono");
     console.log(this.registry.get('player1IsPolice'));
     console.log(this.objectIcono.x);
-    this.ObjectTrampilla1 = this.physics.add.staticImage(1203, 395, "trampilla");
-    this.ObjectTrampilla2 = this.physics.add.staticImage(1203, 580, "trampilla");
-    this.ObjectTrampilla3 = this.physics.add.staticImage(995, 580, "trampilla");
-    this.ObjectTrampilla4 = this.physics.add.staticImage(840, 580, "trampilla");
-    this.ObjectVentilacion1 = this.physics.add.staticImage(730, 510, "trampilla");
-    this.ObjectVentilacion2 = this.physics.add.staticImage(730, 420, "trampilla");
+    this.ObjectTrampilla1 = this.physics.add.staticImage(1203, 410, "Marcador").setScale(0.3);
+    this.ObjectTrampilla2 = this.physics.add.staticImage(1203, 595, "Marcador").setScale(0.3);
+    this.ObjectTrampilla3 = this.physics.add.staticImage(995, 602, "Marcador").setScale(0.3);
+    this.ObjectTrampilla4 = this.physics.add.staticImage(838, 602, "Marcador").setScale(0.3);
+    this.ObjectVentilacion1 = this.physics.add.staticImage(730, 535, "Marcador").setScale(0.3);
+    this.ObjectVentilacion2 = this.physics.add.staticImage(730, 458, "Marcador").setScale(0.3);
 
+    this.ObjectTrampilla1.setTint(0x00ff00);
+    this.ObjectTrampilla2.setTint(0x00ff00);
+    this.ObjectTrampilla3.setTint(0x00ff00);
+    this.ObjectTrampilla4.setTint(0x00ff00);
+    this.ObjectVentilacion1.setTint(0x00ff00);
+    this.ObjectVentilacion2.setTint(0x00ff00);
+
+    
     this.objectOpenDoor = this.physics.add
       .staticImage(1400, 780, "openDoor")
       .setScale(0.05);
@@ -624,11 +633,11 @@ class GameScene extends Phaser.Scene {
     // Pool de objetos y coordenadas
     this.objectPool = ["reloj", "rosquilla", "red", "cepo"];
     this.positionPool = [
-      //{ x: 730 ,y:430 },
+      { x: 730 ,y:430 },
       { x:920 , y: 470},
-      //{ x: 925, y: 700 },
-      //{ x: 1150, y: 465 },
-      //{ x: 1215, y: 645 }
+      { x: 925, y: 700 },
+      { x: 1150, y: 465 },
+      { x: 1215, y: 645 }
     ];
 
     // Inventario del policia (vacio inicialmente)
@@ -639,20 +648,17 @@ class GameScene extends Phaser.Scene {
     this.spawnRandomModifier();
 
     this.add
-      .text(width / 4, 50, `Jugador 1: ${this.registry.get("player1Rounds")}`, {
+      .text(820, 355, `Jugador 1: ${this.registry.get("player1Rounds")}`, {
         fontFamily: "retro-computer",
-        fontSize: "32px",
+        fontSize: "14px",
         fill: "#ffff",
       })
       .setOrigin(0.5);
     this.add
-      .text(
-        width - width / 4,
-        50,
-        `Jugador 2: ${this.registry.get("player2Rounds")}`,
+      .text(1100, 355,`Jugador 2: ${this.registry.get("player2Rounds")}`,
         {
           fontFamily: "retro-computer",
-          fontSize: "32px",
+          fontSize: "14px",
           fill: "#ffff",
         }
       )
@@ -1265,22 +1271,37 @@ class GameScene extends Phaser.Scene {
 
   startTrampillaCooldown() {
     this.canUseTrampilla = false;
+    this.ObjectTrampilla1.setTint(0xff0000);
+    this.ObjectTrampilla2.setTint(0xff0000);
     this.time.delayedCall(10000, () => {
       this.canUseTrampilla = true;
+      this.ObjectTrampilla1.setTint(0x00ff00);
+      this.ObjectTrampilla2.setTint(0x00ff00);
+
     });
   }
 
   startTrampillaCooldown1() {
     this.canUseTrampilla1 = false;
+    this.ObjectTrampilla3.setTint(0xff0000);
+    this.ObjectTrampilla4.setTint(0xff0000);
     this.time.delayedCall(10000, () => {
       this.canUseTrampilla1 = true;
+      this.ObjectTrampilla3.setTint(0x00ff00);
+      this.ObjectTrampilla4.setTint(0x00ff00);
+
     });
   }
 
   startTrampillaCooldown2() {
     this.canUseTrampilla2 = false;
+    this.ObjectVentilacion1.setTint(0xff0000);
+    this.ObjectVentilacion2.setTint(0xff0000);
     this.time.delayedCall(10000, () => {
       this.canUseTrampilla2 = true;
+      this.ObjectVentilacion1.setTint(0x00ff00);
+      this.ObjectVentilacion2.setTint(0x00ff00);
+
     });
   }
 
