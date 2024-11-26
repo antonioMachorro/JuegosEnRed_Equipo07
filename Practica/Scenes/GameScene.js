@@ -20,8 +20,6 @@ class GameScene extends Phaser.Scene {
 
   preload() {
     this.load.image("escenario", "./Escenario/Escenario.png");
-    //this.load.image('policia', './Personajes/police.png');
-    this.load.image("ladron", "./Personajes/ladron.png");
     this.load.image("red", "./Objetos/red.png");
     this.load.image("rosquilla", "./Objetos/rosquilla.png");
     this.load.image("cepo", "./Objetos/cepo.png");
@@ -42,6 +40,12 @@ class GameScene extends Phaser.Scene {
       "./Personajes/Policia_Spritesheet.png",
       "./Personajes/policia_spritesheet.json"
     );
+
+    this.load.atlas(
+        "ladron",
+        "./Personajes/Ladron_Spritesheet.png",
+        "./Personajes/ladron_spritesheet.json"
+    )
 
     this.load.audio("game_music", "./Musica/GAMEPLAYYYY.wav");
   }
@@ -123,12 +127,16 @@ class GameScene extends Phaser.Scene {
     //this.ground.create(1000, 900, 'Pared');
 
     // Agregar los personajes con físicas
-    this.playerPolicia = this.physics.add.sprite(960, 540, "policia");
-    this.playerLadron = this.physics.add.sprite(800, 400, "ladron");
+    this.playerPolicia = this.physics.add.sprite(1215, 705, "policia");
+    this.playerLadron = this.physics.add.sprite(740, 580, "ladron");
 
     // Ajustar el collider de los personajes
     this.playerPolicia.body.setSize(20, 35); // Collider del policía
     this.playerLadron.body.setSize(20, 35); // Collider del ladrón
+
+    this.playerPolicia.on('animationupdate', () => {
+        this.playerPolicia.body.setSize(25, 35);
+    });
 
     // Configurar el temporizador inicial de 2 minutos (120 segundos)
     this.timeLeft = 120;
@@ -394,7 +402,9 @@ class GameScene extends Phaser.Scene {
     this.ground.add(cuboBarra);
 
     //this.ObjectCajaItems = this.add.image(1200, 350, "cajaItems"); // Inventario del policia
-    this.objectIcono = this.add.image(1210, 350, "icono");
+    this.registry.get('player1IsPolice') ? this.objectIcono = this.add.image(710, 350, "icono") : this.objectIcono = this.add.image(1210, 350, "icono");
+    console.log(this.registry.get('player1IsPolice'));
+    console.log(this.objectIcono.x);
     this.ObjectTrampilla1 = this.physics.add.staticImage(1203, 395, "trampilla");
     this.ObjectTrampilla2 = this.physics.add.staticImage(1203, 580, "trampilla");
     this.ObjectTrampilla3 = this.physics.add.staticImage(995, 580, "trampilla");
@@ -684,7 +694,7 @@ class GameScene extends Phaser.Scene {
         end: 8,
         zeroPad: 3,
       }),
-      frameRate: 1,
+      frameRate: 10,
       repeat: -1,
     });
 
@@ -698,6 +708,73 @@ class GameScene extends Phaser.Scene {
       frameRate: 6,
       repeat: -1,
     });
+
+    this.anims.create({
+        key: "police_walljump",
+        frames: this.anims.generateFrameNames("policia", {
+          prefix: "walljump",
+          end: 9,
+          zeroPad: 3,
+        }),
+        frameRate: 15,
+        repeat: -1,
+      });
+
+    //Animaciones ladron
+    this.anims.create({
+        key: "thief_idle",
+        frames: this.anims.generateFrameNames("ladron", {
+          prefix: "idle",
+          end: 4,
+          zeroPad: 3,
+        }),
+        frameRate: 6,
+        repeat: -1,
+      });
+  
+      this.anims.create({
+        key: "thief_run",
+        frames: this.anims.generateFrameNames("ladron", {
+          prefix: "run",
+          end: 7,
+          zeroPad: 3,
+        }),
+        frameRate: 6,
+        repeat: -1,
+      });
+  
+      this.anims.create({
+        key: "thief_jump",
+        frames: this.anims.generateFrameNames("ladron", {
+          prefix: "jump",
+          end: 7,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+  
+      this.anims.create({
+        key: "thief_wall",
+        frames: this.anims.generateFrameNames("ladron", {
+          prefix: "wall",
+          end: 4,
+          zeroPad: 3,
+        }),
+        frameRate: 6,
+        repeat: -1,
+      });
+  
+      this.anims.create({
+          key: "thief_walljump",
+          frames: this.anims.generateFrameNames("ladron", {
+            prefix: "walljump",
+            end: 9,
+            zeroPad: 3,
+          }),
+          frameRate: 15,
+          repeat: -1,
+        });
   }
 
   spawnRandomModifier() {
@@ -783,12 +860,7 @@ class GameScene extends Phaser.Scene {
         });
         break;
       case "red":
-        this.LadronMovement = false;
         this.lanzarRed();
-        this.time.delayedCall(2000, () => {
-          this.LadronMovement = true;
-        });
-
         break;
       case "cepo":
         this.LadronVelocity /= 2;
@@ -851,6 +923,8 @@ class GameScene extends Phaser.Scene {
             red.destroy();
           },
         });
+
+        this.stopThief();
       },
       null,
       this
@@ -858,97 +932,99 @@ class GameScene extends Phaser.Scene {
   }
 
   stopThief() {
+    console.log("STOPING THIEF");
     this.LadronMovement = false;
     this.time.delayedCall(2000, () => {
-      this.LadronMovement = true;
+        console.log("STOPED THIEF");
+        this.LadronMovement = true;
     });
   }
 
   update(time, delta) {
-    // Establecer la velocidad en X a cero antes de procesar el movimiento si no está en el salto de pared.
 
-    if (!this.isWallSlideJumpingLadron) {
-      this.playerLadron.setVelocityX(0);
-    } else {
-      if (this.playerLadron.body.x === this.wallSlideJumpPositionLadron) {
-        this.isWallSlideJumpingLadron = false;
-      }
+    if(!this.policiaFacingRight && !this.isWallSlideJumpingPolicia) {
+        this.playerPolicia.flipX = true;
+    } else if(this.policiaFacingRight && !this.isWallSlideJumpingPolicia) {
+        this.playerPolicia.flipX = false;
+    }
+
+    if(!this.ladronFacingRight && !this.isWallSlideJumpingLadron) {
+        this.playerLadron.flipX = true;
+    } else if(this.ladronFacingRight && !this.isWallSlideJumpingLadron) {
+        this.playerLadron.flipX = false;
     }
 
     // Movimiento del policía
-    if (!this.isWallSlideJumpingPolicia) {
-      if (this.policeControls.left.isDown) {
-        this.playerPolicia.flipX = true;
-        this.playerPolicia.setVelocityX(
-          -this.PoliciaVelocity * this.time.timeScale
-        );
-        this.policiaFacingRight = false;
-        if (this.playerPolicia.body.touching.down) {
-          this.playerPolicia.anims.play("police_run", true);
-        }
-      } else if (this.policeControls.right.isDown) {
-        this.playerPolicia.flipX = false;
-        this.playerPolicia.setVelocityX(
-          this.PoliciaVelocity * this.time.timeScale
-        );
-        this.policiaFacingRight = true;
-        if (this.playerPolicia.body.touching.down) {
-          this.playerPolicia.anims.play("police_run", true);
-        }
-      } else {
-        this.playerPolicia.setVelocityX(0);
-        if (this.playerPolicia.body.touching.down) {
-          this.playerPolicia.anims.play("police_idle", true);
-        }
-      }
-    } else {
-      if (this.wallSlideTimer && this.wallSlideTimer.getRemaining() <= 0) {
-        this.isWallSlideJumpingPolicia = false;
-      }
-      /*
-            if(this.playerPolicia.body.x === this.wallSlideJumpPositionPolicia)
-            {
-                this.isWallSlideJumpingPolicia = false;
+    if(!this.isWallSlideJumpingPolicia)
+    {
+        if (this.policeControls.left.isDown) {
+            this.playerPolicia.setVelocityX(-this.PoliciaVelocity * this.time.timeScale);
+            this.policiaFacingRight = false;
+            if(this.playerPolicia.body.touching.down) {
+                this.playerPolicia.anims.play('police_run', true);
             }
-            */
+        } else if (this.policeControls.right.isDown) {
+            this.playerPolicia.setVelocityX(this.PoliciaVelocity * this.time.timeScale);
+            this.policiaFacingRight = true;
+            if(this.playerPolicia.body.touching.down) {
+                this.playerPolicia.anims.play('police_run', true);
+            }
+        } else {
+            this.playerPolicia.setVelocityX(0);
+            if(this.playerPolicia.body.touching.down) {
+                this.playerPolicia.anims.play('police_idle', true);
+            }
+        }
+    } else {
+        if(this.wallSlideTimerPolicia && this.wallSlideTimerPolicia.getRemaining() <= 0) {
+            this.isWallSlideJumpingPolicia = false;
+        }
     }
 
     // Movimiento del ladrón
-    if (!this.isWallSlideJumpingLadron) {
-      if (this.LadronMovement) {
-        if (this.thiefControls.left.isDown) {
-          this.playerLadron.setVelocityX(
-            -this.LadronVelocity * this.time.timeScale
-          );
-        } else if (this.thiefControls.right.isDown) {
-          this.playerLadron.setVelocityX(
-            this.LadronVelocity * this.time.timeScale
-          );
+    if(!this.isWallSlideJumpingLadron && this.LadronMovement)
+        {
+            if (this.thiefControls.left.isDown) {
+                this.playerLadron.setVelocityX(-this.LadronVelocity * this.time.timeScale);
+                this.ladronFacingRight = false;
+                if(this.playerLadron.body.touching.down) {
+                    this.playerLadron.anims.play('thief_run', true);
+                }
+            } else if (this.thiefControls.right.isDown) {
+                this.playerLadron.setVelocityX(this.LadronVelocity * this.time.timeScale);
+                this.ladronFacingRight = true;
+                if(this.playerLadron.body.touching.down) {
+                    this.playerLadron.anims.play('thief_run', true);
+                }
+            } else {
+                this.playerLadron.setVelocityX(0);
+                if(this.playerLadron.body.touching.down) {
+                    this.playerLadron.anims.play('thief_idle', true);
+                }
+            }
+        } else {
+            if(this.wallSlideTimerLadron && this.wallSlideTimerLadron.getRemaining() <= 0) {
+                this.isWallSlideJumpingLadron = false;
+            }
         }
-      }
-    }
 
     // Detectar si el jugador está pegado a la pared (si está tocando la pared)
     this.checkWallSlide(this.playerPolicia);
     this.checkWallSlide(this.playerLadron);
 
-    // Salto del policía (doble salto)
     if (this.policeControls.up.isDown && this.canJumpPolicia) {
-      if (this.isWallSlidingPolicia) {
-        //Salto de pared
-        this.handleWallJump(this.playerPolicia);
-      } else if (
-        this.playerPolicia.body.touching.down ||
-        this.jumpCountPolicia < this.maxJumpCount
-      ) {
-        this.playerPolicia.anims.play("police_jump", true);
-        this.playerPolicia.setVelocityY(-425 * this.time.timeScale);
-        this.jumpCountPolicia++; // Incrementa el contador de saltos
-      }
-      this.canJumpPolicia = false; // Desactivar el salto por un tiempo
-      this.time.delayedCall(this.jumpCooldown, () => {
-        this.canJumpPolicia = true; // Reactivar el salto después del cooldown
-      });
+        if (this.isWallSlidingPolicia) {
+            //Salto de pared
+            this.handleWallJump(this.playerPolicia);
+        } else if (this.playerPolicia.body.touching.down || this.jumpCountPolicia < this.maxJumpCount) {
+            this.playerPolicia.anims.play('police_jump', true);
+            this.playerPolicia.setVelocityY(-350 * this.time.timeScale);
+            this.jumpCountPolicia++;  // Incrementa el contador de saltos
+        }
+        this.canJumpPolicia = false;  // Desactivar el salto por un tiempo
+        this.time.delayedCall(this.jumpCooldown, () => {
+            this.canJumpPolicia = true;  // Reactivar el salto después del cooldown
+        });
     }
 
     // Salto del ladrón (doble salto)
@@ -960,8 +1036,8 @@ class GameScene extends Phaser.Scene {
         this.playerLadron.body.touching.down ||
         this.jumpCountLadron < this.maxJumpCount
       ) {
-        // Si toca el suelo o tiene saltos disponibles, permite el salto
-        this.playerLadron.setVelocityY(-425 * this.time.timeScale);
+        this.playerLadron.anims.play('thief_jump', true);
+        this.playerLadron.setVelocityY(-350 * this.time.timeScale);
         this.jumpCountLadron++; // Incrementa el contador de saltos
       }
       this.canJumpLadron = false; // Desactivar el salto por un tiempo
@@ -985,47 +1061,54 @@ class GameScene extends Phaser.Scene {
 
     // Detectar cuando se presione la tecla Enter
     if (this.policeInteract.isDown) {
-      console.log("Usar item");
       this.useModifier();
     }
   }
 
-  handleWallJump(player) {
-    if (player === this.playerPolicia) {
-      if (this.playerPolicia.body.blocked.left) {
-        this.isWallSlideJumpingPolicia = true;
-        this.isWallSlidingPolicia = false;
-        this.playerPolicia.setVelocityY(-600 * this.time.timeScale);
-        this.playerPolicia.setVelocityX(300 * this.time.timeScale);
-      } else if (this.playerPolicia.body.blocked.right) {
-        this.isWallSlideJumpingPolicia = true;
-        this.isWallSlidingPolicia = false;
-        this.playerPolicia.setVelocityY(-600 * this.time.timeScale);
-        this.playerPolicia.setVelocityX(-300 * this.time.timeScale);
-      }
-      this.wallSlideTimer = this.time.delayedCall(50, () => {
-        this.isWallSlideJumpingPolicia = false;
-      });
-      this.jumpCountPolicia = 1;
+    handleWallJump(player) {
+        if(player === this.playerPolicia){
+            if(this.playerPolicia.body.blocked.left) {
+                this.isWallSlideJumpingPolicia = true;
+                this.isWallSlidingPolicia = false;
+                this.playerPolicia.setVelocityY(-450 * this.time.timeScale);
+                this.playerPolicia.setVelocityX(180 * this.time.timeScale);
+                this.playerPolicia.flipX = false;
+                this.playerPolicia.anims.play('police_walljump') 
+            } else if(this.playerPolicia.body.blocked.right) {
+                this.isWallSlideJumpingPolicia = true;
+                this.isWallSlidingPolicia = false;
+                this.playerPolicia.setVelocityY(-450 * this.time.timeScale);
+                this.playerPolicia.setVelocityX(-180 * this.time.timeScale);
+                this.playerPolicia.flipX = true;
+                this.playerPolicia.anims.play('police_walljump')
+            }
+            this.wallSlideTimerPolicia = this.time.delayedCall(50, () => {
+                this.isWallSlideJumpingPolicia = false;
+            })
+            this.jumpCountPolicia = 1;
+        }
+        if(player === this.playerLadron){
+            if(this.playerLadron.body.blocked.left) {
+                this.isWallSlideJumpingLadron = true;
+                this.isWallSlidingLadron = false;
+                this.playerLadron.setVelocityY(-450 * this.time.timeScale);
+                this.playerLadron.setVelocityX(180 * this.time.timeScale);
+                this.playerLadron.flipX = false;
+                this.playerLadron.anims.play('thief_walljump') 
+            } else if(this.playerLadron.body.blocked.right) {
+                this.isWallSlideJumpingLadron = true;
+                this.isWallSlidingLadron = false;
+                this.playerLadron.setVelocityY(-450 * this.time.timeScale);
+                this.playerLadron.setVelocityX(-180 * this.time.timeScale);
+                this.playerLadron.flipX = true;
+                this.playerLadron.anims.play('thief_walljump')
+            }
+            this.wallSlideTimerLadron = this.time.delayedCall(50, () => {
+                this.isWallSlideJumpingLadron = false;
+            })
+            this.jumpCountLadron = 1;
+        }
     }
-    if (player === this.playerLadron) {
-      if (this.playerLadron.body.blocked.left) {
-        this.isWallSlideJumpingLadron = true;
-        this.isWallSlidingLadron = false;
-        this.playerLadron.setVelocityY(-600 * this.time.timeScale);
-        this.playerLadron.setVelocityX(300 * this.time.timeScale);
-      } else if (this.playerLadron.body.blocked.right) {
-        this.isWallSlideJumpingLadron = true;
-        this.isWallSlidingLadron = false;
-        this.playerLadron.setVelocityY(-600 * this.time.timeScale);
-        this.playerLadron.setVelocityX(-300 * this.time.timeScale);
-      }
-      this.wallSlideTimer = this.time.delayedCall(50, () => {
-        this.isWallSlideJumpingLadron = false;
-      });
-      this.jumpCountLadron = 1;
-    }
-  }
 
   updateTimer() {
     if (this.timeLeft > 0) {
@@ -1046,7 +1129,7 @@ class GameScene extends Phaser.Scene {
           this.registry.set("player1Rounds", 0);
           this.registry.set("player2Rounds", 0);
         } else {
-          this.playRoundWin("Ladrón");
+          this.playRoundWin("Ladron");
         }
       } else {
         const player1Rounds = this.registry.get("player1Rounds") + 1;
@@ -1057,7 +1140,7 @@ class GameScene extends Phaser.Scene {
           this.registry.set("player1Rounds", 0);
           this.registry.set("player2Rounds", 0);
         } else {
-          this.playRoundWin("Ladrón");
+          this.playRoundWin("Ladron");
         }
       }
     }
@@ -1122,6 +1205,10 @@ class GameScene extends Phaser.Scene {
         this.isWallSlidingPolicia = true;
         this.wallSlideTimePolicia = this.wallSlideDuration;
       } else if (player === this.playerLadron) {
+        this.playerLadron.body.blocked.left
+        ? (this.playerLadron.flipX = false)
+        : (this.playerLadron.flipX = true);
+      this.playerLadron.anims.play("thief_wall", true);
         this.isWallSlidingLadron = true;
         this.wallSlideTimeLadron = this.wallSlideDuration;
       }
