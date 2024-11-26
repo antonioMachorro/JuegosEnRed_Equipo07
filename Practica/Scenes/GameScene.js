@@ -139,8 +139,8 @@ class GameScene extends Phaser.Scene {
             .setSize(960, 5)
             .setVisible(false);
 
-            const marcoInfColl = this.physics.add.staticImage(960,746)
-            .setSize(960, 5)
+            const marcoInfColl = this.physics.add.staticImage(960,742)
+            .setSize(960, 8)
             .setVisible(false);
 
             const marcoDerColl = this.physics.add.staticImage(1303,337)
@@ -151,16 +151,100 @@ class GameScene extends Phaser.Scene {
             .setSize(5, 960)
             .setVisible(false);
 
-            const sueloSub1Coll = this.physics.add.staticImage(872,675)
+            const sueloSub1Coll = this.physics.add.staticImage(872,677)
             .setSize(385, 16)
             .setVisible(false);
 
-            const sueloViga1 = this.physics.add.staticImage(1163, 500)
+            const sueloSub1CollMont1 = this.physics.add.staticImage(1030,690)
+            .setSize(40, 16)
+            .setVisible(false);
+
+            const sueloSub1CollMont2 = this.physics.add.staticImage(1135,728)
+            .setSize(17, 40)
+            .setVisible(false);
+
+            const sueloSub1CollMont3 = this.physics.add.staticImage(1220,738)
+            .setSize(160, 20)
+            .setVisible(false);
+
+            const sueloSubMont1 = this.physics.add.staticImage(760,738)
+            .setSize(39, 20)
+            .setVisible(false);
+
+            const sueloSubMont2 = this.physics.add.staticImage(928,738)
+            .setSize(30, 10)
+            .setVisible(false);
+
+            const sueloTubInf = this.physics.add.staticImage(1168,604)
+            .setSize(155, 17)
+            .setVisible(false);
+
+            const sueloSupTub = this.physics.add.staticImage(1175,421)
+            .setSize(110, 20)
+            .setVisible(false);
+
+            const sueloviga = this.physics.add.staticImage(1163,500)
             .setSize(133, 20)
             .setVisible(false);
 
-            const sueloViga2 = this.physics.add.staticImage(1175, 421)
-            .setSize(110, 20)
+            const sueloviga2 = this.physics.add.staticImage(982,433)
+            .setSize(125, 25)
+            .setVisible(false);
+
+            const techoCasaColl = this.physics.add.staticImage(735,380)
+            .setSize(130, 10)
+            .setVisible(false);
+
+            const paredCasaColl = this.physics.add.staticImage(673,392)
+            .setSize(7, 20)
+            .setVisible(false);
+            
+            const techoCasa1 = this.physics.add.staticImage(735, 380)
+            .setSize(130, 9)
+            .setVisible(false);
+
+            const paredCasa1_1 = this.physics.add.staticImage(673, 392)
+            .setSize(7, 20)
+            .setVisible(false);
+
+            const paredCasa1_2 = this.physics.add.staticImage(796, 392)
+            .setSize(7, 20)
+            .setVisible(false);
+
+            const techoCasa2 = this.physics.add.staticImage(735, 463)
+            .setSize(130, 9)
+            .setVisible(false);
+
+            const paredCasa2_1 = this.physics.add.staticImage(673, 475)
+            .setSize(7, 20)
+            .setVisible(false);
+
+            const paredCasa2_2 = this.physics.add.staticImage(796, 475)
+            .setSize(7, 20)
+            .setVisible(false);
+
+            const techoCasa3 = this.physics.add.staticImage(735, 540)
+            .setSize(130, 9)
+            .setVisible(false);
+
+            const paredCasa3_1 = this.physics.add.staticImage(673, 552)
+            .setSize(7, 20)
+            .setVisible(false);
+
+            const paredCasa3_2 = this.physics.add.staticImage(796, 552)
+            .setSize(7, 20)
+            .setVisible(false);
+
+            const balcon = this.physics.add.staticImage(820, 462)
+            .setSize(45, 7)
+            .setVisible(false);
+
+            const paredMorada1 = this.physics.add.staticImage(1238, 411)
+            .setSize(16, 42)
+            .setVisible(false);
+
+            const paredMorada2 = this.physics.add.staticImage(1238, 543)
+            .setSize(16, 108)
             .setVisible(false);
 
         this.ground.add(busColl);
@@ -170,8 +254,29 @@ class GameScene extends Phaser.Scene {
         this.ground.add(marcoIzqColl);
         this.ground.add(marcoInfColl);
         this.ground.add(sueloSub1Coll);
-        this.ground.add(sueloViga1);
-        this.ground.add(sueloViga2);
+        this.ground.add(sueloTubInf);
+        this.ground.add(sueloSupTub);
+        this.ground.add(sueloviga);
+        this.ground.add(sueloSubMont1);
+        this.ground.add(sueloSubMont2);
+        this.ground.add(sueloviga2);
+        this.ground.add(techoCasaColl);
+        this.ground.add(paredCasaColl);
+        this.ground.add(sueloSub1CollMont1);
+        this.ground.add(sueloSub1CollMont2);
+        this.ground.add(sueloSub1CollMont3);
+        this.ground.add(techoCasa1);
+        this.ground.add(techoCasa2);
+        this.ground.add(techoCasa3);
+        this.ground.add(paredCasa1_1);
+        this.ground.add(paredCasa1_2);
+        this.ground.add(paredCasa2_1);
+        this.ground.add(paredCasa2_2);
+        this.ground.add(paredCasa3_1);
+        this.ground.add(paredCasa3_2);
+        this.ground.add(balcon);
+        this.ground.add(paredMorada1);
+        this.ground.add(paredMorada2);
 
 
         this.ObjectCajaItems = this.add.image(1750, 100, 'cajaItems'); // Inventario del policia
