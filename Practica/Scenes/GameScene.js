@@ -80,6 +80,9 @@ class GameScene extends Phaser.Scene {
             this.thiefInteract = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         }
 
+        this.policiaFacingRight = true;
+        this.ladronFacingRight = true;
+
         // Variable de trampilla
         this.canUseTrampilla = true;
 
@@ -97,11 +100,11 @@ class GameScene extends Phaser.Scene {
 
         // Agregar los personajes con físicas
         this.playerPolicia = this.physics.add.sprite(960, 540, 'policia');
-        this.playerLadron = this.physics.add.sprite(800, 300, 'ladron');
+        this.playerLadron = this.physics.add.sprite(800, 400, 'ladron');
 
         // Ajustar el collider de los personajes
-        this.playerPolicia.body.setSize(40, 85);  // Collider del policía
-        this.playerLadron.body.setSize(40, 85);    // Collider del ladrón
+        this.playerPolicia.body.setSize(20, 35);  // Collider del policía
+        this.playerLadron.body.setSize(20, 35);    // Collider del ladrón
 
         // Configurar el temporizador inicial de 2 minutos (120 segundos)
         this.timeLeft = 120;
@@ -391,8 +394,8 @@ class GameScene extends Phaser.Scene {
         // Pool de objetos y coordenadas
         this.objectPool = ['reloj', 'rosquilla', 'red', 'cepo'];
         this.positionPool = [
-            { x: 500, y: 800 },
-            { x: 1300, y: 800 }
+            { x: width/2, y: height/2 },
+            //{ x: 1300, y: 800 }
         ];
   
         // Inventario del policia (vacio inicialmente)
@@ -486,9 +489,11 @@ class GameScene extends Phaser.Scene {
                 break;
             case 'red':
                 this.LadronMovement = false;
+                this.lanzarRed();
                 this.time.delayedCall(2000, () => {
                     this.LadronMovement = true;
                 });
+
                 break;
             case 'cepo':
                 this.LadronVelocity /= 2;
@@ -509,8 +514,56 @@ class GameScene extends Phaser.Scene {
         
     }
 
+    lanzarRed() {
+
+        let redStartingX = this.policiaFacingRight ? this.playerPolicia.x + 20 : this.playerPolicia.x - 20;
+
+        let red = this.physics.add.image(redStartingX, this.playerPolicia.y, 'red').setOrigin(0.5);
+        red.body.setAllowGravity(false);
+
+        let launchAnimation = this.tweens.add({
+            targets: red,
+            x: this.policiaFacingRight ? red.x + 100 : red.x - 100,
+            ease: 'Power1',
+            duration: 500,
+            onComplete: () => {
+                console.log("DONE");
+                this.tweens.add({
+                    targets: red,
+                    alpha: 0,
+                    duration: 200,
+                    ease: 'Linear',
+                    onComplete: () => {
+                        red.destroy();
+                    }
+                });
+            }
+        });
+
+        this.physics.add.collider(this.playerLadron, red, () => {
+            launchAnimation.stop();
+            this.tweens.add({
+                targets: red,
+                alpha: 0,
+                duration: 200,
+                ease: 'Linear',
+                onComplete: () => {
+                    red.destroy();
+                }
+            })
+        }, null, this);
+    }
+
+    stopThief() {
+        this.LadronMovement = false;
+        this.time.delayedCall(2000, () => {
+            this.LadronMovement = true;
+        });
+    }
+
     update(time, delta) {
         // Establecer la velocidad en X a cero antes de procesar el movimiento si no está en el salto de pared.
+
         if(!this.isWallSlideJumpingPolicia){
             this.playerPolicia.setVelocityX(0);
         } else {
@@ -534,8 +587,10 @@ class GameScene extends Phaser.Scene {
         {
             if (this.policeControls.left.isDown) {
                 this.playerPolicia.setVelocityX(-this.PoliciaVelocity * this.time.timeScale);
+                this.policiaFacingRight = false;
             } else if (this.policeControls.right.isDown) {
                 this.playerPolicia.setVelocityX(this.PoliciaVelocity * this.time.timeScale);
+                this.policiaFacingRight = true;
             }
         }
 
