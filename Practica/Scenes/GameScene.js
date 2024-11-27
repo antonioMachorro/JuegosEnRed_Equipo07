@@ -21,13 +21,6 @@ class GameScene extends Phaser.Scene {
   preload() {
     this.load.image("escenario", "./Escenario/Escenario.png");
 
-    /*
-    this.load.image("red", "./Objetos/red.png");
-    this.load.image("rosquilla", "./Objetos/rosquilla.png");
-    this.load.image("cepo", "./Objetos/cepo.png");
-    this.load.image("reloj", "./Objetos/reloj.png");
-    */
-
     this.load.image("background", "path/to/background.png");
     this.load.image("Suelo", "./Objetos/suelo.png");
     this.load.image("Pared", "./Objetos/Pared.png");
@@ -68,6 +61,10 @@ class GameScene extends Phaser.Scene {
       );
 
     this.load.audio("game_music", "./Musica/GAMEPLAYYYY.wav");
+    this.load.audio("agarrar_objeto", "./Musica/Sonidos/agarrar_objeto_policia.wav");
+    this.load.audio("activar_trampa", "./Musica/Sonidos/ladron_activa_trampa.wav");
+    this.load.audio("teletransporte", "./Musica/Sonidos/teletransporte.wav");
+    this.load.audio("usar_objeto", "./Musica/Sonidos/usar_objeto_policia.wav");
   }
 
   create() {
@@ -531,8 +528,9 @@ class GameScene extends Phaser.Scene {
       this.ObjectTrampilla1,
       () => {
         if (this.thiefInteract.isDown && this.canUseTrampilla) {
-          this.teleportLadron(this.ObjectTrampilla2); // Teletransporta al ladrón a la trampilla 2
-          this.startTrampillaCooldown(); // Activar el cooldown
+            this.sound.play("teletransporte");
+            this.teleportLadron(this.ObjectTrampilla2); // Teletransporta al ladrón a la trampilla 2
+            this.startTrampillaCooldown(); // Activar el cooldown
         }
       },
       null,
@@ -544,8 +542,9 @@ class GameScene extends Phaser.Scene {
       this.ObjectTrampilla2,
       () => {
         if (this.thiefInteract.isDown && this.canUseTrampilla) {
-          this.teleportLadron(this.ObjectTrampilla1); // Teletransporta al ladrón a la trampilla 1
-          this.startTrampillaCooldown(); // Activar el cooldown
+            this.sound.play("teletransporte");
+            this.teleportLadron(this.ObjectTrampilla1); // Teletransporta al ladrón a la trampilla 1
+            this.startTrampillaCooldown(); // Activar el cooldown
         }
       },
       null,
@@ -556,6 +555,7 @@ class GameScene extends Phaser.Scene {
         this.ObjectTrampilla3,
         () => {
           if (this.thiefInteract.isDown && this.canUseTrampilla1) {
+            this.sound.play("teletransporte");
             this.teleportLadron(this.ObjectTrampilla4); // Teletransporta al ladrón a la trampilla 1
             this.startTrampillaCooldown1(); // Activar el cooldown
           }
@@ -568,6 +568,7 @@ class GameScene extends Phaser.Scene {
         this.ObjectTrampilla4,
         () => {
           if (this.thiefInteract.isDown && this.canUseTrampilla1) {
+            this.sound.play("teletransporte");
             this.teleportLadron(this.ObjectTrampilla3); // Teletransporta al ladrón a la trampilla 1
             this.startTrampillaCooldown1(); // Activar el cooldown
           }
@@ -581,6 +582,7 @@ class GameScene extends Phaser.Scene {
         this.ObjectVentilacion1,
         () => {
           if (this.thiefInteract.isDown && this.canUseTrampilla2) {
+            this.sound.play("teletransporte");
             this.teleportLadron(this.ObjectVentilacion2); // Teletransporta al ladrón a la trampilla 1
             this.startTrampillaCooldown2(); // Activar el cooldown
           }
@@ -594,6 +596,7 @@ class GameScene extends Phaser.Scene {
         this.ObjectVentilacion2,
         () => {
           if (this.thiefInteract.isDown && this.canUseTrampilla2) {
+            this.sound.play("teletransporte");
             this.teleportLadron(this.ObjectVentilacion1); // Teletransporta al ladrón a la trampilla 1
             this.startTrampillaCooldown2(); // Activar el cooldown
           }
@@ -605,6 +608,8 @@ class GameScene extends Phaser.Scene {
     //Cierre de puertas
     this.physics.add.overlap(this.playerLadron, this.carcelOpenDoor, () => {
       if (this.thiefInteract.isDown && !this.carcelIsClosed) {
+
+        this.sound.play("activar_trampa");
 
         this.carcelOpenDoor.setVisible(false);
         this.carcelOpenDoor.body.enable = false;
@@ -629,6 +634,8 @@ class GameScene extends Phaser.Scene {
     this.physics.add.overlap(this.playerLadron, this.floor1OpenDoor, () => {
         if (this.thiefInteract.isDown && !this.puerta1IsClosed) {
 
+            this.sound.play("activar_trampa");
+
             this.floor1OpenDoor.setVisible(false);
             this.floor1OpenDoor.body.enable = false;
 
@@ -652,6 +659,8 @@ class GameScene extends Phaser.Scene {
     this.physics.add.overlap(this.playerLadron, this.floor2OpenDoor, () => {
         if (this.thiefInteract.isDown && !this.puerta2IsClosed) {
 
+            this.sound.play("activar_trampa");
+
             this.floor2OpenDoor.setVisible(false);
             this.floor2OpenDoor.body.enable = false;
 
@@ -674,6 +683,8 @@ class GameScene extends Phaser.Scene {
 
     this.physics.add.overlap(this.playerLadron, this.floor3OpenDoor, () => {
         if (this.thiefInteract.isDown && !this.puerta3IsClosed) {
+
+            this.sound.play("activar_trampa");
 
             this.floor3OpenDoor.setVisible(false);
             this.floor3OpenDoor.body.enable = false;
@@ -972,6 +983,7 @@ class GameScene extends Phaser.Scene {
     const randomModifier = Phaser.Utils.Array.GetRandom(this.objectPool);
     const key = this.items[randomModifier];
     this.policiaInventory = randomModifier;
+    this.sound.play("agarrar_objeto");
 
     // Actualizar el texto de inventario en pantalla
     //this.inventoryText.setText('Inventario: ' + randomModifier);
@@ -1230,7 +1242,8 @@ class GameScene extends Phaser.Scene {
 
     // Detectar cuando se presione la tecla Enter
     if (this.policeInteract.isDown) {
-      this.useModifier();
+        this.sound.play('usar_objeto');
+        this.useModifier();
     }
   }
 
