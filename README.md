@@ -88,11 +88,11 @@ Alvaro Rosa Pedraza 		[a.rosa.2022@alumnos.urjc.es](mailto:a.rosa.2022@alumnos.u
 
 1. # **Introducción** 
 
-   1. ## **Concepto del juego** {#concepto-del-juego}
+   1. ## **Concepto del juego** 
 
 *“Hotline Miauami”* es un juego multijugador de persecución 2D, donde un jugador asume el papel de "Policía" y el otro, el de "Ladrón". El objetivo del policía es atrapar al ladrón antes de que el tiempo se acabe, mientras que el del ladrón es evadir al policía y evitar ser atrapado dentro del tiempo establecido. El juego se desarrolla en un escenario 2D con plataformas, obstáculos y bonificaciones que pueden ser usados ​​para escapar, obstaculizar el paso o perjudicar al oponente.
 
-2. ## **Género** {#género}
+2. ## **Género** 
 
 *“Hotline Miauami”* combina dos géneros clave: acción en tercera persona y plataformas 2D, creando una experiencia dinámica y competitiva en tiempo real.
 
@@ -102,7 +102,7 @@ Alvaro Rosa Pedraza 		[a.rosa.2022@alumnos.urjc.es](mailto:a.rosa.2022@alumnos.u
 
 La fusión de estos dos géneros crea una jugabilidad rápida, competitiva y variada. Además, los objetos y bonificaciones presentes en los escenarios añaden aún más variedad al gameplay. Esto convierte cada partida en una experiencia única llena de emoción, tensión  y estrategia en tiempo real.
 
-3. ## **Características principales** {#características-principales}
+3. ## **Características principales** 
 
 Las características principales del juego son:
 
@@ -121,7 +121,7 @@ Las características principales del juego son:
 * **Bonificaciones por el escenario que perjudican al rival:** En el mapa aparecerán bonificaciones que, al ser recogidas podrán usarse para ganar ventaja o perjudicar al rival.
 
 
-  4. ## **Propósito** {#propósito}
+  4. ## **Propósito** 
 
 El propósito del juego es proporcionar una experiencia de juego rápida, intensa y divertida, centrada en la persecución y la evasión. Este juego fomenta la competencia entre dos jugadores. El juego está diseñado para ser accesible pero desafiante, permitiendo que los jugadores disfruten de sesiones cortas y emocionantes, con la posibilidad de partidas rápidas.
 
@@ -155,7 +155,7 @@ El propósito del juego es proporcionar una experiencia de juego rápida, intens
   El juego se va a desarrollar para PC.
 
 
-  6. ## **Modelo de Negocio** {#modelo-de-negocio}
+  6. ## **Modelo de Negocio** 
 
 Hotline Miauami se distribuirá como un juego gratuito para navegador web, accesible a través de una página oficial. Este modelo busca maximizar la accesibilidad y el alcance del público, especialmente entre jugadores casuales. Las estrategias de monetización serán:
 
@@ -165,7 +165,7 @@ Hotline Miauami se distribuirá como un juego gratuito para navegador web, acces
 
 El enfoque es mantener todas las mecánicas centrales del juego accesibles para todos los usuarios sin barreras económicas.
 
-7. ## **Licencia** {#licencia}
+7. ## **Licencia** 
 
 El juego se distribuirá bajo una licencia gratuita para uso personal, permitiendo a los jugadores disfrutarlo directamente desde el navegador.
 
@@ -175,7 +175,7 @@ El juego se distribuirá bajo una licencia gratuita para uso personal, permitien
     
 * **Prohibición de uso comercial no autorizado**: Ningún tercero podrá monetizar el juego sin consentimiento del equipo desarrollador.
 
-  8. ## **PEGI** {#pegi}
+  8. ## **PEGI** 
 
 Hotline Miauami tiene una clasificación de PEGI 7\. Una restricción de edad poco elevada por los siguientes motivos:
 
@@ -186,11 +186,11 @@ Hotline Miauami tiene una clasificación de PEGI 7\. Una restricción de edad po
 
 Esta clasificación permite que el juego sea accesible para un público amplio, incluyendo jugadores jóvenes y adolescentes, sin comprometer la diversión para audiencias mayores.
 
-9. ## **Estilo visual**  {#estilo-visual}
+9. ## **Estilo visual**  
 
 “*Hotline Miauami”* tendrá un estilo visual **pixel art** que aportará un aspecto retro y nostálgico con toques modernos. Se ha elegido esta estética para poder crear una experiencia visual atractiva y con identidad,  lograr claridad visual y transmitir información rápidamente.
 
-10. ## **Narrativa** {#narrativa}
+10. ## **Narrativa** 
 
 El jefe de policía Oinkson ha jurado mantener la paz en Miauami, la paz en una ciudad que nunca duerme. Sin embargo, desde hace muchos años su mayor desafío ha sido atrapar al escurridizo ladrón Michigan conocido por su habilidad para escapar de la ley, desapareciendo como un fantasma.
 
@@ -198,11 +198,11 @@ Una noche, el trabajo de investigación de Oinkson dio como resultado anticipars
 
 El destino y la paz de la ciudad están en juego.
 
-2. # **Mecánicas de juego** {#mecánicas-de-juego}
+2. # **Mecánicas de juego** 
 
 El juego se centra en la **persecución 1v1** en un escenario 2D con plataformas. Uno de los jugadores asumirá el rol de **Policía** y el otro el de **Ladrón.** Deberán utilizar el entorno, habilidades de su personaje y estrategia para cumplir con su objetivo: el Policía debe atrapar al Ladrón antes de que se acabe el tiempo, mientras que el Ladrón debe evadir al Policía.
 
-1. ### **Estructura general** {#estructura-general}
+1. ### **Estructura general** 
 
 * **Duración de la Partida:** Cada partida consta de 3 rondas, en las que los jugadores intercambiarán los roles. Cada ronda dura 2 minutos.
 
@@ -243,7 +243,7 @@ En el nivel hay **obstáculos interactivos** como trampillas y puertas que el la
 
 Boceto Sección de mapa
 
-4. ### **Bonificaciones y potenciadores**  {#bonificaciones-y-potenciadores}
+4. ### **Bonificaciones y potenciadores**  
 
 En el escenario hay **bonificaciones** que aparecen de forma aleatoria en ciertas zonas del mapa. Saldrán 15 segundos después de usar la bonificación de tu inventario. La primera bonificación saldrá en pantalla al principio de la partida. El policía puede recoger estas bonificaciones y obtener ventajas temporales. Las habilidades son las siguientes:
 
@@ -258,7 +258,7 @@ En el Modo en red se añadirá:
 
 El policía tendrá guardada la bonificación, hasta que decida usarla. Solo puede tener una bonificación guardada, por lo que si ya tiene una no podrá recoger otra más hasta que la active.
 
-5. ## **Flujo de juego** {#flujo-de-juego}
+5. ## **Flujo de juego** 
 
 El jugador inicia el juego y elige **Jugar Partida** en el menú principal. También podría acceder al menú de opciones o a los créditos. El jugador elige si quiere jugar de forma **Local o En Red**. Si el jugador escoge jugar en red, establece conexión con el otro jugador, se asignan los roles de manera aleatoria y ambos aceptan comenzar la partida. Si se escoge jugar en local, los jugadores pueden elegir los roles o asignarlos de manera aleatoria. Tras ello, empieza la ronda.
 
@@ -270,7 +270,7 @@ Si el Policía logra capturar al Ladrón, la ronda terminará y se sumará 1 pun
 
 Cuando la partida termina, saldrá una pantalla de victoria/Derrota y ambos jugadores podrán volver al menú principal.
 
-6. ## **Controles** {#controles}
+6. ## **Controles**
 
 En el modo local, se usarán los siguientes controles:
 
@@ -318,7 +318,7 @@ En el modo en red, se usarán los siguientes controles:
 
   * **Space**: para activar la bonificación
 
-3. # **Interfaz** {#interfaz}
+3. # **Interfaz** 
 
 Se ha realizado un diagrama de flujo para visualizar cómo será la navegación entre las pantallas del juego. Después, se detalla cómo será cada una de estas pantallas.
 
@@ -330,13 +330,13 @@ Se ha realizado un diagrama de flujo para visualizar cómo será la navegación 
 
 ## 
 
-2. ## **Título** {#título}
+2. ## **Título** 
 
    En el Título, únicamente aparecerá el logo del juego, una imagen de fondo y un texto que indica al jugador que clique el botón de jugar para seguir.
 
 ![titulo](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/titulo.png)
 
-3. ## **Menú principal** {#menú-principal}
+3. ## **Menú principal**
 
    En el menú principal, el jugador o jugadores podrán acceder a las opciones básicas del juego, incluyendo iniciar partida, modificar los ajustes y salir del juego.
 
@@ -356,25 +356,25 @@ Se ha realizado un diagrama de flujo para visualizar cómo será la navegación 
 
 ![menu](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/menu.png)
 
-4. ## **Menú Elección Modo de Juego** {#menú-elección-modo-de-juego}
+4. ## **Menú Elección Modo de Juego** 
 
    En este menú el jugador elegirá qué modo quiere jugar, modo local o modo multijugador (aún no integrado).
 
 ![modo](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/modo.png)
 
-   5. ## **Menú Selección Roles** {#menú-selección-roles}
+   5. ## **Menú Selección Roles** 
 
    En esta pantalla, los jugadores podrán elegir un personaje o bien que el azar decida su rol.
 
 ![seleccion](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/seleccion.png)
 
-6. ## **Partida** {#partida}
+6. ## **Partida** 
 
    En la pantalla de Partida es donde ocurrirá toda la acción. Los dos jugadores serán posicionados en el mapa, lejos el uno del otro. Al comenzar, ambos jugadores conseguirán el control de sus personajes para cumplir con su objetivo. En la interfaz, lo único que aparecerá será la cuenta atrás y la bonificación que tenga el policía.
 
 ![escenario](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/escenario.png)
 
-   7. ## **Resultados Ronda** {#resultados-ronda}
+   7. ## **Resultados Ronda** 
 
    Al finalizar cada ronda, se mostrará una pantalla de Resultados de Ronda sencilla, que indicará de forma clara si el jugador ha ganado o perdido la ronda, y mostrará el contador. Esta pantalla servirá como transición rápida hacia el cambio de rol de los jugadores y a la siguiente ronda.
 
@@ -382,7 +382,7 @@ Se ha realizado un diagrama de flujo para visualizar cómo será la navegación 
 
 ![victoriaRonda](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/Captura_de_pantalla_44.png)
 
-8. ## **Pantalla Victoria Derrota** {#pantalla-victoria-derrota}
+8. ## **Pantalla Victoria Derrota** 
 
    Cuando uno de los dos jugadores consigue ganar dos rondas, aparecerá esta pantalla. En ella se indicará qué jugador es el que ha ganado la partida.
 
@@ -390,7 +390,7 @@ Se ha realizado un diagrama de flujo para visualizar cómo será la navegación 
 
 ![victoriaFinal](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/victoriaFinal.png)
 
-9. ## **Menú Pausa** {#menú-pausa}
+9. ## **Menú Pausa** 
 
    Este menú flotante aparecerá cuando el jugador presione la tecla “ESC”, donde tendrá la opción de continuar, ir al menú de ajustes o de salir.
 
@@ -406,13 +406,13 @@ Se ha realizado un diagrama de flujo para visualizar cómo será la navegación 
 
 ![pausa](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/pausa.png)
 
-10. ## **Ajustes** {#ajustes}
+10. ## **Ajustes**
 
 Desde este menú el jugador podrá regular el volumen del juego.
 
 ![opciones](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/opciones.png)
 
-11. ## **Créditos** {#créditos}
+11. ## **Créditos** 
 
 En la pantalla de créditos se despliega un fondo repleto de patrones geométricos en colores neón. La música synthwave continúa sonando, creando un ambiente intenso y envolvente que recuerda a la estética del juego.
 
@@ -423,7 +423,7 @@ Al final de la lista de créditos, un mensaje final se deslizará lentamente hac
 
 4. # **Arte** {#arte}
 
-   1. ## **Arte 2D** {#arte-2d}
+   1. ## **Arte 2D** 
 
 **Concepto General**
 
@@ -515,9 +515,9 @@ También se ha implementado una animación de un destello, como retroalimentaci�
 
 ## 
 
-2. ## **Audio** {#audio}
+2. ## **Audio** 
 
-   1. ### **Música**  {#música}
+   1. ### **Música**  
 
 *“Hotline Miauami”* cuenta con música de **Persecución Synthwave (Retrowave)** 
 
