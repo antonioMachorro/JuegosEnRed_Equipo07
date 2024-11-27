@@ -4,6 +4,8 @@ class GameScene extends Phaser.Scene {
   }
 
   init(data) {
+    console.log("STARTING");
+
     if (this.registry.get("player1Rounds") === undefined) {
       this.registry.set("player1Rounds", 0);
     }
@@ -41,6 +43,11 @@ class GameScene extends Phaser.Scene {
     this.load.image("puerta2Cerrada", "./Objetos/puerta2Cerrada.png");
     this.load.image("puerta3Abierta", "./Objetos/puerta3Abierta.png");
     this.load.image("puerta3Cerrada", "./Objetos/puerta3Cerrada.png");
+
+    this.load.image("ladronWin", "./Personajes/ladron.png");
+    this.load.image("policiaWin", "./Personajes/policia.png");
+
+    this.load.image("victory_frame", "./Interfaz/marco_victoria.png");
 
     this.load.atlas(
       "policia",
@@ -1528,23 +1535,48 @@ class GameScene extends Phaser.Scene {
 
   playRoundWin(winner) {
     this.time.timeScale = 0.1;
-    //this.input.keyboard.enabled = false;
 
+    const winnerFrame = this.add.image(this.centerX, this.cameras.main.height / 2, 'victory_frame').setOrigin(0.5);
     const winnerText = this.add
-      .text(
-        this.centerX,
-        this.cameras.main.height / 2,
-        `${winner} Gana Este Round!`,
-        {
-          fontFamily: "retro-computer",
-          fontSize: "35px",
-          fill: "#fff",
-          backgroundColor: "#000",
-        }
-      )
-      .setOrigin(0.5);
+    .text(
+      this.centerX,
+      this.cameras.main.height / 2 - 70,
+      `${winner} Gana Este Round!`,
+      {
+        fontFamily: "retro-computer",
+        fontSize: "20px",
+        fill: "#fff",
+      }
+    )
+    .setOrigin(0.5);
 
-    winnerText.setDepth(9999);
+    let winnerImage = winner === "Policia" ? 'policiaWin' : 'ladronWin';
+    console.log(winnerImage);
+    let victoryImage = this.add.image(this.centerX, winnerText.y + 70, winnerImage).setScale(2);
+
+    this.add.text(this.centerX - 150, victoryImage.y + 65, 'J1 ', {
+        fontFamily: "retro-computer",
+        fontSize: "20px",
+        fill: "#ff0000",
+    }).setOrigin(0.5);
+
+    this.add.text(this.centerX - 100, victoryImage.y + 65, `${this.registry.get('player1Rounds')}`, {
+        fontFamily: "retro-computer",
+        fontSize: "32px",
+        fill: "#fff",
+    }).setOrigin(0.5);
+
+    this.add.text(this.centerX + 100, victoryImage.y + 65, 'J2 ', {
+        fontFamily: "retro-computer",
+        fontSize: "20px",
+        fill: "#0000FF",
+    }).setOrigin(0.5);
+
+    this.add.text(this.centerX + 150, victoryImage.y + 65, `${this.registry.get('player2Rounds')}`, {
+        fontFamily: "retro-computer",
+        fontSize: "32px",
+        fill: "#fff",
+    }).setOrigin(0.5);
 
     const fadeDuration = 300;
     //this.cameras.main.fadeOut(fadeDuration, 0, 0, 0);
