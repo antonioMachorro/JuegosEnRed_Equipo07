@@ -86,7 +86,7 @@ Alvaro Rosa Pedraza 		[a.rosa.2022@alumnos.urjc.es](mailto:a.rosa.2022@alumnos.u
 
 # 
 
-1. # **Introducción** {#introducción}
+1. # **Introducción** 
 
    1. ## **Concepto del juego** {#concepto-del-juego}
 
