@@ -4,125 +4,120 @@ class RoleSelectScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('policia', './Personajes/policia.png');
-        this.load.image('ladron', './Personajes/ladron.png');
+        this.load.image('fondo', './Interfaz/champSelect.png');
+        this.load.image('police', './Personajes/police.png');
+        this.load.image('thief', './Personajes/ladron.png');
         this.load.image('wasd', './Interfaz/wasd.png');
         this.load.image('arrows', './Interfaz/arrowKeys.png');
         this.load.image('dice', './Interfaz/dice.png');
-        this.load.image('button', './Interfaz/boton.png');
+        this.load.image('button', './Interfaz/jugarGame.png');
+        this.load.image('volver', './Interfaz/volver.png');
+
     }
 
     create() {
-        const { width, height } = this.scale;
         this.policeIsOnTheLeft = true;
-
-        const personajesText = this.add.text(width/2, 200, 'PERSONAJES', { 
-            fontFamily: 'retro-computer',
-            fontSize: '64px', 
-            fill: '#fff' }).setOrigin(0.5);
-
-        const jugador1Text = this.add.text(200, personajesText.y + 100, 'Player 1', { 
-            fontFamily: 'retro-computer',
-            fontSize: '32px', 
-            fill: '#ff0000'}).setOrigin(0.5);
-        const jugador2Text = this.add.text(width - 200, personajesText.y + 100, 'Player 2', { 
-            fontFamily: 'retro-computer',
-            fontSize: '32px', 
-            fill: '#0000ff'}).setOrigin(0.5);
-
-        this.add.image(jugador1Text.x, jugador1Text.y + 200, 'wasd').setOrigin(0.5);
         
-        this.add.image(jugador2Text.x, jugador2Text.y + 200, 'arrows').setOrigin(0.5);
+        // Camara
+        const camera = this.cameras.main;
+        camera.setBounds(370, 210, 960, 540);
+        camera.setZoom(2.6);
 
-        const policeButton = this.add.image(personajesText.x - 300, personajesText.y + 300, 'policia')
+        this.interfaceFondo = this.add.image(960,540,'fondo').setDepth(-1);
+
+        // Controles de movimiento
+        this.add.image(750, 630, 'wasd').setOrigin(0.5).setScale(0.3);
+        this.add.image(1150,630, 'arrows').setOrigin(0.5).setScale(0.3);
+
+        // Botones de personajes
+        const policeButton = this.add.image(750,540, 'police')
             .setScale(3)
             .setInteractive();
-        const thiefButton = this.add.image(personajesText.x + 300, personajesText.y + 300, 'ladron')
+
+        const thiefButton = this.add.image(1150, 540, 'thief')
             .setScale(3)
             .setInteractive();
 
-        const policeText = this.add.text(policeButton.x, policeButton.y + (policeButton.displayHeight / 2) + 50, 'POLICIA', {
-                fontFamily: 'retro-computer',
-                fontSize: '32px', 
-                fill: '#fff'}).setOrigin(0.5);
-        const thiefText = this.add.text(thiefButton.x, thiefButton.y + (thiefButton.displayHeight / 2) + 50, 'LADRON', {
-                fontFamily: 'retro-computer',
-                fontSize: '32px', 
-                fill: '#fff'}).setOrigin(0.5);
+        // Textos de personajes
+        const policeText = this.add.text(750, 450, 'Policia', {
+            fontFamily: 'retro-computer',
+            fontSize: '18px', 
+            fill: '#fff' 
+        }).setOrigin(0.5);
 
-        const diceButton = this.add.image(width/2, height/2, 'dice')
+        const thiefText = this.add.text(1150,450, 'Ladron', {
+            fontFamily: 'retro-computer',
+            fontSize: '18px', 
+            fill: '#fff' 
+        }).setOrigin(0.5);
+
+
+        
+
+        // Botón de dado
+        const diceButton = this.add.image(960, 540, 'dice')
             .setScale(0.2)
             .setInteractive();
+
         diceButton.on('pointerdown', () => {
             diceButton.disableInteractive();
             policeButton.disableInteractive();
             thiefButton.disableInteractive();
 
             const scene = this;
-
             const randomSwitch = Phaser.Math.Between(3, 6);
-            console.log(randomSwitch);
             let count = 0;
 
             function animate() {
                 scene.tweens.add({
                     targets: [policeButton, thiefButton, policeText, thiefText],
                     x: function(target) {
-                        if(target === policeButton) return thiefButton.x;
-                        if(target === thiefButton) return policeButton.x;
-                        if(target === policeText) return thiefText.x;
-                        if(target === thiefText) return policeText.x;
+                        if (target === policeButton) return thiefButton.x;
+                        if (target === thiefButton) return policeButton.x;
+                        if (target === policeText) return thiefText.x;
+                        if (target === thiefText) return policeText.x;
                     },
                     ease: 'Power1',
                     duration: 100,
                     onComplete: () => {
                         count++;
-                        if(count < randomSwitch) {
+                        if (count < randomSwitch) {
                             scene.policeIsOnTheLeft = !scene.policeIsOnTheLeft;
                             animate();
-                        }
-                        else {
+                        } else {
                             scene.policeIsOnTheLeft = !scene.policeIsOnTheLeft;
                             diceButton.setInteractive();
                             policeButton.setInteractive();
                             thiefButton.setInteractive();
                         }
                     }
-                })
+                });
             }
 
             animate();
         });
 
-        policeButton.on('pointerdown', ()=>{
-            this.changePlayerButton(policeButton, thiefButton, policeText, thiefText);
-        });
+        
+        // Botón de regresar
+        const returnButton = this.add.image(960,720, 'volver').setOrigin(0.5).setScale(0.8).setInteractive();
 
-        thiefButton.on('pointerdown', ()=>{
-            this.changePlayerButton(policeButton, thiefButton, policeText, thiefText);
-        })
-
-        const returnButton = this.add.text(150, height - 100, 'REGRESAR', { 
-            fontFamily: 'retro-computer',
-            fontSize: '32px', 
-            fill: '#fff' })
-            .setOrigin(0.5)
-            .setInteractive();
         returnButton.on('pointerdown', () => {
             this.scene.start('GameModeScene');
         });
 
-        this.add.image(width - 150, height - 100, 'button')
-
-            .setScale(0.2)
+        // Botón de jugar
+        this.add.image(960, 660, 'button')
+            .setScale(0.4)
             .setInteractive()
             .on('pointerdown', () => {
-                if(this.policeIsOnTheLeft){
-                    this.scene.start('GameScene', {player1IsPolice: true});
+                if (this.policeIsOnTheLeft) {
+                    this.scene.start('GameScene', { player1IsPolice: true });
                 } else {
-                    this.scene.start('GameScene', {player1IsPolice: false});
+                    this.scene.start('GameScene', { player1IsPolice: false });
                 }
             });
+
+            
     }
 
     changePlayerButton(button1, button2, text1, text2) {
@@ -132,10 +127,10 @@ class RoleSelectScene extends Phaser.Scene {
         this.tweens.add({
             targets: [button1, button2, text1, text2],
             x: function(target) {
-                if(target === button1) return button2.x;
-                if(target === button2) return button1.x;
-                if(target === text1) return text2.x;
-                if(target === text2) return text1.x;
+                if (target === button1) return button2.x;
+                if (target === button2) return button1.x;
+                if (target === text1) return text2.x;
+                if (target === text2) return text1.x;
             },
             ease: 'Power1',
             duration: 500,
@@ -147,4 +142,5 @@ class RoleSelectScene extends Phaser.Scene {
         });
     }
 }
-export default RoleSelectScene
+
+export default RoleSelectScene;
