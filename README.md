@@ -532,5 +532,3 @@ Los efectos sonoros son esenciales para proporcionar retroalimentación al jugad
 * Interacción con los botones
 
 ## 
-
-
