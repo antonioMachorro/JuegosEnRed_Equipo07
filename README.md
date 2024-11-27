@@ -501,7 +501,7 @@ El juego presenta animaciones fluidas pero con el encanto limitado del pixel art
 
 * **Bonificaciones**: Se ha implementado una pequeña animación de movimiento vertical a las bonificaciones para darle dinamismo cuando aparezcan en el mapa. 
 
-![spriteBonificadores](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/spriteBonificadores.png)
+![spriteBonificadores](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/spriteBonificaciones.png)
 
 También se ha implementado una animación de un destello, como retroalimentación visual de que la bonificación ha sido recogida.
 
