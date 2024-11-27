@@ -429,13 +429,13 @@ Al final de la lista de créditos, un mensaje final se deslizará lentamente hac
 
 "Hotline Miauami" presenta un estilo artístico en pixel art de alta resolución, que evoca una estética retro. El estilo visual está inspirado en juegos como *The Binding of Isaac* (detalles caricaturescos y personajes únicos) y *Hotline Miami* (ambientación urbana, caos y colores saturados), combinando una paleta de colores variados con una atmósfera vibrante y dinámica.
 
-![isaac](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/isaac.png) 		![hotline](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/hotline.png)
+![isaac](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/isaac.jpg) 		![hotline](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/hotline.jpg)
 
 *The Binding of Isaac					Hotline Miami* 		
 
 El juego sigue una temática de animales antropomorfos, ambientado en escenarios estáticos que recrean los suburbios de una ciudad moderna. Sin embargo, estos espacios se enriquecen con colores llamativos y detalles estéticos para realzar la sensación de un entorno urbano y excéntrico.
 
-![gatoBoceto](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/gatoBoceto.png)    ![cerdoBoceto](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/cerdoBoceto.png)
+![gatoBoceto](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/gatoBoceto.png)    ![cerdoBoceto](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/cerdoBoceto.jpg)
 
 *Imágenes de referencia de personajes*
 
@@ -451,7 +451,7 @@ La paleta de colores combina tonos vivos y saturados para destacar elementos cla
 
 El escenario de *Hotline Miauami* está inspirado en los suburbios de una ciudad moderna. El mapa incluye una mezcla de áreas urbanas como edificios, zonas subterráneas y elementos distintivos que aportan variedad al entorno. Los escenarios están diseñados con una paleta de colores vibrantes que los hace visualmente atractivos, al tiempo que destacan elementos interactivos como puertas, trampillas u objetos del entorno que los jugadores pueden utilizar.
 
-![escenario2](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/escenario2.png)
+![escenario2](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/escenario2.jpg)
 
 **Personajes**
 
@@ -469,7 +469,7 @@ Sprite Policía
 
 * **Ladrón**: El ladrón, representado como un gato ágil y astuto, tiene un diseño delgado y estilizado para enfatizar su rapidez y destreza. Su antifaz, un recurso clásico del bandido, refuerza la idea de sigilo y malicia. Este diseño toma inspiración de personajes como los de *Sly Cooper*, equilibrando personalidad y funcionalidad en el juego.
 
-![conceptLadron](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/conceptLadron.png)
+![conceptLadron](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/conceptLadron.jpg)
 
 Concept Art Ladrón
 
