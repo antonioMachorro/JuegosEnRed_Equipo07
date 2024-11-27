@@ -36,6 +36,15 @@ class GameScene extends Phaser.Scene {
     this.load.image("closedDoor", "./Objetos/closeddoor.png");
     this.load.image("Marcador", "./Escenario/Marcador.png");
 
+    this.load.image("carcelAbierta", "./Objetos/carcelAbierta.png");
+    this.load.image("carcelCerrada", "./Objetos/carcelCerrada.png");
+    this.load.image("puerta1Abierta", "./Objetos/puerta1Abierta.png");
+    this.load.image("puerta1Cerrada", "./Objetos/puerta1Cerrada.png");
+    this.load.image("puerta2Abierta", "./Objetos/puerta2Abierta.png");
+    this.load.image("puerta2Cerrada", "./Objetos/puerta2Cerrada.png");
+    this.load.image("puerta3Abierta", "./Objetos/puerta3Abierta.png");
+    this.load.image("puerta3Cerrada", "./Objetos/puerta3Cerrada.png");
+
     this.load.atlas(
       "policia",
       "./Personajes/Policia_Spritesheet.png",
@@ -115,17 +124,10 @@ class GameScene extends Phaser.Scene {
     this.canUseTrampilla1 = true;
     this.canUseTrampilla2 = true;
 
-    //Variable de puerta
-    this.aDoorIsClosed = false;
-
     // Agregar objetos y suelo
     this.ground = this.physics.add.staticGroup();
 
     this.ground.create(960, 540, "escenario").setDepth(-1);
-    // this.ground.create(500, 900, 'Suelo');
-    // this.ground.create(1400, 900, 'Suelo');
-    // this.ground.create(1800, 650, 'Suelo');
-    // this.ground.create(1000, 900, 'Pared');
 
     // Agregar los personajes con físicas
     this.playerPolicia = this.physics.add.sprite(1215, 705, "policia");
@@ -421,39 +423,65 @@ class GameScene extends Phaser.Scene {
     this.ObjectVentilacion2.setTint(0x00ff00);
 
     
-    this.objectOpenDoor = this.physics.add
-      .staticImage(1400, 780, "openDoor")
-      .setScale(0.05);
-    this.objectOpenDoor.refreshBody();
-    this.objectOpenDoor.body.setSize(
-      this.objectOpenDoor.width * 0.05 * 1.5,
-      this.objectOpenDoor.height * 0.05
-    );
-    this.objectOpenDoor.body.setOffset(
-      -(
-        this.objectOpenDoor.width * 0.05 * 1.5 -
-        this.objectOpenDoor.width * 0.05
-      ) / 2,
-      0
-    );
+    this.carcelOpenDoor = this.physics.add
+      .staticImage(780, 647, "carcelAbierta")
+      .setSize(70, 50);
 
-    this.objectClosedDoor = this.physics.add
-      .staticImage(1400, 780, "closedDoor")
-      .setScale(0.13);
-    this.objectClosedDoor.refreshBody();
-    this.objectClosedDoor.body.setSize(
-      this.objectClosedDoor.width * 0.13 * 0.3,
-      this.objectClosedDoor.height * 0.13
-    );
-    this.objectClosedDoor.body.setOffset(
-      (this.objectClosedDoor.width * 0.13 -
-        this.objectClosedDoor.width * 0.13 * 0.3) /
-        2,
-      0
-    );
+    this.carcelClosedDoor = this.physics.add
+      .staticImage(780, 647, "carcelCerrada")
+      .setSize(10, 50);
 
-    this.objectClosedDoor.setVisible(false);
-    this.objectClosedDoor.body.enable = false;
+    this.carcelClosedDoor.setVisible(false);
+    this.carcelClosedDoor.body.enable = false;
+
+    this.floor1OpenDoor = this.physics.add
+    .staticImage(789, 583, "puerta1Abierta")
+    .setSize(55, 50);
+
+    this.floor1ClosedDoor = this.physics.add
+        .staticImage(793, 583, "puerta1Cerrada")
+        .setSize(14, 50);
+
+    this.floor1ClosedDoor.setVisible(false);
+    this.floor1ClosedDoor.body.enable = false;
+
+    this.floor2OpenDoor = this.physics.add
+    .staticImage(685, 510, "puerta2Abierta")
+    .setSize(55, 50);
+
+    this.floor2ClosedDoor = this.physics.add
+        .staticImage(678, 510, "puerta2Cerrada")
+        .setSize(15, 50);
+
+    this.floor2ClosedDoor.setVisible(false);
+    this.floor2ClosedDoor.body.enable = false;
+
+    this.floor3OpenDoor = this.physics.add
+    .staticImage(785, 430, "puerta3Abierta")
+    .setSize(55, 55);
+
+    this.floor3ClosedDoor = this.physics.add
+        .staticImage(792, 430, "puerta3Cerrada")
+        .setSize(16, 52);
+
+    this.floor3ClosedDoor.setVisible(false);
+    this.floor3ClosedDoor.body.enable = false;
+
+    //Variable de puerta
+    this.puerta1IsClosed = false;
+    this.puerta2IsClosed = false;
+    this.puerta3IsClosed = false;
+    this.carcelIsClosed = false;
+
+    //Fisicas de puertas cerradas
+    this.physics.add.collider(this.playerPolicia, this.carcelClosedDoor);
+    this.physics.add.collider(this.playerLadron, this.carcelClosedDoor);
+    this.physics.add.collider(this.playerPolicia, this.floor1ClosedDoor);
+    this.physics.add.collider(this.playerLadron, this.floor1ClosedDoor);
+    this.physics.add.collider(this.playerPolicia, this.floor2ClosedDoor);
+    this.physics.add.collider(this.playerLadron, this.floor2ClosedDoor);
+    this.physics.add.collider(this.playerPolicia, this.floor3ClosedDoor);
+    this.physics.add.collider(this.playerLadron, this.floor3ClosedDoor);
 
     // Lógica de control del ladrón
     this.LadronMovement = true;
@@ -475,9 +503,6 @@ class GameScene extends Phaser.Scene {
       null,
       this
     );
-
-    this.physics.add.collider(this.playerPolicia, this.objectClosedDoor);
-    this.physics.add.collider(this.playerLadron, this.objectClosedDoor);
 
     this.physics.add.collider(
       this.playerLadron,
@@ -565,29 +590,96 @@ class GameScene extends Phaser.Scene {
       );
 
     //Cierre de puertas
-    this.physics.add.overlap(this.playerLadron, this.objectOpenDoor, () => {
-      if (this.thiefInteract.isDown && !this.aDoorIsClosed) {
-        console.log("Crossed a door");
-        //Here objectOpenDoor is temporarily disabled.
+    this.physics.add.overlap(this.playerLadron, this.carcelOpenDoor, () => {
+      if (this.thiefInteract.isDown && !this.carcelIsClosed) {
 
-        this.objectOpenDoor.setVisible(false);
-        this.objectOpenDoor.body.enable = false;
+        this.carcelOpenDoor.setVisible(false);
+        this.carcelOpenDoor.body.enable = false;
 
-        this.objectClosedDoor.setVisible(true);
-        this.objectClosedDoor.body.enable = true;
+        this.carcelClosedDoor.setVisible(true);
+        this.carcelClosedDoor.body.enable = true;
 
-        this.aDoorIsClosed = true;
+        this.carcelIsClosed = true;
 
         this.time.delayedCall(10000, () => {
-          this.objectOpenDoor.setVisible(true);
-          this.objectOpenDoor.body.enable = true;
+          this.carcelOpenDoor.setVisible(true);
+          this.carcelOpenDoor.body.enable = true;
 
-          this.objectClosedDoor.setVisible(false);
-          this.objectClosedDoor.body.enable = false;
+          this.carcelClosedDoor.setVisible(false);
+          this.carcelClosedDoor.body.enable = false;
 
-          this.aDoorIsClosed = false;
+          this.carcelIsClosed = false;
         });
       }
+    });
+
+    this.physics.add.overlap(this.playerLadron, this.floor1OpenDoor, () => {
+        if (this.thiefInteract.isDown && !this.puerta1IsClosed) {
+
+            this.floor1OpenDoor.setVisible(false);
+            this.floor1OpenDoor.body.enable = false;
+
+            this.floor1ClosedDoor.setVisible(true);
+            this.floor1ClosedDoor.body.enable = true;
+
+            this.puerta1IsClosed = true;
+
+            this.time.delayedCall(10000, () => {
+                this.floor1OpenDoor.setVisible(true);
+                this.floor1OpenDoor.body.enable = true;
+
+                this.floor1ClosedDoor.setVisible(false);
+                this.floor1ClosedDoor.body.enable = false;
+
+                this.puerta1IsClosed = false;
+            });
+        }
+    });
+
+    this.physics.add.overlap(this.playerLadron, this.floor2OpenDoor, () => {
+        if (this.thiefInteract.isDown && !this.puerta2IsClosed) {
+
+            this.floor2OpenDoor.setVisible(false);
+            this.floor2OpenDoor.body.enable = false;
+
+            this.floor2ClosedDoor.setVisible(true);
+            this.floor2ClosedDoor.body.enable = true;
+
+            this.puerta2IsClosed = true;
+
+            this.time.delayedCall(10000, () => {
+                this.floor2OpenDoor.setVisible(true);
+                this.floor2OpenDoor.body.enable = true;
+
+                this.floor2ClosedDoor.setVisible(false);
+                this.floor2ClosedDoor.body.enable = false;
+
+                this.puerta2IsClosed = false;
+            });
+        }
+    });
+
+    this.physics.add.overlap(this.playerLadron, this.floor3OpenDoor, () => {
+        if (this.thiefInteract.isDown && !this.puerta3IsClosed) {
+
+            this.floor3OpenDoor.setVisible(false);
+            this.floor3OpenDoor.body.enable = false;
+
+            this.floor3ClosedDoor.setVisible(true);
+            this.floor3ClosedDoor.body.enable = true;
+
+            this.puerta3IsClosed = true;
+
+            this.time.delayedCall(10000, () => {
+                this.floor3OpenDoor.setVisible(true);
+                this.floor3OpenDoor.body.enable = true;
+
+                this.floor3ClosedDoor.setVisible(false);
+                this.floor3ClosedDoor.body.enable = false;
+
+                this.puerta3IsClosed = false;
+            });
+        }
     });
 
     //this.cursors = this.input.keyboard.createCursorKeys();  // Para el policía (flecha arriba)

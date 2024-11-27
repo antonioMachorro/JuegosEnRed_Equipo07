@@ -15,11 +15,12 @@ const config = {
     height: 1080,
     parent: 'gameContainer',  // Contenedor en el HTML
     scene: [GameScene, MainMenuScene, GameModeScene, RoleSelectScene, PauseScene, VictoryScene, CreditsScene],
+    pixelArt: true,
     physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 1200 },
-            debug: false
+            debug: true
         }
     },
     scale: {
