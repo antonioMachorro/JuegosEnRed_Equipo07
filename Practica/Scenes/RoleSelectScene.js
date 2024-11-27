@@ -33,10 +33,17 @@ class RoleSelectScene extends Phaser.Scene {
         const policeButton = this.add.image(750,540, 'police')
             .setScale(3)
             .setInteractive();
+        policeButton.on('pointerdown', () => {
+            this.changePlayerButton(policeButton, thiefButton, policeText, thiefText);
+        })
 
         const thiefButton = this.add.image(1150, 540, 'thief')
             .setScale(3)
             .setInteractive();
+
+        thiefButton.on('pointerdown', () => {
+            this.changePlayerButton(policeButton, thiefButton, policeText, thiefText);
+        })
 
         // Textos de personajes
         const policeText = this.add.text(750, 450, 'Policia', {

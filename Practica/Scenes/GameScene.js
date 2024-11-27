@@ -167,7 +167,7 @@ class GameScene extends Phaser.Scene {
     });
 
     // Configurar el temporizador inicial de 2 minutos (120 segundos)
-    this.timeLeft = 10;
+    this.timeLeft = 120;
 
     // Crear el texto del temporizador en las coordenadas 1600, 300
     this.centerX = 960;
@@ -1542,7 +1542,7 @@ class GameScene extends Phaser.Scene {
       const player1Rounds = this.registry.get("player1Rounds") + 1;
       this.registry.set("player1Rounds", player1Rounds);
 
-      if (player1Rounds >= 1) {
+      if (player1Rounds >= 3) {
         this.playVictory(1);
       } else {
         this.playRoundWin("Policia");
@@ -1551,7 +1551,7 @@ class GameScene extends Phaser.Scene {
       const player2Rounds = this.registry.get("player2Rounds") + 1;
       this.registry.set("player2Rounds", player2Rounds);
 
-      if (player2Rounds >= 1) {
+      if (player2Rounds >= 3) {
         this.playVictory(2);
       } else {
         this.playRoundWin("Policia");
