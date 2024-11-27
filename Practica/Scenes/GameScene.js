@@ -20,10 +20,14 @@ class GameScene extends Phaser.Scene {
 
   preload() {
     this.load.image("escenario", "./Escenario/Escenario.png");
+
+    /*
     this.load.image("red", "./Objetos/red.png");
     this.load.image("rosquilla", "./Objetos/rosquilla.png");
     this.load.image("cepo", "./Objetos/cepo.png");
     this.load.image("reloj", "./Objetos/reloj.png");
+    */
+
     this.load.image("background", "path/to/background.png");
     this.load.image("Suelo", "./Objetos/suelo.png");
     this.load.image("Pared", "./Objetos/Pared.png");
@@ -57,10 +61,24 @@ class GameScene extends Phaser.Scene {
         "./Personajes/ladron_spritesheet.json"
     )
 
+    this.load.atlas(
+        "bonificaciones",
+        "./Objetos/Bonificaciones_Spritesheet.png",
+        "./Objetos/bonificaciones_spritesheet.json"
+      );
+
     this.load.audio("game_music", "./Musica/GAMEPLAYYYY.wav");
   }
 
   create() {
+
+    // Ajustar la cámara
+    const camera = this.cameras.main;
+    camera.setBounds(370, 210, 960, 540);
+    camera.setZoom(2.6);
+
+    console.log(this.bonificador);
+    
     this.game.audioManager.playMusic("game_music");
 
     const { width, height } = this.scale;
@@ -143,11 +161,6 @@ class GameScene extends Phaser.Scene {
 
     // Configurar el temporizador inicial de 2 minutos (120 segundos)
     this.timeLeft = 120;
-
-    // Ajustar la cámara
-    const camera = this.cameras.main;
-    camera.setBounds(370, 210, 960, 540);
-    camera.setZoom(2.6);
 
     // Crear el texto del temporizador en las coordenadas 1600, 300
     this.centerX = 960;
@@ -405,9 +418,9 @@ class GameScene extends Phaser.Scene {
     this.ground.add(cuboBarra);
 
     //this.ObjectCajaItems = this.add.image(1200, 350, "cajaItems"); // Inventario del policia
-    this.registry.get('player1IsPolice') ? this.objectIcono = this.add.image(710, 350, "icono") : this.objectIcono = this.add.image(1210, 350, "icono");
-    console.log(this.registry.get('player1IsPolice'));
-    console.log(this.objectIcono.x);
+    //this.registry.get('player1IsPolice') ? this.objectIcono = this.add.image(710, 350, "icono") : this.objectIcono = this.add.image(1210, 350, "icono");
+    this.registry.get('player1IsPolice') ? this.itemPos = 707 : this.itemPos = 1212;
+
     this.ObjectTrampilla1 = this.physics.add.staticImage(1203, 410, "Marcador").setScale(0.3);
     this.ObjectTrampilla2 = this.physics.add.staticImage(1203, 595, "Marcador").setScale(0.3);
     this.ObjectTrampilla3 = this.physics.add.staticImage(995, 602, "Marcador").setScale(0.3);
@@ -734,10 +747,7 @@ class GameScene extends Phaser.Scene {
 
     // Inventario del policia (vacio inicialmente)
     this.policiaInventory = null;
-    this.objectIcono.setTexture(this.objectIcono.image);
-
-    // Generar un objeto Modificador en una posición aleatoria
-    this.spawnRandomModifier();
+    //this.objectIcono.setTexture(this.objectIcono.image);
 
     this.add
       .text(820, 355, `Jugador 1: ${this.registry.get("player1Rounds")}`, {
@@ -873,6 +883,61 @@ class GameScene extends Phaser.Scene {
           frameRate: 15,
           repeat: -1,
         });
+    
+    //Animaciones objetos
+    this.anims.create({
+        key: "rosquilla",
+        frames: this.anims.generateFrameNames("bonificaciones", {
+            prefix: "dona",
+            end: 7,
+            zeroPad: 3,
+        }),
+        repeat: -1,
+    });
+
+    this.anims.create({
+        key: "red",
+        frames: this.anims.generateFrameNames("bonificaciones", {
+            prefix: "red",
+            end: 7,
+            zeroPad: 3,
+        }),
+        repeat: -1,
+    });
+
+    this.anims.create({
+        key: "reloj",
+        frames: this.anims.generateFrameNames("bonificaciones", {
+            prefix: "reloj",
+            end: 7,
+            zeroPad: 3,
+        }),
+        repeat: -1,
+    });
+
+    this.anims.create({
+        key: "cepo",
+        frames: this.anims.generateFrameNames("bonificaciones", {
+            prefix: "cepo",
+            end: 7,
+            zeroPad: 3,
+        }),
+        repeat: -1,
+    });
+
+    this.anims.create({
+        key: "item",
+        frames: this.anims.generateFrameNames("bonificaciones", {
+            prefix: "objeto",
+            end: 4,
+            zeroPad: 3,
+        }),
+        frameRate: 8,
+        repeat: -1,
+    });
+
+    // Generar un objeto Modificador en una posición aleatoria
+    this.spawnRandomModifier();
   }
 
   spawnRandomModifier() {
@@ -883,11 +948,13 @@ class GameScene extends Phaser.Scene {
         this.positionPool[Math.floor(Math.random() * this.positionPool.length)];
 
       // Crear un sprite en esa posición con la imagen de 'Modificador'
-      this.currentModifier = this.physics.add.staticImage(
+      this.currentModifier = this.physics.add.sprite(
         randomPos.x,
         randomPos.y,
-        "Modificador"
-      ).setScale(0.3);
+        'bonificaciones'
+      );
+      this.currentModifier.anims.play('item');
+      this.currentModifier.body.setAllowGravity(false);
 
       // Añadir colisión con el policía para recoger el modificador
       this.physics.add.overlap(
@@ -908,7 +975,8 @@ class GameScene extends Phaser.Scene {
 
     // Actualizar el texto de inventario en pantalla
     //this.inventoryText.setText('Inventario: ' + randomModifier);
-    this.objectIcono.setTexture(key.imagen);
+    this.objectIcono = this.add.sprite(this.itemPos, 354, 'bonificadores');
+    this.objectIcono.anims.play(this.policiaInventory);
 
     // Eliminar el sprite del modificador del juego
     this.currentModifier.destroy();
@@ -919,17 +987,19 @@ class GameScene extends Phaser.Scene {
 
     // Aplicar el efecto del modificador actual
     let itemImage = this.add
-      .image(
+      .sprite(
         this.playerPolicia.x,
-        this.playerPolicia.y - 50,
-        `${this.policiaInventory}`
+        this.playerPolicia.y - 20,
+        'bonificadores'
       )
       .setOrigin(0.5)
       .setScale(1);
+    
+    itemImage.anims.play(this.policiaInventory);
 
     this.tweens.add({
       targets: itemImage,
-      y: itemImage.y - 50,
+      y: itemImage.y - 20,
       ease: "Power1",
       duration: 500,
       onComplete: () => {
@@ -970,7 +1040,7 @@ class GameScene extends Phaser.Scene {
 
     // Limpiar el inventario después de usar el modificador
     this.policiaInventory = null;
-    this.objectIcono.setTexture(this.objectIcono.image);
+    this.objectIcono.destroy();
 
     // Generar un nuevo modificador después de usarlo
     setTimeout(() => {
@@ -984,8 +1054,9 @@ class GameScene extends Phaser.Scene {
       : this.playerPolicia.x - 20;
 
     let red = this.physics.add
-      .image(redStartingX, this.playerPolicia.y, "red")
+      .sprite(redStartingX, this.playerPolicia.y, 'bonificaciones')
       .setOrigin(0.5);
+    red.anims.play('red');
     red.body.setAllowGravity(false);
 
     let launchAnimation = this.tweens.add({

@@ -4,7 +4,7 @@ class RoleSelectScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('policia', './Personajes/police.png');
+        this.load.image('policia', './Personajes/policia.png');
         this.load.image('ladron', './Personajes/ladron.png');
         this.load.image('wasd', './Interfaz/wasd.png');
         this.load.image('arrows', './Interfaz/arrowKeys.png');
