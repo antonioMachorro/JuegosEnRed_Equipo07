@@ -380,7 +380,7 @@ Se ha realizado un diagrama de flujo para visualizar cómo será la navegación 
 
    
 
-![victoriaRonda](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/victoriaRonda.png)
+![victoriaRonda](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/Captura_de_pantalla_44.png)
 
 8. ## **Pantalla Victoria Derrota** {#pantalla-victoria-derrota}
 
