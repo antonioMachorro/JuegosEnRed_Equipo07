@@ -48,6 +48,11 @@ class GameScene extends Phaser.Scene {
     this.load.image("policiaWin", "./Personajes/policia.png");
 
     this.load.image("victory_frame", "./Interfaz/marco_victoria.png");
+    this.load.image("victoria", "./Interfaz/victoria.png");
+    this.load.image("victoria_1", "./Interfaz/victoria_1.png");
+    this.load.image("victoria_2", "./Interfaz/victoria_2.png");
+
+    this.load.image("boton_victoria", "./Interfaz/boton_victoria.png");
 
     this.load.atlas(
       "policia",
@@ -80,8 +85,6 @@ class GameScene extends Phaser.Scene {
     const camera = this.cameras.main;
     camera.setBounds(370, 210, 960, 540);
     camera.setZoom(2.6);
-
-    console.log(this.bonificador);
     
     this.game.audioManager.playMusic("game_music");
 
@@ -164,7 +167,7 @@ class GameScene extends Phaser.Scene {
     });
 
     // Configurar el temporizador inicial de 2 minutos (120 segundos)
-    this.timeLeft = 120;
+    this.timeLeft = 10;
 
     // Crear el texto del temporizador en las coordenadas 1600, 300
     this.centerX = 960;
@@ -956,6 +959,27 @@ class GameScene extends Phaser.Scene {
 
     // Generar un objeto Modificador en una posición aleatoria
     this.spawnRandomModifier();
+
+    this.add.rectangle(651, 370, 62, 62, 0x808080, 1);
+    this.add.rectangle(1270, 370, 62, 62, 0x808080, 1);
+
+    console.log(this.registry.get('player1IsPolice'));
+
+    var policePos;
+    var thiefPos;
+
+    if(this.registry.get('player1IsPolice')) {
+        policePos = 651;
+        thiefPos = 1270;
+    } else {
+        policePos = 1270;
+        thiefPos = 651;
+    }
+
+    this.add.image(policePos, 370, 'policiaWin');
+    this.add.image(thiefPos, 370, 'ladronWin');
+
+    this.pause = false;
   }
 
   spawnRandomModifier() {
@@ -1129,128 +1153,136 @@ class GameScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-
-    if(!this.policiaFacingRight && !this.isWallSlideJumpingPolicia) {
-        this.playerPolicia.flipX = true;
-    } else if(this.policiaFacingRight && !this.isWallSlideJumpingPolicia) {
-        this.playerPolicia.flipX = false;
-    }
-
-    if(!this.ladronFacingRight && !this.isWallSlideJumpingLadron) {
-        this.playerLadron.flipX = true;
-    } else if(this.ladronFacingRight && !this.isWallSlideJumpingLadron) {
-        this.playerLadron.flipX = false;
-    }
-
-    // Movimiento del policía
-    if(!this.isWallSlideJumpingPolicia)
-    {
-        if (this.policeControls.left.isDown) {
-            this.playerPolicia.setVelocityX(-this.PoliciaVelocity * this.time.timeScale);
-            this.policiaFacingRight = false;
-            if(this.playerPolicia.body.touching.down) {
-                this.playerPolicia.anims.play('police_run', true);
-            }
-        } else if (this.policeControls.right.isDown) {
-            this.playerPolicia.setVelocityX(this.PoliciaVelocity * this.time.timeScale);
-            this.policiaFacingRight = true;
-            if(this.playerPolicia.body.touching.down) {
-                this.playerPolicia.anims.play('police_run', true);
-            }
-        } else {
-            this.playerPolicia.setVelocityX(0);
-            if(this.playerPolicia.body.touching.down) {
-                this.playerPolicia.anims.play('police_idle', true);
-            }
+    if(!this.pause) {
+        if(!this.policiaFacingRight && !this.isWallSlideJumpingPolicia) {
+            this.playerPolicia.flipX = true;
+        } else if(this.policiaFacingRight && !this.isWallSlideJumpingPolicia) {
+            this.playerPolicia.flipX = false;
         }
-    } else {
-        if(this.wallSlideTimerPolicia && this.wallSlideTimerPolicia.getRemaining() <= 0) {
-            this.isWallSlideJumpingPolicia = false;
-        }
-    }
 
-    // Movimiento del ladrón
-    if(!this.isWallSlideJumpingLadron && this.LadronMovement)
+        if(!this.ladronFacingRight && !this.isWallSlideJumpingLadron) {
+            this.playerLadron.flipX = true;
+        } else if(this.ladronFacingRight && !this.isWallSlideJumpingLadron) {
+            this.playerLadron.flipX = false;
+        }
+
+        // Movimiento del policía
+        if(!this.isWallSlideJumpingPolicia)
         {
-            if (this.thiefControls.left.isDown) {
-                this.playerLadron.setVelocityX(-this.LadronVelocity * this.time.timeScale);
-                this.ladronFacingRight = false;
-                if(this.playerLadron.body.touching.down) {
-                    this.playerLadron.anims.play('thief_run', true);
+            if (this.policeControls.left.isDown) {
+                this.playerPolicia.setVelocityX(-this.PoliciaVelocity * this.time.timeScale);
+                this.policiaFacingRight = false;
+                if(this.playerPolicia.body.touching.down) {
+                    this.playerPolicia.anims.play('police_run', true);
                 }
-            } else if (this.thiefControls.right.isDown) {
-                this.playerLadron.setVelocityX(this.LadronVelocity * this.time.timeScale);
-                this.ladronFacingRight = true;
-                if(this.playerLadron.body.touching.down) {
-                    this.playerLadron.anims.play('thief_run', true);
+            } else if (this.policeControls.right.isDown) {
+                this.playerPolicia.setVelocityX(this.PoliciaVelocity * this.time.timeScale);
+                this.policiaFacingRight = true;
+                if(this.playerPolicia.body.touching.down) {
+                    this.playerPolicia.anims.play('police_run', true);
                 }
             } else {
-                this.playerLadron.setVelocityX(0);
-                if(this.playerLadron.body.touching.down) {
-                    this.playerLadron.anims.play('thief_idle', true);
+                this.playerPolicia.setVelocityX(0);
+                if(this.playerPolicia.body.touching.down) {
+                    this.playerPolicia.anims.play('police_idle', true);
                 }
             }
         } else {
-            if(this.wallSlideTimerLadron && this.wallSlideTimerLadron.getRemaining() <= 0) {
-                this.isWallSlideJumpingLadron = false;
+            if(this.wallSlideTimerPolicia && this.wallSlideTimerPolicia.getRemaining() <= 0) {
+                this.isWallSlideJumpingPolicia = false;
             }
         }
 
-    // Detectar si el jugador está pegado a la pared (si está tocando la pared)
-    this.checkWallSlide(this.playerPolicia);
-    this.checkWallSlide(this.playerLadron);
+        // Movimiento del ladrón
+        if(!this.isWallSlideJumpingLadron && this.LadronMovement)
+            {
+                if (this.thiefControls.left.isDown) {
+                    this.playerLadron.setVelocityX(-this.LadronVelocity * this.time.timeScale);
+                    this.ladronFacingRight = false;
+                    if(this.playerLadron.body.touching.down) {
+                        this.playerLadron.anims.play('thief_run', true);
+                    }
+                } else if (this.thiefControls.right.isDown) {
+                    this.playerLadron.setVelocityX(this.LadronVelocity * this.time.timeScale);
+                    this.ladronFacingRight = true;
+                    if(this.playerLadron.body.touching.down) {
+                        this.playerLadron.anims.play('thief_run', true);
+                    }
+                } else {
+                    this.playerLadron.setVelocityX(0);
+                    if(this.playerLadron.body.touching.down) {
+                        this.playerLadron.anims.play('thief_idle', true);
+                    }
+                }
+            } else {
+                if(this.wallSlideTimerLadron && this.wallSlideTimerLadron.getRemaining() <= 0) {
+                    this.isWallSlideJumpingLadron = false;
+                }
+            }
 
-    if (this.policeControls.up.isDown && this.canJumpPolicia) {
-        if (this.isWallSlidingPolicia) {
-            //Salto de pared
-            this.handleWallJump(this.playerPolicia);
-        } else if (this.playerPolicia.body.touching.down || this.jumpCountPolicia < this.maxJumpCount) {
-            this.playerPolicia.anims.play('police_jump', true);
-            this.playerPolicia.setVelocityY(-350 * this.time.timeScale);
-            this.jumpCountPolicia++;  // Incrementa el contador de saltos
+        // Detectar si el jugador está pegado a la pared (si está tocando la pared)
+        this.checkWallSlide(this.playerPolicia);
+        this.checkWallSlide(this.playerLadron);
+
+        if (this.policeControls.up.isDown && this.canJumpPolicia) {
+            if (this.isWallSlidingPolicia) {
+                //Salto de pared
+                this.handleWallJump(this.playerPolicia);
+            } else if (this.playerPolicia.body.touching.down || this.jumpCountPolicia < this.maxJumpCount) {
+                this.playerPolicia.anims.play('police_jump', true);
+                this.playerPolicia.setVelocityY(-350 * this.time.timeScale);
+                this.jumpCountPolicia++;  // Incrementa el contador de saltos
+            }
+            this.canJumpPolicia = false;  // Desactivar el salto por un tiempo
+            this.time.delayedCall(this.jumpCooldown, () => {
+                this.canJumpPolicia = true;  // Reactivar el salto después del cooldown
+            });
         }
-        this.canJumpPolicia = false;  // Desactivar el salto por un tiempo
+
+        // Salto del ladrón (doble salto)
+        if (this.thiefControls.up.isDown && this.canJumpLadron) {
+        if (this.isWallSlidingLadron) {
+            //Salto de pared
+            this.handleWallJump(this.playerLadron);
+        } else if (
+            this.playerLadron.body.touching.down ||
+            this.jumpCountLadron < this.maxJumpCount
+        ) {
+            this.playerLadron.anims.play('thief_jump', true);
+            this.playerLadron.setVelocityY(-350 * this.time.timeScale);
+            this.jumpCountLadron++; // Incrementa el contador de saltos
+        }
+        this.canJumpLadron = false; // Desactivar el salto por un tiempo
         this.time.delayedCall(this.jumpCooldown, () => {
-            this.canJumpPolicia = true;  // Reactivar el salto después del cooldown
+            this.canJumpLadron = true; // Reactivar el salto después del cooldown
         });
-    }
+        }
 
-    // Salto del ladrón (doble salto)
-    if (this.thiefControls.up.isDown && this.canJumpLadron) {
-      if (this.isWallSlidingLadron) {
-        //Salto de pared
-        this.handleWallJump(this.playerLadron);
-      } else if (
-        this.playerLadron.body.touching.down ||
-        this.jumpCountLadron < this.maxJumpCount
-      ) {
-        this.playerLadron.anims.play('thief_jump', true);
-        this.playerLadron.setVelocityY(-350 * this.time.timeScale);
-        this.jumpCountLadron++; // Incrementa el contador de saltos
-      }
-      this.canJumpLadron = false; // Desactivar el salto por un tiempo
-      this.time.delayedCall(this.jumpCooldown, () => {
-        this.canJumpLadron = true; // Reactivar el salto después del cooldown
-      });
-    }
+        // Detectar si el ladrón está acelerando
+        if (this.thiefControls.down.isDown && !this.isBoosting) {
+        this.isBoosting = true; // Bloquea nuevas aceleraciones
+        this.LadronVelocity += 300; // Incrementa la velocidad
+        this.time.delayedCall(200, () => {
+            this.LadronVelocity -= 300; // Restaura la velocidad normal
+        });
+        // Reinicia la capacidad de acelerar después de 2 segundos
+        this.time.delayedCall(2000, () => {
+            this.isBoosting = false; // Permite volver a acelerar
+        });
+        }
 
-    // Detectar si el ladrón está acelerando
-    if (this.thiefControls.down.isDown && !this.isBoosting) {
-      this.isBoosting = true; // Bloquea nuevas aceleraciones
-      this.LadronVelocity += 300; // Incrementa la velocidad
-      this.time.delayedCall(200, () => {
-        this.LadronVelocity -= 300; // Restaura la velocidad normal
-      });
-      // Reinicia la capacidad de acelerar después de 2 segundos
-      this.time.delayedCall(2000, () => {
-        this.isBoosting = false; // Permite volver a acelerar
-      });
-    }
-
-    // Detectar cuando se presione la tecla Enter
-    if (this.policeInteract.isDown) {
-        this.sound.play('usar_objeto');
-        this.useModifier();
+        // Detectar cuando se presione la tecla Enter
+        if (this.policeInteract.isDown) {
+            this.sound.play('usar_objeto');
+            this.useModifier();
+        }
+    } else {
+        this.playerLadron.setVelocityX(0);
+        this.playerLadron.setVelocityY(0);
+        this.playerLadron.anims.stop();
+        this.playerPolicia.setVelocityX(0);
+        this.playerPolicia.setVelocityY(0);
+        this.playerPolicia.anims.stop();
     }
   }
 
@@ -1300,38 +1332,36 @@ class GameScene extends Phaser.Scene {
     }
 
   updateTimer() {
-    if (this.timeLeft > 0) {
-      this.timeLeft--;
-      this.timerText.setText(this.formatTime(this.timeLeft));
-    } else {
-      this.timerEvent.remove();
-
-      let player1IsPolice = this.registry.get("player1IsPolice");
-      this.registry.set("player1IsPolice", !player1IsPolice);
-
-      if (player1IsPolice) {
-        const player2Rounds = this.registry.get("player2Rounds") + 1;
-        this.registry.set("player2Rounds", player2Rounds);
-
-        if (player2Rounds >= 3) {
-          this.scene.start("VictoryScene", { winner: "Jugador 2" });
-          this.registry.set("player1Rounds", 0);
-          this.registry.set("player2Rounds", 0);
+    if(!this.pause) {
+        if (this.timeLeft > 0) {
+        this.timeLeft--;
+        this.timerText.setText(this.formatTime(this.timeLeft));
         } else {
-          this.playRoundWin("Ladron");
-        }
-      } else {
-        const player1Rounds = this.registry.get("player1Rounds") + 1;
-        this.registry.set("player1Rounds", player1Rounds);
+        this.timerEvent.remove();
 
-        if (player1Rounds >= 3) {
-          this.scene.start("VictoryScene", { winner: "Jugador 1" });
-          this.registry.set("player1Rounds", 0);
-          this.registry.set("player2Rounds", 0);
+        let player1IsPolice = this.registry.get("player1IsPolice");
+        this.registry.set("player1IsPolice", !player1IsPolice);
+
+        if (player1IsPolice) {
+            const player2Rounds = this.registry.get("player2Rounds") + 1;
+            this.registry.set("player2Rounds", player2Rounds);
+
+            if (player2Rounds >= 3) {
+                this.playVictory(2);
+            } else {
+            this.playRoundWin("Ladron");
+            }
         } else {
-          this.playRoundWin("Ladron");
+            const player1Rounds = this.registry.get("player1Rounds") + 1;
+            this.registry.set("player1Rounds", player1Rounds);
+
+            if (player1Rounds >= 3) {
+                this.playVictory(1);
+            } else {
+            this.playRoundWin("Ladron");
+            }
         }
-      }
+        }
     }
   }
 
@@ -1512,10 +1542,8 @@ class GameScene extends Phaser.Scene {
       const player1Rounds = this.registry.get("player1Rounds") + 1;
       this.registry.set("player1Rounds", player1Rounds);
 
-      if (player1Rounds >= 3) {
-        this.scene.start("VictoryScene", { winner: "Jugador 1" });
-        this.registry.set("player1Rounds", 0);
-        this.registry.set("player2Rounds", 0);
+      if (player1Rounds >= 1) {
+        this.playVictory(1);
       } else {
         this.playRoundWin("Policia");
       }
@@ -1523,10 +1551,8 @@ class GameScene extends Phaser.Scene {
       const player2Rounds = this.registry.get("player2Rounds") + 1;
       this.registry.set("player2Rounds", player2Rounds);
 
-      if (player2Rounds >= 3) {
-        this.scene.start("VictoryScene", { winner: "Jugador 2" });
-        this.registry.set("player1Rounds", 0);
-        this.registry.set("player2Rounds", 0);
+      if (player2Rounds >= 1) {
+        this.playVictory(2);
       } else {
         this.playRoundWin("Policia");
       }
@@ -1588,6 +1614,21 @@ class GameScene extends Phaser.Scene {
       this.input.keyboard.enabled = true;
     });
   }
+
+  playVictory(player) {
+    this.add.image(this.centerX, this.centerY + 200, 'victoria');
+    this.add.image(this.centerX, this.centerY + 200, `victoria_${player}`);
+    this.pause = true;
+
+    const nextButton = this.add.image(this.centerX + 300, this.centerY + 360, 'boton_victoria').setInteractive();
+
+    nextButton.on('pointerdown', () => {
+        this.registry.set("player1Rounds", 0);
+        this.registry.set("player2Rounds", 0);
+        this.scene.start("MainMenuScene");
+    });
+  }
+
 }
 
 export default GameScene;
