@@ -51,7 +51,8 @@ class PauseScene extends Phaser.Scene {
         .setInteractive();
 
         optionsButton.on('pointerdown', () => {
-            this.scene.launch('OptionsScene')
+            this.scene.pause();
+            this.scene.launch('OptionsScene', { originScene: 'PauseScene' })
         });
 
         stopButton.on('pointerdown', () => {

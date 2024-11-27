@@ -3,6 +3,10 @@ class OptionsScene extends Phaser.Scene {
       super({ key: "OptionsScene" });
   }
 
+  init(data) {
+    this.originScene = data.originScene;
+  }
+
   preload(){
     this.load.image('marcoPause', './Interfaz/marcoPause.png');
 }
@@ -54,7 +58,8 @@ class OptionsScene extends Phaser.Scene {
       }).setOrigin(0.5).setInteractive();
 
       backButton.on("pointerdown", () => {
-          this.scene.start("MainMenuScene"); // Regresa al menú principal
+          this.scene.resume(this.originScene); // Regresa al menú principal
+          this.scene.stop();
       });
   }
 

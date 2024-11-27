@@ -40,7 +40,8 @@ class MainMenuScene extends Phaser.Scene {
         });
 
         optionsButton.on('pointerdown', () => {
-            this.scene.start('OptionsScene'); // Cambiar a la escena de opciones
+            this.scene.launch('OptionsScene', { originScene: 'MainMenuScene' }); // Cambiar a la escena de opciones
+            this.scene.pause();
         });
 
         exitButton.on('pointerdown', () => {
