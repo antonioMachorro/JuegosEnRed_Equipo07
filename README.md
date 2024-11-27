@@ -445,7 +445,11 @@ La paleta de colores combina tonos vivos y saturados para destacar elementos cla
 
 * **Escenario:** El escenario tiene una paleta de colores que combina tonos oscuros y cálidos con colores contrastantes para aportar profundidad y riqueza visual al entorno. Los tonos principales incluyen un rojo oscuro, un morado, y un azul intenso.
 
+![paleta1](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/paleta1.png)
+
 * **Personajes:** Los personajes tienen colores más claros para contrastar con los escenarios, asegurando que sean fácilmente identificables en cualquier situación. Este enfoque mejora la claridad durante la jugabilidad y refuerza el protagonismo de los personajes en pantalla.
+
+![paleta2.1](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/paleta2.1.png)    ![paleta2.2](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/paleta2.2.png)
 
 **Escenario**
 
