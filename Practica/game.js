@@ -7,6 +7,8 @@ import VictoryScene from './Scenes/VictoryScene.js';
 import PauseScene from './Scenes/PauseScene.js';
 import GameModeScene from './Scenes/GameModeScene.js';
 import AudioManager from './AudioManager.js';
+import OptionsScene from './Scenes/OptionsScene.js';
+import TitleMenu from './Scenes/TitleMenu.js';
 
 
 const config = {
@@ -14,12 +16,13 @@ const config = {
     width: 1920, //Cambiar la ventana de juego aqui y en el archivo CSS
     height: 1080,
     parent: 'gameContainer',  // Contenedor en el HTML
-    scene: [GameScene, MainMenuScene, GameModeScene, RoleSelectScene, PauseScene, VictoryScene, CreditsScene],
+    scene: [TitleMenu, MainMenuScene, GameScene, GameModeScene, RoleSelectScene, PauseScene, VictoryScene, CreditsScene, OptionsScene],
+    pixelArt: true,
     physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 1200 },
-            debug: false
+            debug: true
         }
     },
     scale: {

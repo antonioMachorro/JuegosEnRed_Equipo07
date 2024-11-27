@@ -3,6 +3,10 @@ class PauseScene extends Phaser.Scene {
         super({ key: 'PauseScene' });
     }
 
+    preload(){
+        this.load.image('marcoPause', './Interfaz/marcoPause.png');
+    }
+
     create() {
         const { width, height } = this.scale;
 
@@ -10,13 +14,16 @@ class PauseScene extends Phaser.Scene {
         this.overlay.fillStyle(0xff176c, 0.3);
         this.overlay.fillRect(0, 0, width, height);
 
-        const pausedText = this.add.text(width / 2, 300, 'PAUSED', {
+
+        this.interfaceFondoPause = this.add.image(960,500,'marcoPause').setScale(3);
+
+        const pausedText = this.add.text(width / 2, 300, 'PAUSA', {
             fontFamily: 'retro-computer',
             fontSize: '82px',
             fill: '#fff',
         }).setOrigin(0.5);
 
-        const continueButton = this.add.text(width / 2, pausedText.y + 200, 'CONTINUE', {
+        const continueButton = this.add.text(width / 2, pausedText.y + 200, 'Continuar', {
             fontFamily: 'retro-computer',
             fontSize: '32px',
             fill: '#fff',
@@ -29,12 +36,23 @@ class PauseScene extends Phaser.Scene {
             this.scene.stop();
         });
 
-        const stopButton = this.add.text(width / 2, continueButton.y + 150, 'QUIT', {
+        const optionsButton = this.add.text(width / 2, continueButton.y + 100, 'Opciones', {
             fontFamily: 'retro-computer',
             fontSize: '32px',
             fill: '#fff',
         }).setOrigin(0.5)
         .setInteractive();
+
+        const stopButton = this.add.text(width / 2, optionsButton.y + 100, 'Salir', {
+            fontFamily: 'retro-computer',
+            fontSize: '32px',
+            fill: '#fff',
+        }).setOrigin(0.5)
+        .setInteractive();
+
+        optionsButton.on('pointerdown', () => {
+            this.scene.launch('OptionsScene')
+        });
 
         stopButton.on('pointerdown', () => {
             this.game.audioManager.setVolume(1);
