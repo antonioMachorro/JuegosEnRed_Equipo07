@@ -788,7 +788,6 @@ class GameScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     this.input.keyboard.on("keydown-ESC", () => {
-      this.game.audioManager.setVolume(0.2);
       this.scene.launch("PauseScene");
       this.scene.pause();
     });
@@ -1272,7 +1271,7 @@ class GameScene extends Phaser.Scene {
         }
 
         // Detectar cuando se presione la tecla Enter
-        if (this.policeInteract.isDown) {
+        if (this.policeInteract.isDown && this.policiaInventory) {
             this.sound.play('usar_objeto');
             this.useModifier();
         }

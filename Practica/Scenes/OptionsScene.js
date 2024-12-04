@@ -63,23 +63,23 @@ class OptionsScene extends Phaser.Scene {
       });
   }
 
-  /**
-   * Cambia el volumen del juego
-   * @param {number} delta Cambio incremental del volumen (positivo o negativo)
-   */
-  changeVolume(delta) {
-      // Obtener el volumen actual
-      const currentVolume = this.game.audioManager.getVolume();
-      
-      // Ajustar el volumen en pasos de 5% (0.05)
-      const newVolume = Phaser.Math.Clamp(currentVolume + delta, 0, 1);
+    /**
+     * Cambia el volumen del juego
+     * @param {number} delta Cambio incremental del volumen (positivo o negativo)
+     */
+    changeVolume(delta) {
+        // Obtener el volumen actual
+        const currentVolume = this.game.audioManager.getVolume();
+        
+        // Ajustar el volumen en pasos de 5% (0.05)
+        const newVolume = Phaser.Math.Clamp(currentVolume + delta, 0, 1);
 
-      // Actualizar el volumen en el AudioManager
-      this.game.audioManager.setVolume(newVolume);
+        // Actualizar el volumen en el AudioManager
+        this.game.audioManager.setVolume(newVolume);
 
-      // Mostrar el nuevo volumen como un porcentaje redondeado
-      this.volumeText.setText(`Volume: ${Math.round(newVolume * 100)}%`);
-  }
+        // Mostrar el nuevo volumen como un porcentaje redondeado
+        this.volumeText.setText(`Volume: ${Math.round(newVolume * 100)}%`);
+    }
 }
 
 export default OptionsScene;
