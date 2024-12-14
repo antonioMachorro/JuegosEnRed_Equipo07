@@ -20,20 +20,18 @@ class LoginScene extends Phaser.Scene {
 
         this.add.image(960, 540, 'menuPrincipal');
         this.add.image(960, 540, 'sesion');
-        this.add.image(960, 580, 'iniciar')  // Añadir la imagen en las coordenadas (960, 660)
+        this.add.image(960, 580, 'iniciar')  // Añadir la imagen en las coordenadas (960, 580)
          .setInteractive()  // Hacerla interactiva (detecta clics o toques)
          .on('pointerdown', () => {  // Cuando se haga clic en la imagen...
              this.scene.start('MainMenuScene');  // Cambiar a la escena 'MainMenuScene'
          });
 
-         this.add.image(959, 618, 'noacc')  // Añadir la imagen en las coordenadas (960, 660)
-         .setScale(0.95)
+         this.add.image(960, 618, 'noacc')  // Añadir la imagen en las coordenadas (960, 660)
+         .setScale(1)
          .setInteractive()  // Hacerla interactiva (detecta clics o toques)
          .on('pointerdown', () => {  // Cuando se haga clic en la imagen...
              this.scene.start('CreateAccScene');  // Cambiar a la escena 'MainMenuScene'
          });
-
-         ///////////////////////////////////////David arregla el menu de inicio de sesion/////////////////////////////////////////////////////////////
 
     }
 }
