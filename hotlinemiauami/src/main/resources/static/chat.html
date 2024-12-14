@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego con Chat</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Enlace al script de Phaser -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.0/dist/phaser.min.js"></script>
+
+    <!-- Tu script personalizado -->
+    <script src="path/to/tu/script.js"></script>
+
+    <script>
+        // Configuración de Phaser para iniciar la escena
+        const config = {
+            type: Phaser.AUTO,
+            width: 1920,
+            height: 1080,
+            scene: [LobbyScene],  // Asegúrate de que 'LobbyScene' esté correctamente importado
+        };
+
+        const game = new Phaser.Game(config);
+    </script>
+</body>
+</html>

@@ -7,6 +7,7 @@ class GameModeScene extends Phaser.Scene {
         this.load.image('mododejuego', './Interfaz/mododejuego.png');
         this.load.image('local', './Interfaz/local.png');
         this.load.image('volver', './Interfaz/volver.png');
+        this.load.image('red', './Interfaz/red.png')
 
     }
 
@@ -30,16 +31,16 @@ class GameModeScene extends Phaser.Scene {
             this.scene.start('RoleSelectScene');
         });
 
-        /*const redButton = this.add.text(width/2, 650, 'RED', { 
+        const redButton = this.add.image(1059,573, 'red', { 
             fontFamily: 'retro-computer',
             fontSize: '32px', 
-            fill: '#858585' }).setOrigin(0.5);
-        
-        
+            fill: '#fff' })
+            .setOrigin(0.5)
+            .setInteractive();
         redButton.on('pointerdown', () => {
-            this.scene.start('RoleSelectScene');
+            this.scene.start('LobbyScene');
         });
-        */
+        
 
          // Ajustar la cámara
         const camera = this.cameras.main;

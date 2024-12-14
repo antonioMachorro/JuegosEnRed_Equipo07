@@ -1,4 +1,4 @@
-//import BootScene from './Scenes/BootScene.js';
+//import BootScene from './scenes/BootScene.js';
 import MainMenuScene from './scenes/MainMenuScene.js';
 import GameScene from './scenes/GameScene.js';
 import CreditsScene from './scenes/CreditsScene.js';
@@ -9,8 +9,10 @@ import GameModeScene from './scenes/GameModeScene.js';
 import AudioManager from './AudioManager.js';
 import OptionsScene from './scenes/OptionsScene.js';
 import TitleMenu from './scenes/TitleMenu.js';
+import LobbyScene from './scenes/LobbyScene.js';
 import LoginScene from './scenes/LoginScene.js';
 import CreateAccScene from './scenes/CreateAccScene.js';
+
 
 
 const config = {
@@ -18,7 +20,7 @@ const config = {
     width: 1920, //Cambiar la ventana de juego aqui y en el archivo CSS
     height: 1080,
     parent: 'gameContainer',  // Contenedor en el HTML
-    scene: [TitleMenu, LoginScene, CreateAccScene, MainMenuScene, GameScene, GameModeScene, RoleSelectScene, PauseScene, VictoryScene, CreditsScene, OptionsScene],
+    scene: [TitleMenu, LoginScene, MainMenuScene, GameScene, GameModeScene, LobbyScene, RoleSelectScene, PauseScene, VictoryScene, CreditsScene, OptionsScene, CreateAccScene],
     pixelArt: true,
     physics: {
         default: 'arcade',
