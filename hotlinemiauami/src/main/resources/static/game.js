@@ -20,7 +20,7 @@ const config = {
     width: 1920, //Cambiar la ventana de juego aqui y en el archivo CSS
     height: 1080,
     parent: 'gameContainer',  // Contenedor en el HTML
-    scene: [TitleMenu, LoginScene, MainMenuScene, GameScene, GameModeScene, LobbyScene, RoleSelectScene, PauseScene, VictoryScene, CreditsScene, OptionsScene, CreateAccScene],
+    scene: [TitleMenu, LoginScene, MainMenuScene, GameScene, LobbyScene, GameModeScene, RoleSelectScene, PauseScene, VictoryScene, CreditsScene, OptionsScene, CreateAccScene],
     pixelArt: true,
     physics: {
         default: 'arcade',

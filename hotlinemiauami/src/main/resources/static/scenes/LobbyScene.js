@@ -15,7 +15,7 @@ class LobbyScene extends Phaser.Scene {
        camera.setBounds(370, 210, 960, 540);
        camera.setZoom(2.6);
 
-       this.interfaceFondo = this.add.image(960,540,'fondo').setDepth(-1);
+       this.interfaceFondo = this.add.image(960,540,'fondo');
 
        const returnButton = this.add.image(960,720, 'volver')
        .setScale(0.8)
