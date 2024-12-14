@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'retro-computer';
+    src: url('./Fonts/retro_computer_personal_use.ttf');
+    font-weight: normal;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    align-items:  center;
+ 
+    background-color: #0308;
+    overflow: hidden;
+    
+}
+
+
+

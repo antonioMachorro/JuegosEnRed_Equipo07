@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-HotlinemiauamiApplication<hotlinemiauami>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.gruposiete.hotlinemiauami.HotlinemiauamiApplication",
+            "projectName": "hotlinemiauami",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
