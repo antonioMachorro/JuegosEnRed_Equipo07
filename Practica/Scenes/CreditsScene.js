@@ -21,10 +21,10 @@ class CreditsScene extends Phaser.Scene {
 
         // Nombres de los integrantes
         const names = [
-            '1. Adrian Espinola Gumiel',
-            '2. Alvaro Rosa Pedraza',
-            '3. Antonio Machorro Herrera',
-            '4. David Antonio Paz Gullon',
+            'Adrián Espínola Gumiel',
+            'Álvaro Rosa Pedraza',
+            'Antonio Machorro Herrera',
+            'David Antonio Paz Gullón',
             '5. Laura Manso Herrero'
         ];
 

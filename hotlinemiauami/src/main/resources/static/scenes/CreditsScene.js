@@ -13,7 +13,7 @@ class CreditsScene extends Phaser.Scene {
 
         this.add.image(960,540,'marcoPause').setScale(3.5);
         // Título de Créditos
-        this.add.text(width / 2, 300, 'CREDITOS', { 
+        this.add.text(width / 2, 300, 'CRÉDITOS', { 
             fontFamily: 'retro-computer', 
             fontSize: '48px', 
             fill: '#fff' 
@@ -21,11 +21,11 @@ class CreditsScene extends Phaser.Scene {
 
         // Nombres de los integrantes
         const names = [
-            '1. Adrian Espinola Gumiel',
-            '2. Alvaro Rosa Pedraza',
-            '3. Antonio Machorro Herrera',
-            '4. David Antonio Paz Gullon',
-            '5. Laura Manso Herrero'
+            'Adrián Espínola Gumiel',
+            'Álvaro Rosa Pedraza',
+            'Antonio Machorro Herrera',
+            'David Antonio Paz Gullón',
+            'Laura Manso Herrero'
         ];
 
         names.forEach((name, index) => {

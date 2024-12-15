@@ -46,13 +46,13 @@ class RoleSelectScene extends Phaser.Scene {
         })
 
         // Textos de personajes
-        const policeText = this.add.text(750, 450, 'Policia', {
+        const policeText = this.add.text(750, 450, 'Policía', {
             fontFamily: 'retro-computer',
             fontSize: '18px', 
             fill: '#fff' 
         }).setOrigin(0.5);
 
-        const thiefText = this.add.text(1150,450, 'Ladron', {
+        const thiefText = this.add.text(1150,450, 'Ladrón', {
             fontFamily: 'retro-computer',
             fontSize: '18px', 
             fill: '#fff' 

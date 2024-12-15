@@ -13,7 +13,7 @@ class OptionsScene extends Phaser.Scene {
 
   create() {
       this.interfaceFondoPause = this.add.image(960,500,'marcoPause').setScale(4);
-      this.add.text(960, 200, "Menu de Opciones", {
+      this.add.text(960, 200, "Menú de Opciones", {
           fontSize: "64px",
           fill: "#fff",
           fontFamily: "retro-computer"

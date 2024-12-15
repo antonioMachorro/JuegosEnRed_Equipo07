@@ -1348,7 +1348,7 @@ class GameScene extends Phaser.Scene {
             if (player2Rounds >= 3) {
                 this.playVictory(2);
             } else {
-            this.playRoundWin("Ladron");
+            this.playRoundWin("Ladrón");
             }
         } else {
             const player1Rounds = this.registry.get("player1Rounds") + 1;
@@ -1357,7 +1357,7 @@ class GameScene extends Phaser.Scene {
             if (player1Rounds >= 3) {
                 this.playVictory(1);
             } else {
-            this.playRoundWin("Ladron");
+            this.playRoundWin("Ladrón");
             }
         }
         }
@@ -1544,7 +1544,7 @@ class GameScene extends Phaser.Scene {
       if (player1Rounds >= 3) {
         this.playVictory(1);
       } else {
-        this.playRoundWin("Policia");
+        this.playRoundWin("Policía");
       }
     } else {
       const player2Rounds = this.registry.get("player2Rounds") + 1;
@@ -1553,7 +1553,7 @@ class GameScene extends Phaser.Scene {
       if (player2Rounds >= 3) {
         this.playVictory(2);
       } else {
-        this.playRoundWin("Policia");
+        this.playRoundWin("Policía");
       }
     }
   }
@@ -1575,7 +1575,7 @@ class GameScene extends Phaser.Scene {
     )
     .setOrigin(0.5);
 
-    let winnerImage = winner === "Policia" ? 'policiaWin' : 'ladronWin';
+    let winnerImage = winner === "Policía" ? 'policiaWin' : 'ladronWin';
     console.log(winnerImage);
     let victoryImage = this.add.image(this.centerX, winnerText.y + 70, winnerImage).setScale(2);
 
