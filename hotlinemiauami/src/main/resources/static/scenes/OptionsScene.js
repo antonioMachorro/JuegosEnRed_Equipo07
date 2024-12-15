@@ -36,7 +36,7 @@ class OptionsScene extends Phaser.Scene {
       }).setInteractive();
 
       decreaseButton.on("pointerdown", () => {
-          this.changeVolume(-0.05); // Reduce el volumen en múltiplos de 5%
+          this.changeVolume(-0.1); // Reduce el volumen en múltiplos de 5%
       });
 
       // Botón para subir el volumen (a la derecha)
@@ -47,7 +47,7 @@ class OptionsScene extends Phaser.Scene {
       }).setInteractive();
 
       increaseButton.on("pointerdown", () => {
-          this.changeVolume(0.05); // Aumenta el volumen en múltiplos de 5%
+          this.changeVolume(0.1); // Aumenta el volumen en múltiplos de 5%
       });
 
       // Botón para volver al menú principal

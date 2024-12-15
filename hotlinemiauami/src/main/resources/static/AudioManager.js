@@ -27,11 +27,15 @@ class AudioManager {
     }
 
     setVolume(volume) {
-        this.globalVolume = Phaser.Math.Clamp(volume, 0, 1); // Asegura que esté entre 0 y 1
+        this.globalVolume = Phaser.Math.Clamp(volume, 0, 1);
+    
+        const adjustedVolume = Math.pow(this.globalVolume, 2);
+    
         if (this.currentMusic) {
-            this.currentMusic.setVolume(this.globalVolume);
+            this.currentMusic.setVolume(adjustedVolume);
         }
     }
+    
 
     getVolume() {
         return this.globalVolume; // Devuelve el volumen actual
