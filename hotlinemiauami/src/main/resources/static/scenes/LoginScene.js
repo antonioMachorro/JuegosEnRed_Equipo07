@@ -70,22 +70,33 @@ class LoginScene extends Phaser.Scene {
         field.style.height = '31px';
     }
 
-    validateLogin(username, password) {
-        fetch(`/api/users/${username}`)
-            .then(response => {
-                if (!response.ok) throw new Error('Usuario no encontrado');
-                return response.json();
-            })
-            .then(data => {
-                if (data.username === username && data.password === password) {
-                    this.scene.start('MainMenuScene');
-                } else {
-                    alert('Contraseña incorrecta');
-                }
-            })
-            .catch(error => {
-                alert('Usuario no encontrado');
+
+    async validateLogin(username, password) {
+        console.log(username);
+        console.log(password);
+        try {
+            const response = await fetch('http://localhost:8080/api/users/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
             });
+
+            console.log(response.status);
+        
+            if (response.status === 200) {
+                this.scene.start('MainMenuScene')
+            } else if(response.status === 404){
+                alert("User not found.");
+            } else if(response.status === 401) {
+                alert("Invalid credentials.");
+            } else {
+                throw new Error("Invalid response.");
+            }
+
+        } catch (error) {
+            console.error('Error during login:', error);
+            return 'An error occurred during login';
+        }
     }
 
     cleanUp() {

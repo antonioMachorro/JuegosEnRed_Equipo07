@@ -103,7 +103,7 @@ public class UsersController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginDTO loginDTO) throws IOException {
+    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) throws IOException {
         return userService.login(loginDTO);
     }
 }

@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -83,19 +85,19 @@ public class UserService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 
-    public String login(LoginDTO loginDTO) throws IOException {
+    public ResponseEntity<String> login(LoginDTO loginDTO) throws IOException {
         File userFile = new File("data/" + loginDTO.getUsername() + ".json");
         if(!userFile.exists()) {
-            return "User not found.";
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
         String userData = new String(Files.readAllBytes(Paths.get(userFile.getPath())));
         String encryptedPassword = getPasswordFromJSON(userData);
 
         if(encoder.matches(loginDTO.getPassword(), encryptedPassword)) {
-            return "Login Successful";
+            return new ResponseEntity<>("Login successful", HttpStatus.OK);
         } else {
-            return "Invalid credentials";
+            return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
     }
 
