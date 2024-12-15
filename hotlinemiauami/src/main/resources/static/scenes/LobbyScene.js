@@ -40,6 +40,7 @@ class LobbyScene extends Phaser.Scene {
 
         // Inicializar el chat
         this.initChat();
+        this.fetchMessages();
     }
 
     showChat() {
@@ -68,21 +69,71 @@ class LobbyScene extends Phaser.Scene {
         const chatMessages = document.getElementById('chat-messages');
 
         // Enviar mensaje al presionar Enter
-        chatInput.addEventListener('keydown', (event) => {
+        chatInput.addEventListener('keydown', async (event) => {
             if (event.key === 'Enter' && chatInput.value.trim() !== '') {
                 const message = chatInput.value.trim();
                 chatInput.value = ''; // Limpiar el campo de entrada
 
                 // Mostrar el mensaje localmente
+                /*
                 const messageElement = document.createElement('div');
                 messageElement.textContent = `Tú: ${message}`;
                 chatMessages.appendChild(messageElement);
+                */
+
+                //Enviar el mensaje a servidor
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            user: 'Tu',
+                            message: message,
+                        }),
+                    });
+
+                    if(!response.ok) {
+                        console.error("Error al enviar el mensaje: ", await response.text());
+                    }
+                } catch(error) {
+                    console.error("Error al conectar con servidor: ", error);
+                }
+
 
                 // Hacer scroll al final de los mensajes
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
         });
     }
+
+    async fetchMessages() {
+        const chatMessages = document.getElementById('chat-messages');
+        let lastMessageId = 0;
+
+        console.log("Fetching messages...");
+
+        setInterval(async () => {
+            try {
+                const response = await fetch(`api/chat?since=${lastMessageId}`);
+                if(response.ok) {
+                    const messages = await response.json();
+                    messages.forEach((message) => {
+                        const messageElement = document.createElement('div');
+                        messageElement.textContent = `${message.user}: ${message.message}`;
+                        chatMessages.appendChild(messageElement);
+                        lastMessageId = message.id;
+                    });
+
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            } catch(error) {
+                console.error('Error al obtener mensajes:', error);
+            }
+        }, 1000);
+    }
+
 }
 
 export default LobbyScene;

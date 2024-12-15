@@ -49,7 +49,7 @@ public class ChatController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ChatMessage>> getMessage(@RequestParam(value = "since", defaultValue = "0") long sinceId) {
+    public ResponseEntity<List<ChatMessage>> getMessages(@RequestParam(value = "since", defaultValue = "0") long sinceId) {
 
         var readLock = this.lock.readLock();
         readLock.lock();
