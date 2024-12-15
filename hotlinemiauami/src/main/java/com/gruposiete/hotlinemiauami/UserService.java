@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +86,7 @@ public class UserService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 
-    public ResponseEntity<String> login(LoginDTO loginDTO) throws IOException {
+    public ResponseEntity<?> login(LoginDTO loginDTO) throws IOException {
         File userFile = new File("data/" + loginDTO.getUsername() + ".json");
         if(!userFile.exists()) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
@@ -95,7 +96,7 @@ public class UserService {
         String encryptedPassword = getPasswordFromJSON(userData);
 
         if(encoder.matches(loginDTO.getPassword(), encryptedPassword)) {
-            return new ResponseEntity<>("Login successful", HttpStatus.OK);
+            return new ResponseEntity<>(Map.of("username", loginDTO.getUsername(), "message", "Login Successful"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }

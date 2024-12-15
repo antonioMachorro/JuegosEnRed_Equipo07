@@ -11,6 +11,8 @@ class LobbyScene extends Phaser.Scene {
 
     create() {
 
+        const userData = this.registry.get('userData');
+
         // Camara
         const camera = this.cameras.main;
         camera.setBounds(370, 210, 960, 540);
@@ -39,7 +41,7 @@ class LobbyScene extends Phaser.Scene {
         });
 
         // Inicializar el chat
-        this.initChat();
+        this.initChat(userData.username);
         this.fetchMessages();
     }
 
@@ -64,7 +66,7 @@ class LobbyScene extends Phaser.Scene {
         }
     }
 
-    initChat() {
+    initChat(username) {
         const chatInput = document.getElementById('chat-input');
         const chatMessages = document.getElementById('chat-messages');
 
@@ -89,7 +91,7 @@ class LobbyScene extends Phaser.Scene {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            user: 'Tu',
+                            user: username,
                             message: message,
                         }),
                     });

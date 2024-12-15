@@ -80,10 +80,13 @@ class LoginScene extends Phaser.Scene {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
             });
-
-            console.log(response.status);
         
             if (response.status === 200) {
+                const data = await response.json();
+                console.log(data.message);
+
+                this.registry.set('userData', {username: data.username});
+
                 this.scene.start('MainMenuScene')
             } else if(response.status === 404){
                 alert("User not found.");
