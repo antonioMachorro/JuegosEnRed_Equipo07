@@ -42,8 +42,8 @@ class CreateAccScene extends Phaser.Scene {
         usernameField.id = 'username-input';
         usernameField.placeholder = 'es este';
         usernameField.style.position = 'absolute';
-        usernameField.style.left = '598px';
-        usernameField.style.top = '312px';
+        usernameField.style.left = '758px';
+        usernameField.style.top = '412px';
         usernameField.style.fontSize = '16px';
         usernameField.style.padding = '8px';
         usernameField.style.width = '298px';
@@ -56,8 +56,8 @@ class CreateAccScene extends Phaser.Scene {
         passwordField.placeholder = 'aqui la contraseña';
         passwordField.type = 'password';
         passwordField.style.position = 'absolute';
-        passwordField.style.left = '598px';
-        passwordField.style.top = '394px';
+        passwordField.style.left = '758px';
+        passwordField.style.top = '520px';
         passwordField.style.fontSize = '16px';
         passwordField.style.padding = '8px';
         passwordField.style.width = '298px';

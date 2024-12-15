@@ -25,11 +25,8 @@ class LoginScene extends Phaser.Scene {
         this.add.image(960, 580, 'iniciar')
             .setInteractive()
             .on('pointerdown', () => {
-                // Obtener los valores de usuario y contraseña
-                const username = document.getElementById('username-input').value;
-                const password = document.getElementById('password-input').value;
-
-                // Llamada al backend para validar las credenciales
+                const username = this.usernameField.value;
+                const password = this.passwordField.value;
                 this.validateLogin(username, password);
             });
 
@@ -42,51 +39,46 @@ class LoginScene extends Phaser.Scene {
 
         // Agregar los campos de texto para el nombre de usuario y la contraseña
         this.createLoginFields();
+
+        // Limpiar campos cuando la escena se cierra
+        this.events.on('shutdown', this.cleanUp, this);
     }
 
     createLoginFields() {
-        // Crear un campo de texto para el nombre de usuario
-        const usernameField = document.createElement('input');
-        usernameField.id = 'username-input';
-        usernameField.placeholder = 'Usuario';
-        usernameField.style.position = 'absolute';
-        usernameField.style.left = '48.6%';
-        usernameField.style.top = '40.5%';
-        usernameField.style.transform = 'translate(-50%, -50%)';  // Centrado exacto
-        usernameField.style.fontSize = '16px';  // Tamaño de fuente más pequeño
-        usernameField.style.padding = '8px';    // Menos espacio dentro del campo
-        usernameField.style.width = '298px';    // Ancho reducido
-        usernameField.style.height = '31px';    // Altura reducida
-        document.body.appendChild(usernameField);
+        this.usernameField = document.createElement('input');
+        this.usernameField.id = 'username-input';
+        this.usernameField.placeholder = 'Usuario';
+        this.setStyle(this.usernameField, '40.5%');
+        document.body.appendChild(this.usernameField);
 
-        // Crear un campo de texto para la contraseña
-        const passwordField = document.createElement('input');
-        passwordField.id = 'password-input';
-        passwordField.placeholder = 'Buenas';
-        passwordField.type = 'password';
-        passwordField.style.position = 'absolute';
-        passwordField.style.left = '48.6%';
-        passwordField.style.top = '51.5%';  // Asegurarse que esté debajo del campo de usuario
-        passwordField.style.transform = 'translate(-50%, -50%)';  // Centrado exacto
-        passwordField.style.fontSize = '16px';  // Tamaño de fuente más pequeño
-        passwordField.style.padding = '8px';    // Menos espacio dentro del campo
-        passwordField.style.width = '298px';    // Ancho reducido
-        passwordField.style.height = '31px';    // Altura reducida
-        document.body.appendChild(passwordField);
+        this.passwordField = document.createElement('input');
+        this.passwordField.id = 'password-input';
+        this.passwordField.placeholder = 'Contraseña';
+        this.passwordField.type = 'password';
+        this.setStyle(this.passwordField, '51.5%');
+        document.body.appendChild(this.passwordField);
+    }
+
+    setStyle(field, top) {
+        field.style.position = 'absolute';
+        field.style.left = '48.6%';
+        field.style.top = top;
+        field.style.transform = 'translate(-50%, -50%)';
+        field.style.fontSize = '16px';
+        field.style.padding = '8px';
+        field.style.width = '298px';
+        field.style.height = '31px';
     }
 
     validateLogin(username, password) {
-        // Hacer una solicitud al backend para validar las credenciales
         fetch(`/api/users/${username}`)
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Usuario no encontrado');
-                }
+                if (!response.ok) throw new Error('Usuario no encontrado');
                 return response.json();
             })
             .then(data => {
                 if (data.username === username && data.password === password) {
-                    this.scene.start('MainMenuScene');  // Cambiar a la escena 'MainMenuScene'
+                    this.scene.start('MainMenuScene');
                 } else {
                     alert('Contraseña incorrecta');
                 }
@@ -94,6 +86,18 @@ class LoginScene extends Phaser.Scene {
             .catch(error => {
                 alert('Usuario no encontrado');
             });
+    }
+
+    cleanUp() {
+        // Eliminar campos de texto al salir de la escena
+        if (this.usernameField) {
+            document.body.removeChild(this.usernameField);
+            this.usernameField = null;
+        }
+        if (this.passwordField) {
+            document.body.removeChild(this.passwordField);
+            this.passwordField = null;
+        }
     }
 }
 
