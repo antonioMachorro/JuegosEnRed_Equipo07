@@ -1,6 +1,10 @@
 class CreateAccScene extends Phaser.Scene {
     constructor() {
         super({ key: 'CreateAccScene' });
+
+        // Agrega variables para guardar referencias a los campos
+        this.usernameField = null;
+        this.passwordField = null;
     }
 
     preload() {
@@ -32,37 +36,52 @@ class CreateAccScene extends Phaser.Scene {
                 }
             });
 
-        // Crear los campos de texto para nombre de usuario y contraseña
+        // Crear los campos de texto
         this.createAccountFields();
+
+        this.events.on('shutdown', this.removeFields, this);
+
     }
 
     createAccountFields() {
-        // Crear un campo de texto para el nombre de usuario en una coordenada específica
-        const usernameField = document.createElement('input');
-        usernameField.id = 'username-input';
-        usernameField.placeholder = 'es este';
-        usernameField.style.position = 'absolute';
-        usernameField.style.left = '758px';
-        usernameField.style.top = '412px';
-        usernameField.style.fontSize = '16px';
-        usernameField.style.padding = '8px';
-        usernameField.style.width = '298px';
-        usernameField.style.height = '31px';
-        document.body.appendChild(usernameField);
+        this.usernameField = document.createElement('input');
+        this.usernameField.id = 'username-input';
+        this.usernameField.placeholder = 'es este';
+        this.usernameField.style.position = 'absolute';
+        this.usernameField.style.left = '758px';
+        this.usernameField.style.top = '412px';
+        this.usernameField.style.fontSize = '16px';
+        this.usernameField.style.padding = '8px';
+        this.usernameField.style.width = '298px';
+        this.usernameField.style.height = '31px';
+        document.body.appendChild(this.usernameField);
 
-        // Crear un campo de texto para la contraseña en una coordenada específica
-        const passwordField = document.createElement('input');
-        passwordField.id = 'password-input';
-        passwordField.placeholder = 'aqui la contraseña';
-        passwordField.type = 'password';
-        passwordField.style.position = 'absolute';
-        passwordField.style.left = '758px';
-        passwordField.style.top = '520px';
-        passwordField.style.fontSize = '16px';
-        passwordField.style.padding = '8px';
-        passwordField.style.width = '298px';
-        passwordField.style.height = '31px';
-        document.body.appendChild(passwordField);
+        // Crear un campo de texto para la contraseña
+        this.passwordField = document.createElement('input');
+        this.passwordField.id = 'password-input';
+        this.passwordField.placeholder = 'aqui la contraseña';
+        this.passwordField.type = 'password';
+        this.passwordField.style.position = 'absolute';
+        this.passwordField.style.left = '758px';
+        this.passwordField.style.top = '520px';
+        this.passwordField.style.fontSize = '16px';
+        this.passwordField.style.padding = '8px';
+        this.passwordField.style.width = '298px';
+        this.passwordField.style.height = '31px';
+        document.body.appendChild(this.passwordField);
+    }
+
+    removeFields() {
+        // Eliminar los campos del DOM si existen
+        if (this.usernameField && this.usernameField.parentNode) {
+            this.usernameField.parentNode.removeChild(this.usernameField);
+            this.usernameField = null;
+        }
+
+        if (this.passwordField && this.passwordField.parentNode) {
+            this.passwordField.parentNode.removeChild(this.passwordField);
+            this.passwordField = null;
+        }
     }
 
     createAccount(username, password) {
@@ -91,7 +110,8 @@ class CreateAccScene extends Phaser.Scene {
                     .then(response => {
                         if (response.ok) {
                             alert('Cuenta creada con éxito.');
-                            this.scene.start('LoginScene'); // Volver a la escena de login después de crear la cuenta
+                            // Cambiamos de escena
+                            this.scene.start('LoginScene');
                         } else {
                             alert('Hubo un error al crear la cuenta. Inténtalo de nuevo.');
                         }
