@@ -20,7 +20,7 @@ class GameModeScene extends Phaser.Scene {
             fontSize: '64px', 
             fill: '#fff' }).setOrigin(0.5);
 
-        const localButton = this.add.image(861,573, 'local', { 
+        const localButton = this.add.image(861,575, 'local', { 
             fontFamily: 'retro-computer',
             fontSize: '32px', 
             fill: '#fff' })
