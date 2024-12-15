@@ -1,9 +1,17 @@
 package com.gruposiete.hotlinemiauami;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class UserService {
 
@@ -12,6 +20,8 @@ public class UserService {
 
     @Autowired
     private final ApiStatusService apiStatusService;
+
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
 
     public UserService(UserDAO userDAO, ApiStatusService apiStatusService) {
         this.userDAO = userDAO;
@@ -38,6 +48,8 @@ public class UserService {
             return false;
         }
 
+        String encryptedPassword = encoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
         return userDAO.updateUser(user);
     }
 
@@ -63,5 +75,33 @@ public class UserService {
         } catch(Exception e) {
             throw new RuntimeException("Failed to fetch all users", e);
         }
+    }
+
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userDAO.getUser(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
+    }
+
+    public String login(LoginDTO loginDTO) throws IOException {
+        File userFile = new File("data/" + loginDTO.getUsername() + ".json");
+        if(!userFile.exists()) {
+            return "User not found.";
+        }
+
+        String userData = new String(Files.readAllBytes(Paths.get(userFile.getPath())));
+        String encryptedPassword = getPasswordFromJSON(userData);
+
+        if(encoder.matches(loginDTO.getPassword(), encryptedPassword)) {
+            return "Login Successful";
+        } else {
+            return "Invalid credentials";
+        }
+    }
+
+    public String getPasswordFromJSON(String userData) {
+        int startIndex = userData.indexOf("\"password\":") + 12;
+        int endIndex = userData.indexOf("\"", startIndex);
+        return userData.substring(startIndex, endIndex);
     }
 }
