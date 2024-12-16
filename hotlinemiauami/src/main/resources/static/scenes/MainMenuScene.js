@@ -44,10 +44,34 @@ class MainMenuScene extends Phaser.Scene {
             this.scene.pause();
         });
 
-        exitButton.on('pointerdown', () => {
-            this.scene.start('TitleMenu'); // Cambiar a la escena TitleMenu
+        exitButton.on('pointerdown', async () => {
+            await this.logoutUser();
+            this.scene.start('TitleMenu');
         });
+    }
 
+    async logoutUser() {
+        console.log("Logging out...");
+        const userData = this.registry.get('userData');
+        if(userData && userData.username) {
+            try {
+                const response = await fetch(`/api/chat/user/${userData.username}`, {
+                    method: 'DELETE',
+                });
+
+                if(!response.ok) {
+                    console.error('Error deleting user messages:', await response.text());
+                } else {
+                    console.log('Messages deleted successfully:', userData.username);
+                }
+            } catch (error) {
+                console.error('Error connecting to server:', error);
+            }
+        } else {
+            console.warn('No user data in registry.');
+        }
+
+        this.registry.set('userData', null);
     }
 }
 

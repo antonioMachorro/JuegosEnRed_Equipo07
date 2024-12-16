@@ -19,6 +19,10 @@ public class ApiStatusService {
         this.lastSeen.put(username, System.currentTimeMillis());
     }
 
+    public void disconnect(String username) {
+        this.lastSeen.remove(username);
+    }
+
     //Threshold en milisegundos
     public List<String> isConnected(long threshold) {
         List<String> connected = new ArrayList<>();

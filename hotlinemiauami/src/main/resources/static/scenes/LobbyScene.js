@@ -1,6 +1,7 @@
 class LobbyScene extends Phaser.Scene {
     constructor() {
         super({ key: 'LobbyScene' });
+        this.fetchIntervalId = null;
     }
 
     preload() {
@@ -70,18 +71,13 @@ class LobbyScene extends Phaser.Scene {
         const chatInput = document.getElementById('chat-input');
         const chatMessages = document.getElementById('chat-messages');
 
-        // Enviar mensaje al presionar Enter
-        chatInput.addEventListener('keydown', async (event) => {
-            if (event.key === 'Enter' && chatInput.value.trim() !== '') {
-                const message = chatInput.value.trim();
-                chatInput.value = ''; // Limpiar el campo de entrada
+        const newChat = chatInput.cloneNode(true);
+        chatInput.parentNode.replaceChild(newChat, chatInput);
 
-                // Mostrar el mensaje localmente
-                /*
-                const messageElement = document.createElement('div');
-                messageElement.textContent = `Tú: ${message}`;
-                chatMessages.appendChild(messageElement);
-                */
+        newChat.addEventListener('keydown', async (event) => {
+            if (event.key === 'Enter' && newChat.value.trim() !== '') {
+                const message = newChat.value.trim();
+                newChat.value = ''; // Limpiar el campo de entrada
 
                 //Enviar el mensaje a servidor
                 try {
@@ -114,9 +110,11 @@ class LobbyScene extends Phaser.Scene {
         const chatMessages = document.getElementById('chat-messages');
         let lastMessageId = 0;
 
+        this.clearFetchInterval();
+
         console.log("Fetching messages...");
 
-        setInterval(async () => {
+        this.fetchIntervalId = setInterval(async () => {
             try {
                 const response = await fetch(`api/chat?since=${lastMessageId}`);
                 if(response.ok) {
@@ -134,6 +132,13 @@ class LobbyScene extends Phaser.Scene {
                 console.error('Error al obtener mensajes:', error);
             }
         }, 1000);
+    }
+
+    clearFetchInterval() {
+        if (this.fetchIntervalId) {
+            clearInterval(this.fetchIntervalId);
+            this.fetchIntervalId = null;
+        }
     }
 
 }
