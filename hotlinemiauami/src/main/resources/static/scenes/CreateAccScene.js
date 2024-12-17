@@ -11,6 +11,7 @@ class CreateAccScene extends Phaser.Scene {
         this.load.image('crearCuenta', './Interfaz/crearcuenta.png');
         this.load.image('crearboton', './Interfaz/crearboton.png');
         this.load.image('menuPrincipal', './Interfaz/menuPrincipal.png');
+        this.load.image('volver', './Interfaz/volver.png');
     }
 
     create() {
@@ -41,15 +42,25 @@ class CreateAccScene extends Phaser.Scene {
 
         this.events.on('shutdown', this.removeFields, this);
 
+        const returnButton = this.add.image(960,720, 'volver')
+        .setScale(0.6)
+        .setOrigin(0.5)
+        .setInteractive();
+        returnButton.on('pointerdown', () => {
+            this.scene.start('LoginScene');
+        });
+
+        returnButton.y = 650;
+
     }
 
     createAccountFields() {
         this.usernameField = document.createElement('input');
         this.usernameField.id = 'username-input';
-        this.usernameField.placeholder = 'es este';
+        this.usernameField.placeholder = 'Usuario';
         this.usernameField.style.position = 'absolute';
-        this.usernameField.style.left = '758px';
-        this.usernameField.style.top = '412px';
+        this.usernameField.style.left = '598px';
+        this.usernameField.style.top = '317px';
         this.usernameField.style.fontSize = '16px';
         this.usernameField.style.padding = '8px';
         this.usernameField.style.width = '298px';
@@ -59,11 +70,11 @@ class CreateAccScene extends Phaser.Scene {
         // Crear un campo de texto para la contraseña
         this.passwordField = document.createElement('input');
         this.passwordField.id = 'password-input';
-        this.passwordField.placeholder = 'aqui la contraseña';
+        this.passwordField.placeholder = 'Contraseña';
         this.passwordField.type = 'password';
         this.passwordField.style.position = 'absolute';
-        this.passwordField.style.left = '758px';
-        this.passwordField.style.top = '520px';
+        this.passwordField.style.left = '598px';
+        this.passwordField.style.top = '400px';
         this.passwordField.style.fontSize = '16px';
         this.passwordField.style.padding = '8px';
         this.passwordField.style.width = '298px';

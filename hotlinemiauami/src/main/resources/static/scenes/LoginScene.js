@@ -42,6 +42,17 @@ class LoginScene extends BaseScene {
                 this.scene.start('CreateAccScene'); // Cambia a la escena 'CreateAccScene'
             });
 
+
+            const returnButton = this.add.image(960,720, 'volver')
+        .setScale(0.6)
+        .setOrigin(0.5)
+        .setInteractive();
+        returnButton.on('pointerdown', () => {
+            this.scene.start('TitleMenu');
+        });
+
+        returnButton.y = 675;
+
         // Agregar los campos de texto para el nombre de usuario y la contraseña
         this.createLoginFields();
 
