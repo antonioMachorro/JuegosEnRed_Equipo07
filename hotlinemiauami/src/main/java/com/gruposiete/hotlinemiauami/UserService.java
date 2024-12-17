@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.RequestBody;
 
 public class UserService {
 
@@ -96,6 +97,7 @@ public class UserService {
         String encryptedPassword = getPasswordFromJSON(userData);
 
         if(encoder.matches(loginDTO.getPassword(), encryptedPassword)) {
+            apiStatusService.hasSeen(loginDTO.getUsername());
             return new ResponseEntity<>(Map.of("username", loginDTO.getUsername(), "message", "Login Successful"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
@@ -106,5 +108,15 @@ public class UserService {
         int startIndex = userData.indexOf("\"password\":") + 12;
         int endIndex = userData.indexOf("\"", startIndex);
         return userData.substring(startIndex, endIndex);
+    }
+
+    public ResponseEntity<?> logout(@RequestBody LogoutDTO logoutDTO) {
+        File userFile = new File("data/" + logoutDTO.getUsername() + ".json");
+        if(!userFile.exists()) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+
+        apiStatusService.disconnect(logoutDTO.getUsername());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

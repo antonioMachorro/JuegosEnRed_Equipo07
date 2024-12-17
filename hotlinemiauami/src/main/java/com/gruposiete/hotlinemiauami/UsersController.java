@@ -100,4 +100,10 @@ public class UsersController {
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) throws IOException {
         return userService.login(loginDTO);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody LogoutDTO logoutDTO) {
+        return userService.logout(logoutDTO);
+    }
+    
 }

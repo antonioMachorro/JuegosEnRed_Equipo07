@@ -21,7 +21,7 @@ public class HotlinemiauamiApplication {
 
 	@Bean
 	public long getThreshold() {
-		return 10000;
+		return 30000;
 	}
 
 	@Bean("usersPath")
@@ -37,5 +37,10 @@ public class HotlinemiauamiApplication {
 	@Bean
 	public UserService getUserService(UserDAO userDAO, ApiStatusService apiStatusService) {
 		return new UserService(userDAO, apiStatusService);
+	}
+
+	@Bean
+	public ApiStatusController apiStatusController(ApiStatusService apiStatusService) {
+		return new ApiStatusController(apiStatusService, getThreshold());
 	}
 }

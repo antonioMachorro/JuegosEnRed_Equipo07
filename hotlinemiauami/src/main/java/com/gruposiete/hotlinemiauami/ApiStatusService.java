@@ -16,7 +16,9 @@ public class ApiStatusService {
     }
 
     public void hasSeen(String username) {
+        System.out.println("Updating last seen for user: " + username);
         this.lastSeen.put(username, System.currentTimeMillis());
+        System.out.println("Current last seen map: " + lastSeen);
     }
 
     public void disconnect(String username) {
@@ -33,14 +35,14 @@ public class ApiStatusService {
                 connected.add(entry.getKey());
             }
         }
-
-        //Otra forma pero toda fea
-        //return this.lastSeen.entrySet().stream().filter((entry) -> entry.getValue() > (currentTimeMillis - threshold)).map((entry) -> entry.getValue()).collect(Collectors.toList());
-
         return connected;
     }
 
     public int numberOfUsersConnected(long threshold) {
         return this.isConnected(threshold).size();
+    }
+
+    public List<String> usersConnected(long threshold) {
+        return this.isConnected(threshold);
     }
 }

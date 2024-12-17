@@ -37,7 +37,7 @@ class LobbyScene extends Phaser.Scene {
 
         // Limpiar el chat y ocultarlo cuando se cierra la escena
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-            this.clearChat();
+            //this.clearChat();
             this.hideChat();
         });
 
@@ -99,7 +99,6 @@ class LobbyScene extends Phaser.Scene {
                     console.error("Error al conectar con servidor: ", error);
                 }
 
-
                 // Hacer scroll al final de los mensajes
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
@@ -139,6 +138,20 @@ class LobbyScene extends Phaser.Scene {
             clearInterval(this.fetchIntervalId);
             this.fetchIntervalId = null;
         }
+    }
+
+    async fetchConnectedUsersNum() {
+        setInterval(async () => {
+            try {
+                const response = await fetch('/api/status/connected-users');
+                if(response.ok) {
+                    const connectedUsersNum = await response.json;
+                    console.log(connectedUsersNum);
+                }
+            } catch(error) {
+                console.error("Error fetching connected users:", error);
+            }
+        }, 5000);
     }
 
 }

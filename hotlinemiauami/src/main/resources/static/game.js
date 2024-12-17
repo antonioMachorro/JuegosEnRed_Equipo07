@@ -12,6 +12,7 @@ import TitleMenu from './scenes/TitleMenu.js';
 import LobbyScene from './scenes/LobbyScene.js';
 import LoginScene from './scenes/LoginScene.js';
 import CreateAccScene from './scenes/CreateAccScene.js';
+import ConnectionManager from './ConnectionManager.js';
 
 
 
@@ -38,3 +39,6 @@ const config = {
 const game = new Phaser.Game(config);
 
 game.audioManager = new AudioManager(game);
+
+game.connectionManager = new ConnectionManager();
+game.connectionManager.startPolling();
