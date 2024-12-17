@@ -25,13 +25,14 @@ class CreditsScene extends Phaser.Scene {
             'Álvaro Rosa Pedraza',
             'Antonio Machorro Herrera',
             'David Antonio Paz Gullón',
-            'Laura Manso Herrero'
+            'Laura Manso Herrero',
+            'Tipografía: RETRO COMPUTER de petyka'
         ];
 
         names.forEach((name, index) => {
             this.add.text(width / 2, 400 + (index * 75), name, { 
                 fontFamily: 'retro-computer', 
-                fontSize: '32px', 
+                fontSize: '28px', 
                 fill: '#fff' 
             }).setOrigin(0.5);
         });
