@@ -12,7 +12,6 @@ class MainMenuScene extends BaseScene {
         this.load.image('Salir', './Interfaz/Salir.png');
         this.load.image('Creditos', './Interfaz/Creditos.png');
         this.load.image('menuPrincipal', './Interfaz/menuPrincipal.png');
-
         this.load.audio('menu_music', './Musica/MENUU.wav');
     }
 
@@ -53,6 +52,40 @@ class MainMenuScene extends BaseScene {
             await this.logoutUser();
             this.scene.start('TitleMenu');
         });
+
+        this.fetchConnectedUsers();
+    }
+
+    async fetchConnectedUsers() {
+
+        this.fetchIntervalId = setInterval(async () => {
+            try {
+                const response = await fetch('/api/status/connected-users');
+                if (response.ok) {
+                    const data = await response.json();
+                    const connectedUsers = data.connectedUsers;
+                    this.updateUserCount(connectedUsers);
+                } else {
+                    console.error('Error fetching connected users:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error connecting to server:', error);
+            }
+        }, 1000);
+    }
+
+    updateUserCount(count) {
+        // Actualiza el texto en pantalla con el número de usuarios conectados
+        console.log("Count");
+        if (this.userCountText) {
+            this.userCountText.setText(`Usuarios conectados: ${count}`);
+        } else {
+            this.userCountText = this.add.text(615, 340, `Usuarios conectados: ${count}`, {
+                fontFamily: 'retro-computer',
+                fontSize: '16px',
+                fill: '#ffffff'
+            });
+        }
     }
 
     async logoutUser() {
