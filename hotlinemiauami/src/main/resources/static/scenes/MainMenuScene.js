@@ -13,6 +13,8 @@ class MainMenuScene extends BaseScene {
         this.load.image('Creditos', './Interfaz/Creditos.png');
         this.load.image('menuPrincipal', './Interfaz/menuPrincipal.png');
         this.load.audio('menu_music', './Musica/MENUU.wav');
+        this.load.image('online', './Interfaz/enlinea.png');
+        this.load.image('offline', './Interfaz/offline.png');
     }
 
     create() {
@@ -54,6 +56,7 @@ class MainMenuScene extends BaseScene {
         });
 
         this.fetchConnectedUsers();
+        this.serverStatus();
     }
 
     async fetchConnectedUsers() {
@@ -87,6 +90,48 @@ class MainMenuScene extends BaseScene {
             });
         }
     }
+
+    async serverStatus() {
+        this.fetchIntervalId = setInterval(async () => {
+            try {
+                const response = await fetch('/api/status/connection'); // Llama al endpoint
+                if (response.ok) {
+                    const status = await response.text(); // El servidor devuelve un texto simple
+                    this.updateServerStatus(status);
+                } else {
+                    this.updateServerStatus("Servidor no disponible");
+                    console.error('Error fetching server status:', response.statusText);
+                }
+            } catch (error) {
+                this.updateServerStatus("Error de conexión");
+                console.error('Error connecting to server:', error);
+            }
+        }, 1000);
+    }
+    
+    updateServerStatus(status) {
+        // Verificar si el texto base ya existe, si no, crearlo
+        if (!this.serverStatusLabel) {
+            this.serverStatusLabel = this.add.text(615, 360, 'Estado del servidor:', {
+                fontFamily: 'retro-computer',
+                fontSize: '16px',
+                fill: '#ffffff'
+            });
+        }
+    
+        // Elimina la imagen anterior si existe
+        if (this.serverStatusImage) {
+            this.serverStatusImage.destroy();
+        }
+    
+        // Determina qué imagen mostrar según el estado
+        const imageKey = status === "Connected to server." ? 'online' : 'offline';
+    
+        // Crear la imagen correspondiente justo al lado del texto
+        this.serverStatusImage = this.add.image(870, 368, imageKey).setScale(0.8);
+    }
+    
+        
 
     async logoutUser() {
         console.log("Logging out...");
