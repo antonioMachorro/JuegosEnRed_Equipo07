@@ -78,7 +78,7 @@ class OptionsScene extends Phaser.Scene {
         this.game.audioManager.setVolume(newVolume);
 
         // Mostrar el nuevo volumen como un porcentaje redondeado
-        this.volumeText.setText(`Volume: ${Math.round(newVolume * 100)}%`);
+        this.volumeText.setText(`Volumen: ${Math.round(newVolume * 100)}%`);
     }
 }
 
