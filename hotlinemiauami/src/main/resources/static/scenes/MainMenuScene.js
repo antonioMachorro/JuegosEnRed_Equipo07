@@ -21,6 +21,10 @@ class MainMenuScene extends BaseScene {
 
         super.create();
 
+        this.userCountText = null;
+        this.serverStatusLabel = null;
+        this.serverStatusImage = null;
+
         this.game.audioManager.playMusic('menu_music');
 
         this.Interfaz = this.add.image(960, 540, 'menuPrincipal');
@@ -54,9 +58,17 @@ class MainMenuScene extends BaseScene {
             await this.logoutUser();
             this.scene.start('TitleMenu');
         });
-
+        this.startUserActivity();
         this.fetchConnectedUsers();
         this.serverStatus();
+    }
+
+    startUserActivity() {
+        const sendActivityLoop = () => {
+            this.sendActivity(); // Actualizar la actividad del usuario
+            this.time.delayedCall(1000, sendActivityLoop); // Llama cada 5 segundos usando Phaser
+        };
+        sendActivityLoop();
     }
 
     async fetchConnectedUsers() {
@@ -78,8 +90,6 @@ class MainMenuScene extends BaseScene {
     }
 
     updateUserCount(count) {
-        // Actualiza el texto en pantalla con el número de usuarios conectados
-        console.log("Count");
         if (this.userCountText) {
             this.userCountText.setText(`Usuarios conectados: ${count}`);
         } else {
@@ -90,6 +100,20 @@ class MainMenuScene extends BaseScene {
             });
         }
     }
+
+    sendActivity() {
+        const userData = this.registry.get('userData'); // Obtener datos del usuario
+        if (userData && userData.username) {
+            fetch('/api/status/activity', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: userData.username })
+            }).catch(error => {
+                console.error('Error updating user activity:', error);
+            });
+        }
+    }
+    
 
     async serverStatus() {
         this.fetchIntervalId = setInterval(async () => {
