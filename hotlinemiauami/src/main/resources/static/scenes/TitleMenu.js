@@ -1,4 +1,6 @@
-class TitleMenu extends Phaser.Scene {
+import BaseScene from "./BaseScene.js";
+
+class TitleMenu extends BaseScene {
     constructor() {
         super({ key: 'TitleMenu' });
     }
@@ -9,6 +11,8 @@ class TitleMenu extends Phaser.Scene {
     }
 
     create(){
+
+        super.create();
 
         this.add.image(960,540,'menuPrincipal');
                 const camera = this.cameras.main;

@@ -1,4 +1,6 @@
-class LoginScene extends Phaser.Scene {
+import BaseScene from "./BaseScene.js";
+
+class LoginScene extends BaseScene {
     constructor() {
         super({ key: 'LoginScene' });
     }
@@ -12,6 +14,9 @@ class LoginScene extends Phaser.Scene {
     }
 
     create() {
+
+        super.create();
+
         // Camara
         const camera = this.cameras.main;
         camera.setBounds(370, 210, 960, 540);
@@ -86,6 +91,8 @@ class LoginScene extends Phaser.Scene {
                 console.log(data.message);
 
                 this.registry.set('userData', {username: data.username});
+                this.game.connectionManager.setUsername(data.username);
+                this.game.connectionManager.startPolling();
 
                 this.scene.start('MainMenuScene')
             } else if(response.status === 404){

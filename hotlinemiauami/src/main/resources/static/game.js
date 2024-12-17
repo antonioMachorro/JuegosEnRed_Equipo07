@@ -41,4 +41,4 @@ const game = new Phaser.Game(config);
 game.audioManager = new AudioManager(game);
 
 game.connectionManager = new ConnectionManager();
-game.connectionManager.startPolling();
+//game.connectionManager.startPolling();

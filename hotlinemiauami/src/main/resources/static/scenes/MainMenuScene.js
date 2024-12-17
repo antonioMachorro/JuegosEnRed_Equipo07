@@ -1,4 +1,6 @@
-class MainMenuScene extends Phaser.Scene {
+import BaseScene from "./BaseScene.js";
+
+class MainMenuScene extends BaseScene {
     constructor() {
         super({ key: 'MainMenuScene' });
     }
@@ -15,6 +17,9 @@ class MainMenuScene extends Phaser.Scene {
     }
 
     create() {
+
+        super.create();
+
         this.game.audioManager.playMusic('menu_music');
 
         this.Interfaz = this.add.image(960, 540, 'menuPrincipal');
