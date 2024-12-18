@@ -8,10 +8,23 @@ class LobbyScene extends Phaser.Scene {
         // Cargar imágenes
         this.load.image('fondo', './Interfaz/champSelect.png');
         this.load.image('volver', './Interfaz/volver.png');
+
+        this.load.atlas(
+            "policia",
+            "./Personajes/Policia_Spritesheet.png",
+            "./Personajes/policia_spritesheet.json"
+          );
+      
+          this.load.atlas(
+              "ladron",
+              "./Personajes/Ladron_Spritesheet.png",
+              "./Personajes/ladron_spritesheet.json"
+          )
+
     }
 
     create() {
-
+        const { width, height } = this.scale;
         const userData = this.registry.get('userData');
 
         // Camara
@@ -35,9 +48,46 @@ class LobbyScene extends Phaser.Scene {
         // Mostrar el chat
         this.showChat();
 
+        //Animaciones
+        this.anims.create({
+            key: "police_run",
+            frames: this.anims.generateFrameNames("policia", {
+              prefix: "run",
+              end: 5,
+              zeroPad: 3,
+            }),
+            frameRate: 6,
+            repeat: -1,
+        });
+
+        this.anims.create({
+        key: "thief_run",
+        frames: this.anims.generateFrameNames("ladron", {
+            prefix: "run",
+            end: 7,
+            zeroPad: 3,
+        }),
+        frameRate: 6,
+        repeat: -1,
+        });
+
+        const policia = this.add.sprite(1125, 550, "policia");
+        policia.play("police_run");
+    
+        const ladron = this.add.sprite(1200, 550, "ladron");
+        ladron.play("thief_run");
+
+
+        // Titulo escena
+        this.add.text(this.width / 2, 100, 'CHAT', { 
+            fontFamily: 'Arial', 
+            fontSize: '120px', 
+            fill: '#fff' 
+        })
+
         // Limpiar el chat y ocultarlo cuando se cierra la escena
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-            //this.clearChat();
+            this.clearChat();
             this.hideChat();
         });
 
