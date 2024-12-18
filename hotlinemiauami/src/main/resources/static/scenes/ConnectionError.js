@@ -40,7 +40,7 @@ class ConnectionError extends Phaser.Scene {
 
 
         // Boton reintentar
-        const continueButton = this.add.text(width / 2, 600, 'Reintentar', {
+        const continueButton = this.add.text(width / 2, 700, 'Reintentar', {
             fontFamily: 'retro-computer',
             fontSize: '32px',
             fill: '#fff',

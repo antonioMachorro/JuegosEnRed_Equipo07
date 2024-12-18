@@ -51,12 +51,14 @@ class LoginScene extends Phaser.Scene {
 
     returnButton.y = 675;
 
+    //
     this.loadingOverlay = this.add.graphics({ fillStyle: { color: 0x000000, alpha: 0.5 } });
     this.loadingOverlay.fillRect(0, 0, this.cameras.main.width, this.cameras.main.height);
     this.loadingOverlay.setDepth(10);
     this.loadingOverlay.setVisible(false);
 
-    this.loadingText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, 'Loading...', { fontSize: '32px', fill: '#ffffff' })
+    // Loading...
+    this.loadingText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY+170, 'Loading...', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
       .setOrigin(0.5)
       .setDepth(11)
       .setVisible(false);
