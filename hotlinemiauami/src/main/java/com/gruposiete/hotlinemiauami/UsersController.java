@@ -32,11 +32,13 @@ public class UsersController {
     /**
      * DELETE /api/users/{username}
      */
+    /* 
     @DeleteMapping("/{username}")
     public ResponseEntity<?> deleteUser(@PathVariable String username) {
         boolean deleted = userService.deleteUser(username);
         return deleted ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
+    */
 
     /**
      * POST /api/users/
@@ -95,6 +97,15 @@ public class UsersController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestBody LogoutDTO logoutDTO) {
         return userService.logout(logoutDTO);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteUser(@RequestBody LoginDTO loginDTO) throws IOException {
+        try {
+            return userService.deleteUser(loginDTO);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     // DTO para la actualización de configuración del usuario (contraseña y volumen)

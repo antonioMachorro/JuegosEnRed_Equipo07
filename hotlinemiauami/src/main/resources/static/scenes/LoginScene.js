@@ -88,9 +88,20 @@ class LoginScene extends BaseScene {
   }
 
   async validateLogin(username, password) {
-    console.log(username);
-    console.log(password);
     try {
+      
+      const userExistsResponse = await fetch("/api/status/users");
+      if(userExistsResponse.ok) {
+        const users = await userExistsResponse.json();
+        if(users.connectedUsers.includes(username)) {
+          alert("User is already logged in.");
+          return;
+        }
+      } else {
+        alert("Error fetching users.")
+        throw new Error("An error ocurred during fetching users.");
+      }
+
       const response = await fetch("/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -115,6 +126,7 @@ class LoginScene extends BaseScene {
       } else {
         throw new Error("Invalid response.");
       }
+
     } catch (error) {
       console.error("Error during login:", error);
       return "An error occurred during login";
