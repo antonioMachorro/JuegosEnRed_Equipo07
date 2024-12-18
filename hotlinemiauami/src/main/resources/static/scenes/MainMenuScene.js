@@ -15,6 +15,8 @@ class MainMenuScene extends BaseScene {
         this.load.audio('menu_music', './Musica/MENUU.wav');
         this.load.image('online', './Interfaz/enlinea.png');
         this.load.image('offline', './Interfaz/offline.png');
+        this.load.image('borrar', './Interfaz/borrarAcc.png');
+        this.load.image("marcoPause", "./Interfaz/marcoPause.png");
     }
 
     create() {
@@ -34,6 +36,7 @@ class MainMenuScene extends BaseScene {
         const creditsButton = this.add.image(1275, 720, 'Creditos').setInteractive();
         const exitButton = this.add.image(750, 680, 'Salir').setInteractive();
         const optionsButton = this.add.image(772, 620, 'Opciones').setInteractive();
+        const deleteButton = this.add.image(1225, 720, 'borrar').setInteractive().setScale(0.1);
 
         // Configuración de la cámara
         const camera = this.cameras.main;
@@ -58,9 +61,97 @@ class MainMenuScene extends BaseScene {
             await this.logoutUser();
             this.scene.start('TitleMenu');
         });
+
+        deleteButton.on('pointerdown', () => {
+            // Mostrar el marco de confirmación
+            const marco = this.add.image(960, 540, 'marcoPause').setDepth(1); // Asegurarnos de que esté encima de otros elementos
+        
+            // Agregar el texto de confirmación
+            const confirmText = this.add.text(755, 500, '¿Quieres borrar la cuenta?', {
+                fontFamily: 'retro-computer',
+                fontSize: '20px',
+                fill: '#ffffff',
+                align: 'center',
+                wordWrap: { width: 600 }
+            }).setDepth(2);
+        
+            // Crear botones para "Sí" y "No"
+            const yesButton = this.add.text(980, 570, 'Sí', {
+                fontFamily: 'retro-computer',
+                fontSize: '18px',
+                fill: '#00ff00'
+            }).setInteractive().setDepth(2);
+        
+            const noButton = this.add.text(880, 570, 'No', {
+                fontFamily: 'retro-computer',
+                fontSize: '18px',
+                fill: '#ff0000'
+            }).setInteractive().setDepth(2);
+        
+            // Acción para "Sí"
+            yesButton.on('pointerdown', async () => {
+                await this.logoutUser();
+                marco.destroy();
+                confirmText.destroy();
+                yesButton.destroy();
+                noButton.destroy();
+                this.scene.start('TitleMenu'); // Regresar al menú principal o escena inicial
+                
+            });
+        
+            // Acción para "No"
+            noButton.on('pointerdown', () => {
+                marco.destroy();
+                confirmText.destroy();
+                yesButton.destroy();
+                noButton.destroy();
+            });
+        });
+        
+
         this.startUserActivity();
         this.fetchConnectedUsers();
         this.serverStatus();
+        this.deleteButton();
+    }
+
+    async deleteButton() {
+        try {
+            // Obtener datos del usuario del registro
+            const userData = this.registry.get('userData');
+            if (!userData || !userData.username) {
+                console.warn('No hay datos de usuario en el registro.');
+                return;
+            }
+    
+            // Llamar al backend para borrar al usuario
+            const response = await fetch('/api/users/delete', {
+                method: 'DELETE',
+            });
+    
+            if (response.ok) {
+                console.log('Cuenta eliminada exitosamente');
+                // Limpia los datos del usuario en el registro
+                this.registry.set('userData', null);
+                // Redirigir al menú inicial
+                this.scene.start('TitleMenu');
+            } else {
+                const errorText = await response.text();
+                console.error('Error eliminando la cuenta:', errorText);
+                this.add.text(755, 600, 'Error eliminando la cuenta. Inténtalo de nuevo.', {
+                    fontFamily: 'retro-computer',
+                    fontSize: '16px',
+                    fill: '#ff0000'
+                }).setDepth(2);
+            }
+        } catch (error) {
+            console.error('Error al conectarse con el servidor:', error);
+            this.add.text(755, 600, 'Error al conectarse con el servidor.', {
+                fontFamily: 'retro-computer',
+                fontSize: '16px',
+                fill: '#ff0000'
+            }).setDepth(2);
+        }
     }
 
     startUserActivity() {
