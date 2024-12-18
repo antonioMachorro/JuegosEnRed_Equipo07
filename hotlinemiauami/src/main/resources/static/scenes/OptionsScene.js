@@ -78,7 +78,7 @@ class OptionsScene extends Phaser.Scene {
   
       // Botón para guardar cambios y verificar la contraseña
       const confirmButton = this.add
-        .image(960, 615, "confirmar")
+        .image(960, 730, "confirmar")
         .setScale(1.4)
         .setOrigin(0.5)
         .setInteractive();
@@ -89,7 +89,7 @@ class OptionsScene extends Phaser.Scene {
   
       // Botón para volver a la escena anterior
       const returnButton = this.add
-        .image(960, 720, "volver")
+        .image(960, 830, "volver")
         .setScale(1.4)
         .setOrigin(0.5)
         .setInteractive();
@@ -123,8 +123,8 @@ class OptionsScene extends Phaser.Scene {
       passwordField.type = "password";
       passwordField.placeholder = "Nueva contraseña";
       passwordField.style.position = "absolute";
-      passwordField.style.left = "880px"; // Ajustar posición horizontal
-      passwordField.style.top = "540px"; // Ajustar posición vertical
+      passwordField.style.left = "56%"; // Ajustar posición horizontal
+      passwordField.style.top = "50%"; // Ajustar posición vertical
       passwordField.style.transform = "translate(-50%, -50%)";
       passwordField.style.fontSize = "16px";
       passwordField.style.padding = "8px";
