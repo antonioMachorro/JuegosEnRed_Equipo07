@@ -78,15 +78,6 @@ class ConnectionManager {
 
     notifyServerStatus(isConnected) {
         console.log(isConnected ? "Connected" : "Disconnected");
-        /*
-        const statusElement = document.getElementById('server-status');
-        if (statusElement) {
-            statusElement.textContent = isConnected
-                ? 'Server is connected'
-                : 'Server is disconnected';
-            statusElement.style.color = isConnected ? 'green' : 'red';
-        }
-            */
     }
 
     async sendUpdate() {

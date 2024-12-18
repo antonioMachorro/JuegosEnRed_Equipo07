@@ -1,6 +1,4 @@
-import BaseScene from "./BaseScene.js";
-
-class TitleMenu extends BaseScene {
+class TitleMenu extends Phaser.Scene {
     constructor() {
         super({ key: 'TitleMenu' });
     }
@@ -11,8 +9,6 @@ class TitleMenu extends BaseScene {
     }
 
     create(){
-
-        super.create();
 
         this.add.image(960,540,'menuPrincipal');
                 const camera = this.cameras.main;
@@ -29,4 +25,4 @@ class TitleMenu extends BaseScene {
         console.log(this.game.connectionManager.getStatus());
     }
 }
-    export default TitleMenu;
+export default TitleMenu;

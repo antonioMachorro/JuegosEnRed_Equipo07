@@ -156,22 +156,22 @@ class MainMenuScene extends BaseScene {
         // Crear la imagen correspondiente justo al lado del texto
         this.serverStatusImage = this.add.image(870, 368, imageKey).setScale(0.8);
     }
-    
-        
 
     async logoutUser() {
         console.log("Logging out...");
         const userData = this.registry.get('userData');
         if(userData && userData.username) {
             try {
-                const response = await fetch(`/api/chat/user/${userData.username}`, {
-                    method: 'DELETE',
+                const response = await fetch(`/api/users/logout`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: userData.username })
                 });
 
                 if(!response.ok) {
-                    console.error('Error deleting user messages:', await response.text());
+                    console.error('Error logging out:', await response.text());
                 } else {
-                    console.log('Messages deleted successfully:', userData.username);
+                    console.log('User logged out successfully:', userData.username);
                 }
             } catch (error) {
                 console.error('Error connecting to server:', error);
@@ -181,6 +181,8 @@ class MainMenuScene extends BaseScene {
         }
 
         this.registry.set('userData', null);
+        this.game.connectionManager.setUsername(null);
+        this.game.connectionManager.stopPolling();
     }
 }
 

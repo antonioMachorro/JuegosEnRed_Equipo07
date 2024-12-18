@@ -1,6 +1,4 @@
-import BaseScene from "./BaseScene.js";
-
-class LoginScene extends BaseScene {
+class LoginScene extends Phaser.Scene {
   constructor() {
     super({ key: "LoginScene" });
   }
@@ -14,7 +12,6 @@ class LoginScene extends BaseScene {
   }
 
   create() {
-    super.create();
 
     // Camara
     const camera = this.cameras.main;
@@ -26,14 +23,14 @@ class LoginScene extends BaseScene {
     this.add.image(960, 540, "sesion");
 
     // Botón de iniciar sesión
-    this.add
-      .image(960, 580, "iniciar")
-      .setInteractive()
-      .on("pointerdown", () => {
-        const username = this.usernameField.value;
-        const password = this.passwordField.value;
-        this.validateLogin(username, password);
-      });
+    this.loginButton = this.add
+        .image(960, 580, "iniciar")
+        .setInteractive()
+        .on("pointerdown", () => {
+          const username = this.usernameField.value;
+          const password = this.passwordField.value;
+          this.validateLogin(username, password);
+        });
 
     // Botón para crear cuenta
     this.add
@@ -53,6 +50,16 @@ class LoginScene extends BaseScene {
     });
 
     returnButton.y = 675;
+
+    this.loadingOverlay = this.add.graphics({ fillStyle: { color: 0x000000, alpha: 0.5 } });
+    this.loadingOverlay.fillRect(0, 0, this.cameras.main.width, this.cameras.main.height);
+    this.loadingOverlay.setDepth(10);
+    this.loadingOverlay.setVisible(false);
+
+    this.loadingText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, 'Loading...', { fontSize: '32px', fill: '#ffffff' })
+      .setOrigin(0.5)
+      .setDepth(11)
+      .setVisible(false);
 
     // Agregar los campos de texto para el nombre de usuario y la contraseña
     this.createLoginFields();
@@ -88,8 +95,11 @@ class LoginScene extends BaseScene {
   }
 
   async validateLogin(username, password) {
+
+    this.showLoading(true);
+
     try {
-      
+
       const userExistsResponse = await fetch("/api/status/users");
       if(userExistsResponse.ok) {
         const users = await userExistsResponse.json();
@@ -130,7 +140,15 @@ class LoginScene extends BaseScene {
     } catch (error) {
       console.error("Error during login:", error);
       return "An error occurred during login";
+    } finally {
+      this.showLoading(false);
     }
+  }
+
+  showLoading(visible) {
+    this.loadingOverlay.setVisible(visible);
+    this.loadingText.setVisible(visible);
+    this.loginButton.setActive(!visible);
   }
 
   cleanUp() {
