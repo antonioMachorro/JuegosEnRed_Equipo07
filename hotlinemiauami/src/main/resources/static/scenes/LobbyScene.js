@@ -5,7 +5,7 @@ class LobbyScene extends Phaser.Scene {
     }
 
     preload() {
-        // Cargar imágenes
+        // Cargar imágenes y sprites
         this.load.image('fondo', './Interfaz/champSelect.png');
         this.load.image('volver', './Interfaz/volver.png');
 
@@ -13,14 +13,13 @@ class LobbyScene extends Phaser.Scene {
             "policia",
             "./Personajes/Policia_Spritesheet.png",
             "./Personajes/policia_spritesheet.json"
-          );
+        );
       
-          this.load.atlas(
-              "ladron",
-              "./Personajes/Ladron_Spritesheet.png",
-              "./Personajes/ladron_spritesheet.json"
-          )
-
+        this.load.atlas(
+            "ladron",
+            "./Personajes/Ladron_Spritesheet.png",
+            "./Personajes/ladron_spritesheet.json"
+        );
     }
 
     create() {
@@ -48,27 +47,27 @@ class LobbyScene extends Phaser.Scene {
         // Mostrar el chat
         this.showChat();
 
-        //Animaciones
+        // Animaciones
         this.anims.create({
             key: "police_run",
             frames: this.anims.generateFrameNames("policia", {
-              prefix: "run",
-              end: 5,
-              zeroPad: 3,
+                prefix: "run",
+                end: 5,
+                zeroPad: 3,
             }),
             frameRate: 6,
             repeat: -1,
         });
 
         this.anims.create({
-        key: "thief_run",
-        frames: this.anims.generateFrameNames("ladron", {
-            prefix: "run",
-            end: 7,
-            zeroPad: 3,
-        }),
-        frameRate: 6,
-        repeat: -1,
+            key: "thief_run",
+            frames: this.anims.generateFrameNames("ladron", {
+                prefix: "run",
+                end: 7,
+                zeroPad: 3,
+            }),
+            frameRate: 6,
+            repeat: -1,
         });
 
         const policia = this.add.sprite(1125, 550, "policia");
@@ -77,13 +76,12 @@ class LobbyScene extends Phaser.Scene {
         const ladron = this.add.sprite(1200, 550, "ladron");
         ladron.play("thief_run");
 
-
         // Titulo escena
-        this.add.text(this.width / 2, 100, 'CHAT', { 
+        this.add.text(width / 2, 100, 'CHAT', { 
             fontFamily: 'Arial', 
             fontSize: '120px', 
             fill: '#fff' 
-        })
+        });
 
         // Limpiar el chat y ocultarlo cuando se cierra la escena
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
@@ -129,7 +127,7 @@ class LobbyScene extends Phaser.Scene {
                 const message = newChat.value.trim();
                 newChat.value = ''; // Limpiar el campo de entrada
 
-                //Enviar el mensaje a servidor
+                // Enviar el mensaje al servidor
                 try {
                     const response = await fetch('/api/chat', {
                         method: 'POST',
@@ -142,10 +140,10 @@ class LobbyScene extends Phaser.Scene {
                         }),
                     });
 
-                    if(!response.ok) {
+                    if (!response.ok) {
                         console.error("Error al enviar el mensaje: ", await response.text());
                     }
-                } catch(error) {
+                } catch (error) {
                     console.error("Error al conectar con servidor: ", error);
                 }
 
@@ -153,6 +151,19 @@ class LobbyScene extends Phaser.Scene {
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
         });
+    }
+
+    // Función para filtrar palabras malsonantes
+    filterProfanity(message) {
+        const profaneWords = ['cooked']; // Lista de palabras a filtrar
+        let filteredMessage = message;
+
+        profaneWords.forEach(word => {
+            const regex = new RegExp(word, 'gi'); // Insensible a mayúsculas y global
+            filteredMessage = filteredMessage.replace(regex, '*****'); // Reemplazar con asteriscos
+        });
+
+        return filteredMessage;
     }
 
     async fetchMessages() {
@@ -166,18 +177,21 @@ class LobbyScene extends Phaser.Scene {
         this.fetchIntervalId = setInterval(async () => {
             try {
                 const response = await fetch(`api/chat?since=${lastMessageId}`);
-                if(response.ok) {
+                if (response.ok) {
                     const messages = await response.json();
                     messages.forEach((message) => {
+                        // Filtrar palabras malsonantes
+                        const filteredMessage = this.filterProfanity(message.message);
+
                         const messageElement = document.createElement('div');
-                        messageElement.textContent = `${message.user}: ${message.message}`;
+                        messageElement.textContent = `${message.user}: ${filteredMessage}`;
                         chatMessages.appendChild(messageElement);
                         lastMessageId = message.id;
                     });
 
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                 }
-            } catch(error) {
+            } catch (error) {
                 console.error('Error al obtener mensajes:', error);
             }
         }, 1000);
@@ -194,16 +208,15 @@ class LobbyScene extends Phaser.Scene {
         setInterval(async () => {
             try {
                 const response = await fetch('/api/status/connected-users');
-                if(response.ok) {
+                if (response.ok) {
                     const connectedUsersNum = await response.json;
                     console.log(connectedUsersNum);
                 }
-            } catch(error) {
+            } catch (error) {
                 console.error("Error fetching connected users:", error);
             }
         }, 5000);
     }
-
 }
 
 export default LobbyScene;
