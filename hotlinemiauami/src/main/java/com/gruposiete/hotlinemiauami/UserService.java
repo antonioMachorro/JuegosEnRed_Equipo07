@@ -119,4 +119,31 @@ public class UserService {
         apiStatusService.disconnect(logoutDTO.getUsername());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    // NUEVO MÉTODO PARA ACTUALIZAR CONTRASEÑA Y VOLUMEN
+    public boolean updateUserSettings(String username, String newPassword, int newVolume) {
+        if (username == null) {
+            throw new IllegalArgumentException("Username cannot be null");
+        }
+
+        Optional<User> optionalUser = userDAO.getUser(username);
+        if(optionalUser.isEmpty()) {
+            return false;
+        }
+
+        User user = optionalUser.get();
+
+        // Actualizar la contraseña si se proporciona
+        if (newPassword != null && !newPassword.isBlank()) {
+            String encryptedPassword = encoder.encode(newPassword);
+            user.setPassword(encryptedPassword);
+        }
+
+        // Actualizar el volumen si está en un rango válido
+        if (newVolume >= 0 && newVolume <= 100) {
+            user.setVolume(newVolume);
+        }
+
+        return userDAO.updateUser(user);
+    }
 }

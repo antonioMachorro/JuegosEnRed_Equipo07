@@ -107,6 +107,7 @@ class CreateAccScene extends Phaser.Scene {
                     const newUser = {
                         username: username,
                         password: password,
+                        volume:100,
                         lastSeen: Date.now()
                     };
 

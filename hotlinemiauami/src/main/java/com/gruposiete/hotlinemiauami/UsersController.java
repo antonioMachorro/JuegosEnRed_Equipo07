@@ -6,21 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
 public class UsersController {
 
-    //Change this so the logic is done in the userService
     @Autowired
     private final UserService userService;
 
@@ -30,20 +21,16 @@ public class UsersController {
 
     /**
      * GET /api/users/{username}
-     * @param param
-     * @return
      */
     @GetMapping("/{username}")
     public ResponseEntity<UserDTO> getUser(@PathVariable String username) {
         Optional<User> user = userService.getUser(username);
         return user.map(value -> ResponseEntity.ok(new UserDTO(value)))
-                    .orElseGet(() -> ResponseEntity.notFound().build());
+                   .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     /**
      * DELETE /api/users/{username}
-     * @param param
-     * @return
      */
     @DeleteMapping("/{username}")
     public ResponseEntity<?> deleteUser(@PathVariable String username) {
@@ -52,15 +39,11 @@ public class UsersController {
     }
 
     /**
-     * GET /api/users/
-     * @param param
-     * @return
+     * POST /api/users/
+     * Crear un nuevo usuario
      */
     @PostMapping("/")
     public ResponseEntity<?> createUser(@RequestBody User user) {
-        //Para debuggeo
-        //System.out.println(user);
-
         try {
             boolean created = userService.createUser(user);
             return created ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -70,20 +53,23 @@ public class UsersController {
     }
 
     /**
-     * PUT /api/users/{username}/password
-     * @param param
-     * @return
+     * PUT /api/users/{username}
+     * Actualizar contraseña y volumen
      */
-    @PutMapping("/{username}/password")
-    public ResponseEntity<?> updatePassword(@PathVariable String username, @RequestBody PasswordUpdateRequest password) {
+    @PutMapping("/{username}")
+    public ResponseEntity<?> updateUserSettings(@PathVariable String username,
+                                                @RequestBody UserSettingsUpdateRequest request) {
         try {
-            boolean updated = userService.updatePassword(username, password.password());
+            boolean updated = userService.updateUserSettings(username, request.password(), request.volume());
             return updated ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
+    /**
+     * GET /api/users/
+     */
     @GetMapping("/")
     public ResponseEntity<?> getAllUsers() {
         try {
@@ -93,17 +79,24 @@ public class UsersController {
         }
     }
 
-    public record PasswordUpdateRequest(String password) {
-    }
-
+    /**
+     * POST /api/users/login
+     * Login del usuario
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) throws IOException {
         return userService.login(loginDTO);
     }
 
+    /**
+     * POST /api/users/logout
+     * Logout del usuario
+     */
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestBody LogoutDTO logoutDTO) {
         return userService.logout(logoutDTO);
     }
-    
+
+    // DTO para la actualización de configuración del usuario (contraseña y volumen)
+    public record UserSettingsUpdateRequest(String password, int volume) {}
 }
