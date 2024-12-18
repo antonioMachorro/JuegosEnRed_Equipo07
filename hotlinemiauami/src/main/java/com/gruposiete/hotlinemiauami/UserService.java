@@ -37,10 +37,6 @@ public class UserService {
         return userDAO.getUser(username);
     }
 
-    public boolean deleteUser(String username) {
-        return userDAO.deleteUser(username);
-    }
-
     public boolean createUser(User user) {
         if(user.getUsername() == null || user.getPassword() == null) {
             throw new IllegalArgumentException("Username and password cannot be null");
@@ -145,5 +141,23 @@ public class UserService {
         }
 
         return userDAO.updateUser(user);
+    }
+
+    public ResponseEntity<?> deleteUser(LoginDTO loginDTO) throws IOException {
+        File userFile = new File("data/" + loginDTO.getUsername() + ".json");
+        if(!userFile.exists()) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+
+        String userData = new String(Files.readAllBytes(Paths.get(userFile.getPath())));
+        String encryptedPassword = getPasswordFromJSON(userData);
+
+        if(encoder.matches(loginDTO.getPassword(), encryptedPassword)) {
+            apiStatusService.disconnect(loginDTO.getUsername());
+            userDAO.deleteUser(loginDTO.getUsername());
+            return new ResponseEntity<>("User deleted", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
+        }
     }
 }
