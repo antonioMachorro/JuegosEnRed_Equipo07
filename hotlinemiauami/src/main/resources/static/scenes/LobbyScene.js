@@ -92,7 +92,14 @@ class LobbyScene extends Phaser.Scene {
         // Inicializar el chat
         this.initChat(userData.username);
         this.fetchMessages();
+
+        this.add.text(845, 395, 'Chat', {
+            fontFamily: 'retro-computer',
+            fontSize: '16px',
+            fill: '#ffffff'
+        });
     }
+    
 
     showChat() {
         const chatContainer = document.getElementById('chat-container');
