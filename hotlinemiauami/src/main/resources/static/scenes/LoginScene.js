@@ -101,6 +101,8 @@ class LoginScene extends BaseScene {
         const data = await response.json();
         console.log(data.message);
 
+        window.currentUsername = data.username;
+
         this.registry.set("userData", { username: data.username });
         this.game.connectionManager.setUsername(data.username);
         this.game.connectionManager.startPolling();
