@@ -2,6 +2,7 @@
 import MainMenuScene from './scenes/MainMenuScene.js';
 import GameScene from './scenes/GameScene.js';
 import CreditsScene from './scenes/CreditsScene.js';
+import ConnectionError from './scenes/ConnectionError.js';
 import RoleSelectScene from './scenes/RoleSelectScene.js';
 import VictoryScene from './scenes/VictoryScene.js';
 import PauseScene from './scenes/PauseScene.js';
@@ -16,12 +17,14 @@ import ConnectionManager from './ConnectionManager.js';
 
 
 
+
+
 const config = {
     type: Phaser.AUTO,
     width: 1920, //Cambiar la ventana de juego aqui y en el archivo CSS
     height: 1080,
     parent: 'gameContainer',  // Contenedor en el HTML
-    scene: [TitleMenu, LoginScene, MainMenuScene, GameScene, LobbyScene, GameModeScene, RoleSelectScene, PauseScene, VictoryScene, CreditsScene, OptionsScene, CreateAccScene],
+    scene: [TitleMenu, LoginScene, MainMenuScene, GameScene, LobbyScene, GameModeScene, RoleSelectScene, PauseScene, VictoryScene, CreditsScene, OptionsScene, CreateAccScene, ConnectionError],
     pixelArt: true,
     physics: {
         default: 'arcade',

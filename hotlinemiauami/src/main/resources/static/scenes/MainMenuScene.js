@@ -125,10 +125,12 @@ class MainMenuScene extends BaseScene {
                 } else {
                     this.updateServerStatus("Servidor no disponible");
                     console.error('Error fetching server status:', response.statusText);
+                    this.scene.launch('ConnectionError', { originScene: 'MainMenuScene' }); // Cambiar a la escena de Error de conexión
                 }
             } catch (error) {
                 this.updateServerStatus("Error de conexión");
                 console.error('Error connecting to server:', error);
+                this.scene.launch('ConnectionError', { originScene: 'MainMenuScene' }); // Cambiar a la escena de Error de conexión
             }
         }, 1000);
     }
