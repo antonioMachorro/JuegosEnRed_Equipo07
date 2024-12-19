@@ -6,6 +6,8 @@
 
 **Hotline Miauami**
 
+#
+
 **Grupo 07:**
 
 Adrián Espínola Gumiel 	[a.espinola.2022@alumnos.urjc.es](mailto:a.espinola.2022@alumnos.urjc.es) 		idarkar3000  
@@ -13,6 +15,8 @@ Antonio Machorro Herrera	[a.machorro.2024@alumnos.urjc.es](mailto:a.machorro.202
 Laura Manso Herrero 		[l.manso.2022@alumnos.urjc.es](mailto:l.manso.2022@alumnos.urjc.es)		laurimans  
 David Antonio Paz Gullón	[da.paz.2022@alumnos.urjc.es](mailto:da.paz.2022@alumnos.urjc.es)		DavidPazUni  
 Alvaro Rosa Pedraza 		[a.rosa.2022@alumnos.urjc.es](mailto:a.rosa.2022@alumnos.urjc.es)		alvaroRosa23
+
+#
 
 **Índice**
 
@@ -38,9 +42,9 @@ Alvaro Rosa Pedraza 		[a.rosa.2022@alumnos.urjc.es](mailto:a.rosa.2022@alumnos.u
 
 [Implementación	](#implementación)
 
-**[6\. Configuración General	](#configuración-general)
+**[6\. Configuración General	](#configuración-general) **
 
-# ** 1. Introducción** 
+# **1. Introducción** 
 
 El proyecto desarrollado implementa una API REST que permite gestionar usuarios, autenticación, mensajería y estado de conexión en tiempo real. Este sistema utiliza Spring Boot para la configuración y ejecución del servidor.
 
@@ -65,7 +69,6 @@ Esta funcionalidad tiene como objetivo principal el manejo del ciclo de vida de 
 * **POST /api/users/logout**  
   Cierra la sesión del usuario especificado en el objeto LogoutDTO, eliminando su información de actividad reciente.
 
-### 
 
 ### **Lógica** 
 
