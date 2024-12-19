@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +26,9 @@ public class UserService {
     @Autowired
     private final ApiStatusService apiStatusService;
 
+    @Value("${data.folder:data}")  // Default to "data/" if not specified
+    private String dataFolder;
+
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
 
     public UserService(UserDAO userDAO, ApiStatusService apiStatusService) {
@@ -35,6 +39,10 @@ public class UserService {
     public Optional<User> getUser(String username) {
         apiStatusService.hasSeen(username);
         return userDAO.getUser(username);
+    }
+
+    private File getUserFile(String username) {
+        return new File(dataFolder + "/" + username + ".json");
     }
 
     public boolean createUser(User user) {
@@ -84,7 +92,8 @@ public class UserService {
     }
 
     public ResponseEntity<?> login(LoginDTO loginDTO) throws IOException {
-        File userFile = new File("data/" + loginDTO.getUsername() + ".json");
+        System.out.println(getUserFile(loginDTO.getUsername()));
+        File userFile = getUserFile(loginDTO.getUsername());
         if (!userFile.exists()) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
