@@ -42,7 +42,7 @@ Alvaro Rosa Pedraza 		[a.rosa.2022@alumnos.urjc.es](mailto:a.rosa.2022@alumnos.u
 
 [Implementación	](#implementación)
 
-**[6\. Configuración General	](#configuración-general) **
+**[6\. Configuración General	](#configuración-general)**
 
 # **1. Introducción** 
 
