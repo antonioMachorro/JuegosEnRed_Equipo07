@@ -9,7 +9,7 @@
 **Grupo 07:**
 
 Adrián Espínola Gumiel 	[a.espinola.2022@alumnos.urjc.es](mailto:a.espinola.2022@alumnos.urjc.es) 		idarkar3000  
-Antonio Machorro Herrera	[a.machorro.2024@alumnos.urjc.es](mailto:a.machorro.2024@alumnos.urjc.es) 		antonioMachorro  
+Antonio Machorro Herrera	[a.machorro.2024@alumnos.urjc.es](mailto:a.machorro.2024@alumnos.urjc.es) 	antonioMachorro  
 Laura Manso Herrero 		[l.manso.2022@alumnos.urjc.es](mailto:l.manso.2022@alumnos.urjc.es)		laurimans  
 David Antonio Paz Gullón	[da.paz.2022@alumnos.urjc.es](mailto:da.paz.2022@alumnos.urjc.es)		DavidPazUni  
 Álvaro Rosa Pedraza 		[a.rosa.2022@alumnos.urjc.es](mailto:a.rosa.2022@alumnos.urjc.es)		alvaroRosa23
@@ -40,7 +40,7 @@ David Antonio Paz Gullón	[da.paz.2022@alumnos.urjc.es](mailto:da.paz.2022@alumn
 
   [1.10. Narrativa	](#narrativa)
 
-[2. Mecánicas de juego	](#mecánicas-de-juego)
+[2. Mecánicas de juego](#mecánicas-de-juego)
 
   [2.1. Estructura general	](#estructura-general)
 
@@ -56,7 +56,7 @@ David Antonio Paz Gullón	[da.paz.2022@alumnos.urjc.es](mailto:da.paz.2022@alumn
 
   [2.7. Diagrama de clases	](#controles)
 
-[3. Interfaz	](#interfaz)
+[3. Interfaz](#interfaz)
 
   [3.1. Diagrama de estados	](#diagrama-de-estados)
 
@@ -64,7 +64,7 @@ David Antonio Paz Gullón	[da.paz.2022@alumnos.urjc.es](mailto:da.paz.2022@alumn
 
   [3.3. Menú de Login](#ajustes)
 
-  [3.4. Menú de Creación de cuenta] (#menú-principal)
+  [3.4. Menú de Creación de cuenta](#menú-principal)
 
   [3.5. Menú principal	](#menú-principal)
 
@@ -82,7 +82,7 @@ David Antonio Paz Gullón	[da.paz.2022@alumnos.urjc.es](mailto:da.paz.2022@alumn
 
   [3.12. Ajustes	](#ajustes)
 
-  [3.13. Juego en Red	] (#ajustes)
+  [3.13. Juego en Red	](#ajustes)
 
   [3.14. Créditos	](#créditos)
 
