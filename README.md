@@ -694,7 +694,9 @@ Los efectos sonoros son esenciales para proporcionar retroalimentación al jugad
 Para ejecutar el proyecto desde un paquete .jar hay que seguir los siguientes pasos:
 
 1. Abrir el cmd (simbolo de sistema)
-2. Ejecutar el comando: cd "ruta/del/proyecto/.../target" (copiar la ruta del archivo)
-3. Una vez dentro, ejecutar: java -jar hotlinemiauami-0.0.1-SNAPSHOT.jar
-4. Al ejecutar esto, se levanta el servidor. A continuación, ejecutaremos el comando ipconfig para obtener la IP del servidor.
-5. Por último, desde los ordenadores que usaremos como clientes, accederemos al navegador y pondremos en la barra de búsqueda: IPdelServidor:8080
+2. Ejecutar: cd ruta/del/proyecto
+3. Ejecutar:  .\mvnw.cmd package
+4. Ejecutar el comando: cd ruta/del/proyecto/.../target (copiar la ruta del archivo)
+5. Una vez dentro, ejecutar: java -jar hotlinemiauami-0.0.1-SNAPSHOT.jar
+6. Al ejecutar esto, se levanta el servidor. A continuación, ejecutaremos el comando ipconfig para obtener la IP del servidor.
+7. Por último, desde los ordenadores que usaremos como clientes, accederemos al navegador y pondremos en la barra de búsqueda: IPdelServidor:8080
