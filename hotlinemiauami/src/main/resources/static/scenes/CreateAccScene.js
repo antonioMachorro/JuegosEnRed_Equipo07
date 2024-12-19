@@ -40,6 +40,17 @@ class CreateAccScene extends Phaser.Scene {
         // Crear los campos de texto
         this.createAccountFields();
 
+        this.loadingOverlay = this.add.graphics({ fillStyle: { color: 0x000000, alpha: 0.5 } });
+        this.loadingOverlay.fillRect(0, 0, this.cameras.main.width, this.cameras.main.height);
+        this.loadingOverlay.setDepth(10);
+        this.loadingOverlay.setVisible(false);
+    
+        // Loading...
+        this.loadingText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY+170, 'Loading...', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+          .setOrigin(0.5)
+          .setDepth(11)
+          .setVisible(false);
+
         this.events.on('shutdown', this.removeFields, this);
 
         const returnButton = this.add.image(960,660, 'volver')
@@ -93,10 +104,17 @@ class CreateAccScene extends Phaser.Scene {
         }
     }
 
-    createAccount(username, password) {
+    showLoading(visible) {
+        console.log("Showing visible...");
+        this.loadingOverlay.setVisible(visible);
+        this.loadingText.setVisible(visible);
+    }
+
+    async createAccount(username, password) {
+        this.showLoading(true);
         // Verificar si el nombre de usuario ya existe
-        fetch(`/api/users/${username}`)
-            .then(response => {
+        try {
+            const response = await fetch(`/api/users/${username}`);
                 if (response.ok) {
                     // Si el usuario ya existe
                     alert('El nombre de usuario ya está en uso.');
@@ -110,30 +128,26 @@ class CreateAccScene extends Phaser.Scene {
                     };
 
                     // Enviar solicitud para crear el usuario
-                    fetch('/api/users/', {
+                    const createResponse = await fetch('/api/users/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify(newUser)
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            alert('Cuenta creada con éxito.');
-                            // Cambiamos de escena
-                            this.scene.start('LoginScene');
-                        } else {
-                            alert('Hubo un error al crear la cuenta. Inténtalo de nuevo.');
-                        }
-                    })
-                    .catch(error => {
-                        alert('Error en la conexión con el servidor.');
                     });
+                    if(createResponse.ok) {
+                        alert('Cuenta creada con éxito.');
+                        this.scene.start('LoginScene');
+                    } else {
+                        alert('Hubo un error al crear la cuenta. Inténtalo de nuevo.');
+                    }
                 }
-            })
-            .catch(error => {
-                alert('Error al verificar el nombre de usuario.');
-            });
+        } catch (error) {
+            console.error("Error during creation:", error);
+            alert("Error de conexión.");
+        } finally  {
+            this.showLoading(false);
+        }
     }
 }
 

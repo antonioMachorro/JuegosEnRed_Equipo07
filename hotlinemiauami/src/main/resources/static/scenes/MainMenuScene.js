@@ -92,8 +92,8 @@ class MainMenuScene extends BaseScene {
             passwordInput.style.transform = 'translate(-50%, -50%)';
             passwordInput.style.fontSize = '16px';
             passwordInput.style.padding = '10px';
-            passwordInput.style.width = '200px';
-            passwordInput.style.height = '20px';
+            passwordInput.style.width = '300px';
+            passwordInput.style.height = '40px';
 
             document.body.appendChild(passwordInput);
 
@@ -115,7 +115,7 @@ class MainMenuScene extends BaseScene {
                 if(password === '') {
                     alert("Invalid credentials.");
                 } else {
-                    this.deleteButton(password);
+                    await this.deleteButton(password);
 
                     marco.destroy();
                     confirmText.destroy();
