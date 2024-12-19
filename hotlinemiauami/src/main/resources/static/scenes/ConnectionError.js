@@ -2,13 +2,12 @@ class ConnectionError extends Phaser.Scene {
     constructor() {
         super({ key: "ConnectionError" });
     }
-/*
+    
     init(data) {
         this.originScene = data.originScene; // Escena original desde donde se llamó a OptionsScene
         this.events.on("shutdown", this.shutdown, this); // Llama a shutdown al cerrar la escena
     }
 
-    */
     preload(){
         this.load.image('marco', './Interfaz/marcoPause.png');
         this.load.image("volver", "./Interfaz/volver.png");
