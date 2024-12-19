@@ -18,89 +18,89 @@ David Antonio Paz Gullón	[da.paz.2022@alumnos.urjc.es](mailto:da.paz.2022@alumn
 
 **ÍNDICE**
 
-[**1\. Introducción**](#introducción)
+[**1. Introducción**](#introducción)
 
-[1.1. Concepto del juego	](#concepto-del-juego)
+	[1.1. Concepto del juego	](#concepto-del-juego)
 
-[1.2. Género	](#género)
+	[1.2. Género	](#género)
 
-[1.3. Características principales	](#características-principales)
+	[1.3. Características principales	](#características-principales)
 
-[1.4. Propósito	](#propósito)
+	[1.4. Propósito	](#propósito)
 
-[1.5. Público objetivo	](#público-objetivo)
+	[1.5. Público objetivo	](#público-objetivo)
 
-[1.6. Modelo de Negocio	](#modelo-de-negocio)
+	[1.6. Modelo de Negocio	](#modelo-de-negocio)
 
-[1.7. Licencia	](#licencia)
+	[1.7. Licencia	](#licencia)
 
-[1.8. PEGI	](#pegi)
+	[1.8. PEGI	](#pegi)
 
-[1.9. Estilo visual	](#estilo-visual)
+	[1.9. Estilo visual	](#estilo-visual)
 
-[1.10. Narrativa	](#narrativa)
+	[1.10. Narrativa	](#narrativa)
 
-[**2\. Mecánicas de juego	**](#mecánicas-de-juego)
+[**2. Mecánicas de juego	**](#mecánicas-de-juego)
 
-[2.1. Estructura general	](#estructura-general)
+	[2.1. Estructura general	](#estructura-general)
 
-[2.2. Mecánicas de movimientos y habilidades	](#mecánicas-de-movimientos-y-habilidades)
+	[2.2. Mecánicas de movimientos y habilidades	](#mecánicas-de-movimientos-y-habilidades)
 
-[2.3. Mecánicas de Escenario	](#mecánicas-de-escenario)
+	[2.3. Mecánicas de Escenario	](#mecánicas-de-escenario)
 
-[2.4. Bonificaciones y potenciadores	](#bonificaciones-y-potenciadores)
+	[2.4. Bonificaciones y potenciadores	](#bonificaciones-y-potenciadores)
 
-[2.5. Flujo de juego	](#flujo-de-juego)
+	[2.5. Flujo de juego	](#flujo-de-juego)
 
-[2.6. Controles	](#controles)
+	[2.6. Controles	](#controles)
 
-[2.7. Diagrama de clases	](#controles)
+	[2.7. Diagrama de clases	](#controles)
 
-[**3\. Interfaz	**](#interfaz)
+[**3. Interfaz	**](#interfaz)
 
-[3.1. Diagrama de estados	](#diagrama-de-estados)
+	[3.1. Diagrama de estados	](#diagrama-de-estados)
 
-[3.2. Título	](#título)
+	[3.2. Título	](#título)
 
-[3.3. Menú de Login]
+	[3.3. Menú de Login](#ajustes)
 
-[3.4. Menú de Creación de cuenta]
+	[3.4. Menú de Creación de cuenta]
 
-[3.5. Menú principal	](#menú-principal)
+	[3.5. Menú principal	](#menú-principal)
 
-[3.6. Menú Elección Modo de Juego	](#menú-elección-modo-de-juego)
+	[3.6. Menú Elección Modo de Juego	](#menú-elección-modo-de-juego)
 
-[3.7. Menú Selección Roles	](#menú-selección-roles)
+	[3.7. Menú Selección Roles	](#menú-selección-roles)
 
-[3.8. Partida	](#partida)
+	[3.8. Partida	](#partida)
 
-[3.9. Resultados Ronda	](#resultados-ronda)
+	[3.9. Resultados Ronda	](#resultados-ronda)
 
-[3.10. Pantalla Victoria Derrota	](#pantalla-victoria-derrota)
+	[3.10. Pantalla Victoria Derrota	](#pantalla-victoria-derrota)
 
-[3.11. Menú Pausa	](#menú-pausa)
+	[3.11. Menú Pausa	](#menú-pausa)
 
-[3.12. Ajustes	](#ajustes)
+	[3.12. Ajustes	](#ajustes)
 
-[3.13. Juego en Red	]
+	[3.13. Juego en Red	] (#ajustes)
 
-[3.14. Créditos	](#créditos)
+	[3.14. Créditos	](#créditos)
 
-[3.15. Pantalla Confirmación Borrar cuenta	]
+	[3.15. Pantalla Confirmación Borrar cuenta	](#ajustes)
 
-[3.16. Pantalla de carga	]
+	[3.16. Pantalla de carga	](#ajustes)
 
-[3.17. Pantalla de Error de conexión	]
+	[3.17. Pantalla de Error de conexión	](#ajustes)
 
-[**4\. Arte	**](#arte)
+[**4. Arte	**](#arte)
 
-[4.1. Arte 2D	](#arte-2d)
+	[4.1. Arte 2D	](#arte-2d)
 
-[4.2. Audio	](#audio)
+	[4.2. Audio	](#audio)
 
-[4.2.1. Música	](#música)
+		[4.2.1. Música	](#música)
 
-[4.2.2. Efectos de sonido	](#efectos-de-sonido)
+		[4.2.2. Efectos de sonido	](#efectos-de-sonido)
 
 # 
 
@@ -109,6 +109,8 @@ David Antonio Paz Gullón	[da.paz.2022@alumnos.urjc.es](mailto:da.paz.2022@alumn
 **1.1.  Concepto del juego** 
 
 *“Hotline Miauami”* es un juego multijugador de persecución 2D, donde un jugador asume el papel de "Policía" y el otro, el de "Ladrón". El objetivo del policía es atrapar al ladrón antes de que el tiempo se acabe, mientras que el del ladrón es evadir al policía y evitar ser atrapado dentro del tiempo establecido. El juego se desarrolla en un escenario 2D con plataformas, obstáculos y bonificaciones que pueden ser usados ​​para escapar, obstaculizar el paso o perjudicar al oponente.
+
+# 
 
 **1.2.  Género** 
 
@@ -119,6 +121,8 @@ David Antonio Paz Gullón	[da.paz.2022@alumnos.urjc.es](mailto:da.paz.2022@alumn
 - **Plataformas 2D**: El uso de plataformas añade complejidad a la persecución. Los jugadores deben saltar, trepar y usar los elementos del entorno para avanzar, escapar o interceptar al oponente. Las plataformas están diseñadas para fomentar la habilidad y el ingenio, ya que el jugador que mejor maneje el terreno y los obstáculos tendrá una ventaja significativa. Los niveles incluirán múltiples rutas, alturas variables, y elementos móviles que crean un entorno dinámico y desafiante.
 
 La fusión de estos dos géneros crea una jugabilidad rápida, competitiva y variada. Además, los objetos y bonificaciones presentes en los escenarios añaden aún más variedad al gameplay. Esto convierte cada partida en una experiencia única llena de emoción, tensión  y estrategia en tiempo real.
+
+# 
 
 **1.3. Características principales** 
 
@@ -138,6 +142,7 @@ Las características principales del juego son:
 
 * **Bonificaciones por el escenario que perjudican al rival:** En el mapa aparecerán bonificaciones que, al ser recogidas podrán usarse para ganar ventaja o perjudicar al rival.
 
+# 
 
 **1.4. Propósito** 
 
@@ -148,6 +153,8 @@ El propósito del juego es proporcionar una experiencia de juego rápida, intens
 * **Repetibilidad**: Ofrecer partidas cortas pero con una gran rejugabilidad.
 
 * **Estrategia y agilidad**: Requiere destreza, reflejos rápidos y una buena lectura del entorno para evadir o capturar.
+
+# 
 
 **1.5. Público objetivo** {#público-objetivo}
 
@@ -169,6 +176,7 @@ El propósito del juego es proporcionar una experiencia de juego rápida, intens
 
 El juego se va a desarrollar para PC.
 
+# 
 
 **1.6. Modelo de Negocio** 
 
@@ -180,6 +188,8 @@ Hotline Miauami se distribuirá como un juego gratuito para navegador web, acces
 
 El enfoque es mantener todas las mecánicas centrales del juego accesibles para todos los usuarios sin barreras económicas.
 
+# 
+
 **1.7. Licencia** 
 
 El juego se distribuirá bajo una licencia gratuita para uso personal, permitiendo a los jugadores disfrutarlo directamente desde el navegador.
@@ -189,6 +199,8 @@ El juego se distribuirá bajo una licencia gratuita para uso personal, permitien
 * **Autorización para retransmisión**: Los creadores de contenido podrán compartir partidas en plataformas como YouTube o Twitch, incentivando la promoción orgánica.  
     
 * **Prohibición de uso comercial no autorizado**: Ningún tercero podrá monetizar el juego sin consentimiento del equipo desarrollador.
+
+# 
 
 **1.8. PEGI** 
 
@@ -201,9 +213,13 @@ Hotline Miauami tiene una clasificación de PEGI 7\. Una restricción de edad po
 
 Esta clasificación permite que el juego sea accesible para un público amplio, incluyendo jugadores jóvenes y adolescentes, sin comprometer la diversión para audiencias mayores.
 
+# 
+
 **1.9. Estilo visual**  
 
 “*Hotline Miauami”* tendrá un estilo visual **pixel art** que aportará un aspecto retro y nostálgico con toques modernos. Se ha elegido esta estética para poder crear una experiencia visual atractiva y con identidad,  lograr claridad visual y transmitir información rápidamente.
+
+# 
 
 **1.10. Narrativa** 
 
@@ -336,7 +352,7 @@ En el modo en red, se usarán los siguientes controles:
 
 **2.7. Diagrama de clases**
 
-![bocetoCerdo](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/bocetoCerdo.png)
+![UML](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/UML.png)
 
 El diagrama de clases muestra la estructura principal de clases de la aplicación. Se puede encontrar:
 
