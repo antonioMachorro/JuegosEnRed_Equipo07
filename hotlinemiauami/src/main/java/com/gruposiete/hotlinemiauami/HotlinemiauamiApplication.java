@@ -36,7 +36,7 @@ public class HotlinemiauamiApplication implements WebSocketConfigurer {
 
 	@Bean
 	public long getThreshold() {
-		return 30000;
+		return 10000;
 	}
 
 	@Bean("usersPath")

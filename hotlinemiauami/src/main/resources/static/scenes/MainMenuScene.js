@@ -63,48 +63,76 @@ class MainMenuScene extends BaseScene {
         });
 
         deleteButton.on('pointerdown', () => {
-            // Mostrar el marco de confirmación
-            const marco = this.add.image(960, 540, 'marcoPause').setDepth(1); // Asegurarnos de que esté encima de otros elementos
+
+            const marco = this.add.image(960, 540, 'marcoPause').setDepth(1);
         
-            // Agregar el texto de confirmación
-            const confirmText = this.add.text(755, 500, '¿Quieres borrar la cuenta?', {
+            const confirmText = this.add.text(755, 470, '¿Quieres borrar la cuenta?', {
                 fontFamily: 'retro-computer',
                 fontSize: '20px',
                 fill: '#ffffff',
                 align: 'center',
                 wordWrap: { width: 600 }
             }).setDepth(2);
-        
-            // Crear botones para "Sí" y "No"
-            const yesButton = this.add.text(980, 570, 'Sí', {
+
+            this.add.text(confirmText.x + 20, confirmText.y + 20, 'Escribe tu contraseña para confirmar.', {
+                fontFamily: 'retro-computer',
+                fontSize: '12px',
+                fill: '#ffffff',
+                align: 'center',
+                wordWrap: { width: 600 }
+            }).setDepth(2);
+
+            //I want the new password field between the above text and the lower buttons.
+            const passwordInput = document.createElement('input');
+            passwordInput.type = 'password';
+            passwordInput.placeholder = 'Contraseña';
+            passwordInput.style.position = 'absolute';
+            passwordInput.style.left = '50%';
+            passwordInput.style.top = '50%'; // Adjust this to match the desired position
+            passwordInput.style.transform = 'translate(-50%, -50%)';
+            passwordInput.style.fontSize = '16px';
+            passwordInput.style.padding = '10px';
+            passwordInput.style.width = '200px';
+            passwordInput.style.height = '20px';
+
+            document.body.appendChild(passwordInput);
+
+            const yesButton = this.add.text(980, 600, 'Sí', {
                 fontFamily: 'retro-computer',
                 fontSize: '18px',
                 fill: '#00ff00'
             }).setInteractive().setDepth(2);
         
-            const noButton = this.add.text(880, 570, 'No', {
+            const noButton = this.add.text(880, 600, 'No', {
                 fontFamily: 'retro-computer',
                 fontSize: '18px',
                 fill: '#ff0000'
             }).setInteractive().setDepth(2);
         
-            // Acción para "Sí"
             yesButton.on('pointerdown', async () => {
-                await this.logoutUser();
-                marco.destroy();
-                confirmText.destroy();
-                yesButton.destroy();
-                noButton.destroy();
-                this.scene.start('TitleMenu'); // Regresar al menú principal o escena inicial
+
+                const password = passwordInput.value;
+                if(password === '') {
+                    alert("Invalid credentials.");
+                } else {
+                    this.deleteButton(password);
+
+                    marco.destroy();
+                    confirmText.destroy();
+                    yesButton.destroy();
+                    noButton.destroy();
+                    passwordInput.remove();
+                    this.scene.start('TitleMenu'); 
+                }
                 
             });
         
-            // Acción para "No"
             noButton.on('pointerdown', () => {
                 marco.destroy();
                 confirmText.destroy();
                 yesButton.destroy();
                 noButton.destroy();
+                passwordInput.remove();
             });
         });
         
@@ -112,10 +140,9 @@ class MainMenuScene extends BaseScene {
         this.startUserActivity();
         this.fetchConnectedUsers();
         this.serverStatus();
-        this.deleteButton();
     }
 
-    async deleteButton() {
+    async deleteButton(password) {
         try {
             // Obtener datos del usuario del registro
             const userData = this.registry.get('userData');
@@ -125,12 +152,14 @@ class MainMenuScene extends BaseScene {
             }
     
             // Llamar al backend para borrar al usuario
-            const response = await fetch('/api/users/delete', {
-                method: 'DELETE',
-            });
+            const response = await fetch("/api/users/delete", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username: userData.username, password: password }),
+              });
     
             if (response.ok) {
-                console.log('Cuenta eliminada exitosamente');
+                alert('Cuenta eliminada exitosamente');
                 // Limpia los datos del usuario en el registro
                 this.registry.set('userData', null);
                 // Redirigir al menú inicial

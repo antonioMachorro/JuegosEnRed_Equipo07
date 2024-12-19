@@ -33,6 +33,8 @@ public class ApiStatusService {
         for (var entry: this.lastSeen.entrySet()) {
             if(entry.getValue() > (currentTimeMillis - threshold)) {
                 connected.add(entry.getKey());
+            } else {
+                System.out.println("User is inactive.");
             }
         }
         return connected;
