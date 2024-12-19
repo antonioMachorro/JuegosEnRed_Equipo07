@@ -20,87 +20,87 @@ David Antonio Paz Gullón	[da.paz.2022@alumnos.urjc.es](mailto:da.paz.2022@alumn
 
 [**1. Introducción**](#introducción)
 
-	[1.1. Concepto del juego	](#concepto-del-juego)
+  [1.1. Concepto del juego	](#concepto-del-juego)
 
-	[1.2. Género	](#género)
+  [1.2. Género	](#género)
 
-	[1.3. Características principales	](#características-principales)
+  [1.3. Características principales	](#características-principales)
 
-	[1.4. Propósito	](#propósito)
+  [1.4. Propósito	](#propósito)
 
-	[1.5. Público objetivo	](#público-objetivo)
+  [1.5. Público objetivo	](#público-objetivo)
 
-	[1.6. Modelo de Negocio	](#modelo-de-negocio)
+  [1.6. Modelo de Negocio	](#modelo-de-negocio)
 
-	[1.7. Licencia	](#licencia)
+  [1.7. Licencia	](#licencia)
 
-	[1.8. PEGI	](#pegi)
+  [1.8. PEGI	](#pegi)
 
-	[1.9. Estilo visual	](#estilo-visual)
+  [1.9. Estilo visual	](#estilo-visual)
 
-	[1.10. Narrativa	](#narrativa)
+  [1.10. Narrativa	](#narrativa)
 
-[**2. Mecánicas de juego	**](#mecánicas-de-juego)
+[2. Mecánicas de juego	](#mecánicas-de-juego)
 
-	[2.1. Estructura general	](#estructura-general)
+  [2.1. Estructura general	](#estructura-general)
 
-	[2.2. Mecánicas de movimientos y habilidades	](#mecánicas-de-movimientos-y-habilidades)
+  [2.2. Mecánicas de movimientos y habilidades	](#mecánicas-de-movimientos-y-habilidades)
 
-	[2.3. Mecánicas de Escenario	](#mecánicas-de-escenario)
+  [2.3. Mecánicas de Escenario	](#mecánicas-de-escenario)
 
-	[2.4. Bonificaciones y potenciadores	](#bonificaciones-y-potenciadores)
+  [2.4. Bonificaciones y potenciadores	](#bonificaciones-y-potenciadores)
 
-	[2.5. Flujo de juego	](#flujo-de-juego)
+  [2.5. Flujo de juego	](#flujo-de-juego)
 
-	[2.6. Controles	](#controles)
+  [2.6. Controles	](#controles)
 
-	[2.7. Diagrama de clases	](#controles)
+  [2.7. Diagrama de clases	](#controles)
 
-[**3. Interfaz	**](#interfaz)
+[3. Interfaz	](#interfaz)
 
-	[3.1. Diagrama de estados	](#diagrama-de-estados)
+  [3.1. Diagrama de estados	](#diagrama-de-estados)
 
-	[3.2. Título	](#título)
+  [3.2. Título	](#título)
 
-	[3.3. Menú de Login](#ajustes)
+  [3.3. Menú de Login](#ajustes)
 
-	[3.4. Menú de Creación de cuenta]
+  [3.4. Menú de Creación de cuenta] (#menú-principal)
 
-	[3.5. Menú principal	](#menú-principal)
+  [3.5. Menú principal	](#menú-principal)
 
-	[3.6. Menú Elección Modo de Juego	](#menú-elección-modo-de-juego)
+  [3.6. Menú Elección Modo de Juego	](#menú-elección-modo-de-juego)
 
-	[3.7. Menú Selección Roles	](#menú-selección-roles)
+  [3.7. Menú Selección Roles	](#menú-selección-roles)
 
-	[3.8. Partida	](#partida)
+  [3.8. Partida	](#partida)
 
-	[3.9. Resultados Ronda	](#resultados-ronda)
+  [3.9. Resultados Ronda	](#resultados-ronda)
 
-	[3.10. Pantalla Victoria Derrota	](#pantalla-victoria-derrota)
+  [3.10. Pantalla Victoria Derrota	](#pantalla-victoria-derrota)
 
-	[3.11. Menú Pausa	](#menú-pausa)
+  [3.11. Menú Pausa	](#menú-pausa)
 
-	[3.12. Ajustes	](#ajustes)
+  [3.12. Ajustes	](#ajustes)
 
-	[3.13. Juego en Red	] (#ajustes)
+  [3.13. Juego en Red	] (#ajustes)
 
-	[3.14. Créditos	](#créditos)
+  [3.14. Créditos	](#créditos)
 
-	[3.15. Pantalla Confirmación Borrar cuenta	](#ajustes)
+  [3.15. Pantalla Confirmación Borrar cuenta	](#ajustes)
 
-	[3.16. Pantalla de carga	](#ajustes)
+  [3.16. Pantalla de carga	](#ajustes)
 
-	[3.17. Pantalla de Error de conexión	](#ajustes)
+  [3.17. Pantalla de Error de conexión	](#ajustes)
 
-[**4. Arte	**](#arte)
+[4. Arte	](#arte)
 
-	[4.1. Arte 2D	](#arte-2d)
+  [4.1. Arte 2D	](#arte-2d)
 
-	[4.2. Audio	](#audio)
+  [4.2. Audio	](#audio)
 
-		[4.2.1. Música	](#música)
+   [4.2.1. Música	](#música)
 
-		[4.2.2. Efectos de sonido	](#efectos-de-sonido)
+   [4.2.2. Efectos de sonido	](#efectos-de-sonido)
 
 # 
 
@@ -156,7 +156,7 @@ El propósito del juego es proporcionar una experiencia de juego rápida, intens
 
 # 
 
-**1.5. Público objetivo** {#público-objetivo}
+**1.5. Público objetivo** 
 
 *“Hotline Miauami”* está orientado al siguiente público
 
@@ -233,6 +233,9 @@ El destino y la paz de la ciudad están en juego.
 
 El juego se centra en la **persecución 1v1** en un escenario 2D con plataformas. Uno de los jugadores asumirá el rol de **Policía** y el otro el de **Ladrón.** Deberán utilizar el entorno, habilidades de su personaje y estrategia para cumplir con su objetivo: el Policía debe atrapar al Ladrón antes de que se acabe el tiempo, mientras que el Ladrón debe evadir al Policía.
 
+# 
+
+
 **2.1. Estructura general** 
 
 * **Duración de la Partida:** Cada partida consta de 3 rondas, en las que los jugadores intercambiarán los roles. Cada ronda dura 2 minutos.
@@ -240,6 +243,9 @@ El juego se centra en la **persecución 1v1** en un escenario 2D con plataformas
 * **Roles Asimétricos:** Los jugadores se alternan entre ser Policía o Ladrón en diferentes rondas.
 
 * **Escenarios Dinámicos:** Los escenarios cambian entre rondas, ofreciendo nuevos desafíos y rutas de escape.
+
+# 
+
 
 **2.2. Mecánicas de movimientos y habilidades** 
 
@@ -260,7 +266,10 @@ Cada rol tendrá sus propias mecánicas de movimiento y habilidades:
 
   * **Condición de victoria:** El ladrón deberá de evitar ser capturado toda la ronda para ganar.
 
-**2.3. Mecánicas de Escenario** {#mecánicas-de-escenario}
+# 
+
+
+**2.3. Mecánicas de Escenario** 
 
 Los escenarios 2D incluyen varias **plataformas** que los jugadores deben utilizar para moverse por el mapa. Las plataformas son estáticas, con rutas verticales y horizontales para escapar o interceptar, y están inspiradas en la estructura de un laberinto.
 
@@ -273,6 +282,9 @@ En el nivel hay **obstáculos interactivos** como trampillas y puertas que el la
 ![bocetoEscenario](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/bocetoMapa.png)
 
 Boceto Sección de mapa
+
+# 
+
 
 **2.4. Bonificaciones y potenciadores**  
 
@@ -289,6 +301,9 @@ En el Modo en red se añadirá:
 
 El policía tendrá guardada la bonificación, hasta que decida usarla. Solo puede tener una bonificación guardada, por lo que si ya tiene una no podrá recoger otra más hasta que la active.
 
+# 
+
+
 **2.5. Flujo de juego** 
 
 El jugador inicia el juego y elige **Jugar Partida** en el menú principal. También podría acceder al menú de opciones o a los créditos. El jugador elige si quiere jugar de forma **Local o En Red**. Si el jugador escoge jugar en red, establece conexión con el otro jugador, se asignan los roles de manera aleatoria y ambos aceptan comenzar la partida. Si se escoge jugar en local, los jugadores pueden elegir los roles o asignarlos de manera aleatoria. Tras ello, empieza la ronda.
@@ -300,6 +315,9 @@ Durante el transcurso de la partida, el Policía tiene que intentar atrapar al L
 Si el Policía logra capturar al Ladrón, la ronda terminará y se sumará 1 punto al marcador del Policía. Si el tiempo se acaba y el Policía aún no ha logrado capturar al Ladrón, se sumará un punto al marcador del ladrón. La partida es al mejor de tres, cuando uno de los dos llegue a 2 puntos, la partida finalizará y obtendrá la victoria dicho jugador.
 
 Cuando la partida termina, saldrá una pantalla de victoria/Derrota y ambos jugadores podrán volver al menú principal.
+
+# 
+
 
 **2.6. Controles**
 
@@ -348,6 +366,9 @@ En el modo en red, se usarán los siguientes controles:
 * El Policía tiene los siguientes controles propios:
 
   * **Space**: para activar la bonificación
+
+
+# 
 
 
 **2.7. Diagrama de clases**
@@ -532,15 +553,21 @@ En esta pantalla también aparecen los usuarios conectados y el estado del servi
 
 "Hotline Miauami" presenta un estilo artístico en pixel art de alta resolución, que evoca una estética retro. El estilo visual está inspirado en juegos como *The Binding of Isaac* (detalles caricaturescos y personajes únicos) y *Hotline Miami* (ambientación urbana, caos y colores saturados), combinando una paleta de colores variados con una atmósfera vibrante y dinámica.
 
-![isaac](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/isaac.jpg) 		![hotline](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/hotline.jpg)
+![isaac](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/isaac.jpg) 	
+*The Binding of Isaac*		
 
-*The Binding of Isaac					Hotline Miami* 		
+![hotline](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/hotline.jpg)
+
+*Hotline Miami* 		
 
 El juego sigue una temática de animales antropomorfos, ambientado en escenarios estáticos que recrean los suburbios de una ciudad moderna. Sin embargo, estos espacios se enriquecen con colores llamativos y detalles estéticos para realzar la sensación de un entorno urbano y excéntrico.
 
 ![gatoBoceto](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/gatoBoceto.png)    ![cerdoBoceto](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/cerdoBoceto.jpg)
 
 *Imágenes de referencia de personajes*
+
+# 
+
 
 **Paleta de color**
 
@@ -552,13 +579,19 @@ La paleta de colores combina tonos vivos y saturados para destacar elementos cla
 
 * **Personajes:** Los personajes tienen colores más claros para contrastar con los escenarios, asegurando que sean fácilmente identificables en cualquier situación. Este enfoque mejora la claridad durante la jugabilidad y refuerza el protagonismo de los personajes en pantalla.
 
-![paleta2.1](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/paleta2.1.png)    ![paleta2.2](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/paleta2.2.png)
+![paleta2.1](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/paleta2.1.png) ![paleta2.2](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/paleta2.2.png)
+
+# 
+
 
 **Escenario**
 
 El escenario de *Hotline Miauami* está inspirado en los suburbios de una ciudad moderna. El mapa incluye una mezcla de áreas urbanas como edificios, zonas subterráneas y elementos distintivos que aportan variedad al entorno. Los escenarios están diseñados con una paleta de colores vibrantes que los hace visualmente atractivos, al tiempo que destacan elementos interactivos como puertas, trampillas u objetos del entorno que los jugadores pueden utilizar.
 
 ![escenario2](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/escenario2.jpg)
+
+# 
+
 
 **Personajes**
 
@@ -568,21 +601,24 @@ El diseño de los personajes combina elementos humorísticos y estereotipados pa
 
 ![bocetoCerdo](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/bocetoCerdo.png)
 
-Concept Art Policia
+*Concept Art Policia*
 
 ![spriteCerdo](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/spriteCerdo.png)
 
-Sprite Policía
+*Sprite Policía*
 
 * **Ladrón**: El ladrón, representado como un gato ágil y astuto, tiene un diseño delgado y estilizado para enfatizar su rapidez y destreza. Su antifaz, un recurso clásico del bandido, refuerza la idea de sigilo y malicia. Este diseño toma inspiración de personajes como los de *Sly Cooper*, equilibrando personalidad y funcionalidad en el juego.
 
 ![conceptLadron](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/conceptLadron.jpg)
 
-Concept Art Ladrón
+*Concept Art Ladrón*
 
 ![spriteLadron](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/spriteLadron.png)
 
-Sprite Ladrón
+*Sprite Ladrón*
+
+# 
+
 
 **Bonificaciones**
 
@@ -590,9 +626,14 @@ Cada una de las bonificaciones tiene su respectivo icono: Donut, Red de Caza, Bo
 
 ![bonificaciones_1](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/bonificaciones_1.png)
 
+# 
+
+
 **Tipografía**
 
    La tipografía utilizada es la Retro-Computer de Petyka, que tiene un estilo pixel art. Se ha ampliado para su uso en español añadiendo tildes, diéresis, la letra ñ y la exclamación e interrogación inicial.
+
+# 
 
 
 **Animaciones**
@@ -618,7 +659,7 @@ También se ha implementado una animación de un destello, como retroalimentaci�
 
 **4.2. Audio** 
 
-   **4.2.1. Música**  
+**4.2.1. Música**  
 
 *“Hotline Miauami”* cuenta con música de **Persecución Synthwave (Retrowave)** 
 
@@ -630,7 +671,7 @@ Se han producido canciones para:
 
 * **Gameplay:** La música es más intensa y dinámica aportando a los jugadores tensión sonora que acompaña muy bien a lo que está sucediendo en pantalla. De nuevo, el uso de sintetizadores graves y percusión acorde hacen una experiencia sonora equilibrada con lo que se está viendo por pantalla.
 
-    **4.2.2. Efectos de sonido**
+**4.2.2. Efectos de sonido**
 
 Los efectos sonoros son esenciales para proporcionar retroalimentación al jugador. Acompañan perfectamente al gameplay y son pequeños detalles que aportan dinamismo a la partida y los menús. El juego cuenta con efectos de sonido para:
 
@@ -644,5 +685,4 @@ Los efectos sonoros son esenciales para proporcionar retroalimentación al jugad
 
 * Interacción con los botones
 
-## 
 
