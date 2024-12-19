@@ -18,29 +18,29 @@ Alvaro Rosa Pedraza 		[a.rosa.2022@alumnos.urjc.es](mailto:a.rosa.2022@alumnos.u
 
 **[1\. Introducción	](#introducción)**
 
-[**2\. Gestión de Usuarios	**](#gestión-de-usuarios)
+**[2\. Gestión de Usuarios	](#gestión-de-usuarios)**
 
 [Endpoints Disponibles	](#endpoints-disponibles)
 
 [Lógica	](#lógica)
 
-[**3\. Gestión del Estado de Conexión	**](#gestión-del-estado-de-conexión)
+**[3\. Gestión del Estado de Conexión	](#gestión-del-estado-de-conexión)**
 
 [Endpoints Disponibles	](#endpoints-disponibles-1)
 
-[Lógica	](#lógica-1)
+**[Lógica	](#lógica-1)**
 
-[**4\. Gestión de Mensajes (Chat)	**](#gestión-de-mensajes-\(chat\))
+**[4\. Gestión de Mensajes (Chat)	](#gestión-de-mensajes-\(chat\))**
 
 [Endpoints Disponibles	](#endpoints-disponibles-2)
 
-[**5\. Comunicación en Tiempo Real (WebSockets)	**](#comunicación-en-tiempo-real-\(websockets\))
+**[5\. Comunicación en Tiempo Real (WebSockets)	](#comunicación-en-tiempo-real-\(websockets\))**
 
 [Implementación	](#implementación)
 
-[**6\. Configuración General	**](#configuración-general)
+**[6\. Configuración General	](#configuración-general)
 
-#** 1. Introducción** 
+# ** 1. Introducción** 
 
 El proyecto desarrollado implementa una API REST que permite gestionar usuarios, autenticación, mensajería y estado de conexión en tiempo real. Este sistema utiliza Spring Boot para la configuración y ejecución del servidor.
 
