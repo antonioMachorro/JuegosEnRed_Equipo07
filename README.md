@@ -102,6 +102,8 @@ David Antonio Paz Gullón	[da.paz.2022@alumnos.urjc.es](mailto:da.paz.2022@alumn
 
    [4.2.2. Efectos de sonido	](#efectos-de-sonido)
 
+[Anexo: Ejecución con .jar	](#arte)
+
 # 
 
 # 1. **Introducción** 
@@ -685,4 +687,14 @@ Los efectos sonoros son esenciales para proporcionar retroalimentación al jugad
 
 * Interacción con los botones
 
+#
 
+# **Anexo: Ejecución con .jar**
+
+Para ejecutar el proyecto desde un paquete .jar hay que seguir los siguientes pasos:
+
+1. Abrir el cmd (simbolo de sistema)
+2. Ejecutar el comando: cd "ruta/del/proyecto/.../target" (copiar la ruta del archivo)
+3. Una vez dentro, ejecutar: java -jar hotlinemiauami-0.0.1-SNAPSHOT.jar
+4. Al ejecutar esto, se levanta el servidor. A continuación, ejecutaremos el comando ipconfig para obtener la IP del servidor.
+5. Por último, desde los ordenadores que usaremos como clientes, accederemos al navegador y pondremos en la barra de búsqueda: IPdelServidor:8080
