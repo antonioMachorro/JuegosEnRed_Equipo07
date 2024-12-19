@@ -85,20 +85,33 @@ public class UserService {
 
     public ResponseEntity<?> login(LoginDTO loginDTO) throws IOException {
         File userFile = new File("data/" + loginDTO.getUsername() + ".json");
-        if(!userFile.exists()) {
+        if (!userFile.exists()) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
-
+    
         String userData = new String(Files.readAllBytes(Paths.get(userFile.getPath())));
         String encryptedPassword = getPasswordFromJSON(userData);
-
-        if(encoder.matches(loginDTO.getPassword(), encryptedPassword)) {
+    
+        if (encoder.matches(loginDTO.getPassword(), encryptedPassword)) {
             apiStatusService.hasSeen(loginDTO.getUsername());
-            return new ResponseEntity<>(Map.of("username", loginDTO.getUsername(), "message", "Login Successful"), HttpStatus.OK);
+    
+            // Obtener el volumen del usuario
+            int userVolume = getUserVolume(loginDTO.getUsername());
+            
+            // Responder con el volumen y otros datos
+            return new ResponseEntity<>(
+                Map.of(
+                    "username", loginDTO.getUsername(),
+                    "message", "Login Successful",
+                    "volume", userVolume
+                ),
+                HttpStatus.OK
+            );
         } else {
             return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
         }
     }
+    
 
     public String getPasswordFromJSON(String userData) {
         int startIndex = userData.indexOf("\"password\":") + 12;
@@ -158,6 +171,16 @@ public class UserService {
             return new ResponseEntity<>("User deleted", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    public int getUserVolume(String username) {
+        Optional<User> userOpt = userDAO.getUser(username);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            return user.getVolume();
+        } else {
+            return -1; // Indicador de que el usuario no existe
         }
     }
 }

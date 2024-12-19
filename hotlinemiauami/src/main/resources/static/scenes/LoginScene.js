@@ -125,6 +125,13 @@ class LoginScene extends Phaser.Scene {
         console.log(data.message);
 
         window.currentUsername = data.username;
+        this.registry.set("currentVolume", data.volume);
+
+
+         // Configurar el volumen en el AudioManager
+         const volume = data.volume / 100; // Convertir 0-100 a 0-1
+         this.game.audioManager.setVolume(volume);
+         console.log("Volumen aplicado en el juego:", volume);
 
         this.registry.set("userData", { username: data.username });
         this.game.connectionManager.setUsername(data.username);
