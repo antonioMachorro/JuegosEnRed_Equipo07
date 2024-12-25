@@ -42,7 +42,9 @@ public class ChatController {
                 messageIdGenerator.getAndIncrement(), //Evita bugs de adicion al hacerlo concurrentemente
                 request.user(),
                 request.message(),
-                LocalDateTime.now());
+                LocalDateTime.now(),
+                request.isSystemMessage()                
+                );
             messages.add(message);
         } finally {
             writeLock.unlock();
@@ -84,9 +86,9 @@ public class ChatController {
         return ResponseEntity.ok("Messages from user " + username + " deleted.");
     }
     
-    public record ChatRequest(String user, String message){
+    public record ChatRequest(String user, String message, boolean isSystemMessage){
     }
     
-    public record ChatMessage(long id, String user, String message, LocalDateTime timestamp){
+    public record ChatMessage(long id, String user, String message, LocalDateTime timestamp, boolean isSystemMessage){
     }
 }

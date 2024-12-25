@@ -44,6 +44,8 @@ class LobbyScene extends Phaser.Scene {
             this.scene.start('GameModeScene');
         });
 
+        //Limpiar el chat antes de mostrarlo
+        this.clearChat();
         // Mostrar el chat
         this.showChat();
 
@@ -76,15 +78,30 @@ class LobbyScene extends Phaser.Scene {
         const ladron = this.add.sprite(1200, 550, "ladron");
         ladron.play("thief_run");
 
-        // Titulo escena
-        this.add.text(width / 2, 100, 'CHAT', { 
-            fontFamily: 'Arial', 
-            fontSize: '120px', 
-            fill: '#fff' 
-        });
-
         // Limpiar el chat y ocultarlo cuando se cierra la escena
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            
+            // Mensaje de usuario se desconectó al chat 
+            try {
+                const response = fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user: userData.username,
+                        message: "salió del chat",
+                        isSystemMessage: true,
+                    }),
+                });
+
+                if (!response.ok) {
+                    console.error("Error al enviar el mensaje: ", response.text());
+                }
+            } catch (error) {
+                console.error("Error al conectar con servidor: ", error);
+            }
+
             this.clearChat();
             this.hideChat();
         });
@@ -128,7 +145,29 @@ class LobbyScene extends Phaser.Scene {
 
         const newChat = chatInput.cloneNode(true);
         chatInput.parentNode.replaceChild(newChat, chatInput);
+        
+        // Mensaje de usuario se conectó al chat 
+        try {
+            const response = fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user: username,
+                    message: "entró al chat",
+                    isSystemMessage: true,
+                }),
+            });
 
+            if (!response.ok) {
+                console.error("Error al enviar el mensaje: ", response.text());
+            }
+        } catch (error) {
+            console.error("Error al conectar con servidor: ", error);
+        }
+
+        // Envio de mensajes
         newChat.addEventListener('keydown', async (event) => {
             if (event.key === 'Enter' && newChat.value.trim() !== '') {
                 const message = newChat.value.trim();
@@ -144,6 +183,7 @@ class LobbyScene extends Phaser.Scene {
                         body: JSON.stringify({
                             user: username,
                             message: message,
+                            isSystemMessage: false,
                         }),
                     });
 
@@ -186,17 +226,29 @@ class LobbyScene extends Phaser.Scene {
                 const response = await fetch(`api/chat?since=${lastMessageId}`);
                 if (response.ok) {
                     const messages = await response.json();
+                    let isScrolledToTop = chatMessages.scrollHeight - chatMessages.scrollTop === chatMessages.clientHeight; // Verificar si el usuario esta viendo el mensaje final
                     messages.forEach((message) => {
                         // Filtrar palabras malsonantes
                         const filteredMessage = this.filterProfanity(message.message);
 
                         const messageElement = document.createElement('div');
-                        messageElement.textContent = `${message.user}: ${filteredMessage}`;
+
+                        if (message.isSystemMessage) {
+                            messageElement.textContent = `{${message.user} ${filteredMessage}}`;
+                            messageElement.style.color = '#D478E9';
+                        } else {
+                            messageElement.textContent = `${message.user}: ${filteredMessage}`;
+                        }
+                        
                         chatMessages.appendChild(messageElement);
                         lastMessageId = message.id;
                     });
 
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    // Hacer scroll al final de los mensajes
+                    if(isScrolledToTop){
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
+
                 }
             } catch (error) {
                 console.error('Error al obtener mensajes:', error);
