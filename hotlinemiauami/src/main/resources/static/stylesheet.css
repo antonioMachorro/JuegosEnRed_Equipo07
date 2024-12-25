@@ -36,8 +36,10 @@ html, body {
     border-radius: 0px;
     display: none; /* Oculto por defecto */
     z-index: 10;
-    overflow: hidden;
+    overflow: auto;
 }
+
+
 
 #chat-messages {
     height: 90%;
@@ -46,6 +48,17 @@ html, body {
     color: #fff;
     font-family: 'retro-computer';
     font-size: 16px;
+}
+
+/*Barra de desplazamiento*/
+#chat-messages::-webkit-scrollbar {
+    width: 13px; 
+    background-color: #480060; 
+}
+
+/* Barra de desplazamiento */
+#chat-messages::-webkit-scrollbar-thumb {
+    background-color: #D478E9; 
 }
 
 #chat-input {

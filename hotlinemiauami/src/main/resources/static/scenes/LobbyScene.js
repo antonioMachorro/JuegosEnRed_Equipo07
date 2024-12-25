@@ -14,7 +14,7 @@ class LobbyScene extends Phaser.Scene {
             "./Personajes/Policia_Spritesheet.png",
             "./Personajes/policia_spritesheet.json"
         );
-      
+
         this.load.atlas(
             "ladron",
             "./Personajes/Ladron_Spritesheet.png",
@@ -74,13 +74,13 @@ class LobbyScene extends Phaser.Scene {
 
         const policia = this.add.sprite(1125, 550, "policia");
         policia.play("police_run");
-    
+
         const ladron = this.add.sprite(1200, 550, "ladron");
         ladron.play("thief_run");
 
         // Limpiar el chat y ocultarlo cuando se cierra la escena
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-            
+
             // Mensaje de usuario se desconectó al chat 
             try {
                 const response = fetch('/api/chat', {
@@ -116,7 +116,7 @@ class LobbyScene extends Phaser.Scene {
             fill: '#ffffff'
         });
     }
-    
+
 
     showChat() {
         const chatContainer = document.getElementById('chat-container');
@@ -145,7 +145,7 @@ class LobbyScene extends Phaser.Scene {
 
         const newChat = chatInput.cloneNode(true);
         chatInput.parentNode.replaceChild(newChat, chatInput);
-        
+
         // Mensaje de usuario se conectó al chat 
         try {
             const response = fetch('/api/chat', {
@@ -194,8 +194,12 @@ class LobbyScene extends Phaser.Scene {
                     console.error("Error al conectar con servidor: ", error);
                 }
 
-                // Hacer scroll al final de los mensajes
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Esperar a que el mensaje se añada antes de hacer scroll
+                setTimeout(() => {
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 100); 
+
             }
         });
     }
@@ -239,14 +243,16 @@ class LobbyScene extends Phaser.Scene {
                         } else {
                             messageElement.textContent = `${message.user}: ${filteredMessage}`;
                         }
-                        
+
                         chatMessages.appendChild(messageElement);
                         lastMessageId = message.id;
                     });
 
                     // Hacer scroll al final de los mensajes
-                    if(isScrolledToTop){
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    if (isScrolledToTop) {
+                        setTimeout(() => {
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }, 100); 
                     }
 
                 }
