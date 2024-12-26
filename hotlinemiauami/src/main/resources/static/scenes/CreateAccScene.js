@@ -22,41 +22,75 @@ class CreateAccScene extends Phaser.Scene {
 
         this.add.image(960, 540, 'menuPrincipal');
         this.add.image(960, 540, 'crearCuenta');
-        
+
         // Botón de crear cuenta
         this.add.image(962, 600, 'crearboton')
             .setInteractive()
             .on('pointerdown', () => {
+                this.clearAlerts();
                 const username = document.getElementById('username-input').value;
                 const password = document.getElementById('password-input').value;
 
                 if (username && password) {
                     this.createAccount(username, password);
                 } else {
-                    alert('Por favor, ingresa un nombre de usuario y una contraseña.');
+                    this.pleaseIntroduceText.setVisible(true);
+                    this.alertsOverlay.setVisible(true);
                 }
             });
 
         // Crear los campos de texto
         this.createAccountFields();
 
+        // Overlay mensajes
+        this.alertsOverlay = this.add.graphics({ fillStyle: { color: 0x000000, alpha: 0.65 } });
+        this.alertsOverlay.fillRect(this.cameras.main.centerX-400, this.cameras.main.centerY + 140, 800, 60);
+        this.alertsOverlay.setDepth(10);
+        this.alertsOverlay.setVisible(false);
+
+        // Overlay loading
         this.loadingOverlay = this.add.graphics({ fillStyle: { color: 0x000000, alpha: 0.5 } });
         this.loadingOverlay.fillRect(0, 0, this.cameras.main.width, this.cameras.main.height);
         this.loadingOverlay.setDepth(10);
         this.loadingOverlay.setVisible(false);
-    
-        // Loading...
-        this.loadingText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY+170, 'Loading...', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
-          .setOrigin(0.5)
-          .setDepth(11)
-          .setVisible(false);
+
+        // Mensaje Por favor...
+        this.pleaseIntroduceText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 170, 'Por favor, ingresa un nombre de usuario y una contraseña', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+            .setOrigin(0.5)
+            .setDepth(11)
+            .setVisible(false);
+
+        // Mensaje Cargando...
+        this.loadingText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 170, 'Cargando...', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+            .setOrigin(0.5)
+            .setDepth(11)
+            .setVisible(false);
+
+        // Mensaje Usuario en uso...
+        this.usedUserText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 170, 'El nombre de usuario ya está en uso', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+            .setOrigin(0.5)
+            .setDepth(11)
+            .setVisible(false);
+
+        // Mensaje Error al crear cuenta
+        this.createErrorText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 170, 'Hubo un error al crear la cuenta. Inténtalo de nuevo.', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+            .setOrigin(0.5)
+            .setDepth(11)
+            .setVisible(false);
+
+        // Mensaje Cuenta creada
+        this.successAccountText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 170, '¡Cuenta creada con éxito!', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+            .setOrigin(0.5)
+            .setDepth(11)
+            .setVisible(false);
+
 
         this.events.on('shutdown', this.removeFields, this);
 
-        const returnButton = this.add.image(960,660, 'volver')
-        .setScale(0.6)
-        .setOrigin(0.5)
-        .setInteractive();
+        const returnButton = this.add.image(960, 660, 'volver')
+            .setScale(0.6)
+            .setOrigin(0.5)
+            .setInteractive();
         returnButton.on('pointerdown', () => {
             this.scene.start('LoginScene');
         });
@@ -110,42 +144,58 @@ class CreateAccScene extends Phaser.Scene {
         this.loadingText.setVisible(visible);
     }
 
+    clearAlerts() {
+        // Borrar las alertas de la pantalla
+        this.loadingOverlay.setVisible(false);
+        this.loadingText.setVisible(false);
+        this.usedUserText.setVisible(false);
+        this.createErrorText.setVisible(false);
+        this.successAccountText.setVisible(false);
+        this.pleaseIntroduceText.setVisible(false);
+        this.alertsOverlay.setVisible(false);
+    }
+
     async createAccount(username, password) {
         this.showLoading(true);
         // Verificar si el nombre de usuario ya existe
         try {
             const response = await fetch(`/api/users/${username}`);
-                if (response.ok) {
-                    // Si el usuario ya existe
-                    alert('El nombre de usuario ya está en uso.');
-                } else {
-                    // Crear el usuario si no existe
-                    const newUser = {
-                        username: username,
-                        password: password,
-                        volume:100,
-                        lastSeen: Date.now()
-                    };
+            if (response.ok) {
+                // Si el usuario ya existe
+                this.alertsOverlay.setVisible(true);
+                this.usedUserText.setVisible(true);
+            } else {
+                // Crear el usuario si no existe
+                const newUser = {
+                    username: username,
+                    password: password,
+                    volume: 100,
+                    lastSeen: Date.now()
+                };
 
-                    // Enviar solicitud para crear el usuario
-                    const createResponse = await fetch('/api/users/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(newUser)
-                    });
-                    if(createResponse.ok) {
-                        alert('Cuenta creada con éxito.');
+                // Enviar solicitud para crear el usuario
+                const createResponse = await fetch('/api/users/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newUser)
+                });
+                if (createResponse.ok) {
+                    this.alertsOverlay.setVisible(true);
+                    this.successAccountText.setVisible(true);
+                    setTimeout(() => {
                         this.scene.start('LoginScene');
-                    } else {
-                        alert('Hubo un error al crear la cuenta. Inténtalo de nuevo.');
-                    }
+                    }, 2000);
+                } else {
+                    this.alertsOverlay.setVisible(true);
+                    this.createErrorText.setVisible(true);
                 }
+            }
         } catch (error) {
             console.error("Error during creation:", error);
             alert("Error de conexión.");
-        } finally  {
+        } finally {
             this.showLoading(false);
         }
     }

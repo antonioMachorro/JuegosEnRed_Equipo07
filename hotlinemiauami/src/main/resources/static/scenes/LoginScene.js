@@ -24,13 +24,21 @@ class LoginScene extends Phaser.Scene {
 
     // Botón de iniciar sesión
     this.loginButton = this.add
-        .image(960, 580, "iniciar")
-        .setInteractive()
-        .on("pointerdown", () => {
-          const username = this.usernameField.value;
-          const password = this.passwordField.value;
+      .image(960, 580, "iniciar")
+      .setInteractive()
+      .on("pointerdown", () => {
+        this.clearAlerts();
+        const username = this.usernameField.value;
+        const password = this.passwordField.value;
+
+        if (username && password) {
           this.validateLogin(username, password);
-        });
+        } else {
+          this.pleaseIntroduceText.setVisible(true);
+          this.alertsOverlay.setVisible(true);
+        }
+
+      });
 
     // Botón para crear cuenta
     this.add
@@ -51,17 +59,47 @@ class LoginScene extends Phaser.Scene {
 
     returnButton.y = 675;
 
-    //
+    // Overlay mensajes
+    this.alertsOverlay = this.add.graphics({ fillStyle: { color: 0x000000, alpha: 0.65 } });
+    this.alertsOverlay.fillRect(this.cameras.main.centerX - 400, this.cameras.main.centerY + 150, 800, 40);
+    this.alertsOverlay.setDepth(10);
+    this.alertsOverlay.setVisible(false);
+
+    // Overlay Cargando
     this.loadingOverlay = this.add.graphics({ fillStyle: { color: 0x000000, alpha: 0.5 } });
     this.loadingOverlay.fillRect(0, 0, this.cameras.main.width, this.cameras.main.height);
     this.loadingOverlay.setDepth(10);
     this.loadingOverlay.setVisible(false);
 
-    // Loading...
-    this.loadingText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY+170, 'Loading...', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+    // Mensaje Cargando
+    this.loadingText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 170, 'Cargando...', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
       .setOrigin(0.5)
       .setDepth(11)
       .setVisible(false);
+
+    // Mensaje Por favor...
+    this.pleaseIntroduceText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 170, 'Por favor, ingresa un nombre de usuario y una contraseña', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+      .setOrigin(0.5)
+      .setDepth(11)
+      .setVisible(false);
+
+    // Mensaje usuario ya loggeado
+    this.alreadyLoggedText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 170, 'El usuario ya ha iniciado sesión', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+      .setOrigin(0.5)
+      .setDepth(11)
+      .setVisible(false);
+
+    // Mensaje Usuario no encontrado
+    this.notFoundText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 170, 'Usuario no encontrado', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+      .setOrigin(0.5)
+      .setDepth(11)
+      .setVisible(false);
+
+    // Mensaje Credenciales invalidas
+    this.invalidCredentialsText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 170, 'Credenciales inválidas', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+    .setOrigin(0.5)
+    .setDepth(11)
+    .setVisible(false);
 
     // Agregar los campos de texto para el nombre de usuario y la contraseña
     this.createLoginFields();
@@ -103,10 +141,11 @@ class LoginScene extends Phaser.Scene {
     try {
 
       const userExistsResponse = await fetch("/api/status/users");
-      if(userExistsResponse.ok) {
+      if (userExistsResponse.ok) {
         const users = await userExistsResponse.json();
-        if(users.connectedUsers.includes(username)) {
-          alert("User is already logged in.");
+        if (users.connectedUsers.includes(username)) {
+          this.alertsOverlay.setVisible(true);
+          this.alreadyLoggedText.setVisible(true);
           return;
         }
       } else {
@@ -128,10 +167,10 @@ class LoginScene extends Phaser.Scene {
         this.registry.set("currentVolume", data.volume);
 
 
-         // Configurar el volumen en el AudioManager
-         const volume = data.volume / 100; // Convertir 0-100 a 0-1
-         this.game.audioManager.setVolume(volume);
-         console.log("Volumen aplicado en el juego:", volume);
+        // Configurar el volumen en el AudioManager
+        const volume = data.volume / 100; // Convertir 0-100 a 0-1
+        this.game.audioManager.setVolume(volume);
+        console.log("Volumen aplicado en el juego:", volume);
 
         this.registry.set("userData", { username: data.username });
         this.game.connectionManager.setUsername(data.username);
@@ -139,9 +178,11 @@ class LoginScene extends Phaser.Scene {
 
         this.scene.start("MainMenuScene");
       } else if (response.status === 404) {
-        alert("User not found.");
+        this.alertsOverlay.setVisible(true);
+        this.notFoundText.setVisible(true);
       } else if (response.status === 401) {
-        alert("Invalid credentials.");
+        this.alertsOverlay.setVisible(true);
+        this.invalidCredentialsText.setVisible(true);
       } else {
         throw new Error("Invalid response.");
       }
@@ -152,6 +193,14 @@ class LoginScene extends Phaser.Scene {
     } finally {
       this.showLoading(false);
     }
+  }
+
+  clearAlerts() {
+    this.alertsOverlay.setVisible(false);
+    this.notFoundText.setVisible(false);
+    this.alreadyLoggedText.setVisible(false);
+    this.pleaseIntroduceText.setVisible(false);
+    this.invalidCredentialsText.setVisible(false);
   }
 
   showLoading(visible) {
