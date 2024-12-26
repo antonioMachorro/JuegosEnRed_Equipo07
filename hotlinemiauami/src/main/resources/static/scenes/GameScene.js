@@ -1083,6 +1083,17 @@ class GameScene extends Phaser.Scene {
           frameRate: 15,
           repeat: -1,
         });
+
+      this.anims.create({
+        key: "thief_red",
+        frames: this.anims.generateFrameNames("ladron", {
+          prefix: "red",
+          end: 4,
+          zeroPad: 3,
+        }),
+        frameRate: 6,
+        repeat: -1,
+      });
     
     //Animaciones objetos
     this.anims.create({
@@ -1324,6 +1335,7 @@ class GameScene extends Phaser.Scene {
 
   stopThief() {
     console.log("STOPING THIEF");
+    this.playerLadron.anims.play('thief_red')
     this.LadronMovement = false;
     this.time.delayedCall(2000, () => {
         console.log("STOPED THIEF");
