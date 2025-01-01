@@ -22,9 +22,37 @@ class LobbyScene extends Phaser.Scene {
         );
     }
 
-    create() {
+    create(data) {
         const { width, height } = this.scale;
         const userData = this.registry.get('userData');
+
+        console.log(window.location.hostname);
+
+        const wsUrl = `ws://${window.location.hostname}:8080/ws/room/${data.roomData.roomId}`;
+        this.chatSocket = new WebSocket(wsUrl);
+
+        this.chatSocket.onopen = () => {
+            console.log("Websocket connected to room Id: ", data.roomData.roomId);
+        };
+
+        this.chatSocket.onmessage = (event) => {
+            const message = event.data;
+            console.log("Received message: ", message);
+
+            const chatMessages = document.getElementById('chat-messages');
+            if(chatMessages) {
+                const div = document.createElement('div');
+                div.textContent = message;
+                chatMessages.appendChild(div);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        };
+
+        this.chatSocket.onclose = (evt) => {
+            console.log("Websocket closed: ", evt);
+        }
+
+        console.log(data.roomData);
 
         // Camara
         const camera = this.cameras.main;
@@ -108,13 +136,25 @@ class LobbyScene extends Phaser.Scene {
 
         // Inicializar el chat
         this.initChat(userData.username);
-        this.fetchMessages();
+        //this.fetchMessages();
 
-        this.add.text(845, 395, 'Chat', {
+        const chatText = this.add.text(845, 395, 'Chat', {
             fontFamily: 'retro-computer',
             fontSize: '16px',
             fill: '#ffffff'
-        });
+        }).setOrigin(0.5);
+
+        const idText = this.add.text(chatText.x + 200, chatText.y, `ROOM ID: ${data.roomData.roomId}`, {
+            fontFamily: 'retro-computer', 
+            fontSize: '8px', 
+            fill: '#ffffff' 
+        }).setOrigin(0.5);
+
+        const roomNameText = this.add.text(idText.x, idText.y + 20, `ROOM: ${data.roomData.roomName}`, {
+            fontFamily: 'retro-computer', 
+            fontSize: '8px', 
+            fill: '#ffffff' 
+        }).setOrigin(0.5);
     }
 
 
@@ -173,7 +213,10 @@ class LobbyScene extends Phaser.Scene {
                 const message = newChat.value.trim();
                 newChat.value = ''; // Limpiar el campo de entrada
 
+                this.chatSocket.send(`${username}: ${message}`);
+
                 // Enviar el mensaje al servidor
+                /*
                 try {
                     const response = await fetch('/api/chat', {
                         method: 'POST',
@@ -193,6 +236,7 @@ class LobbyScene extends Phaser.Scene {
                 } catch (error) {
                     console.error("Error al conectar con servidor: ", error);
                 }
+                */
 
 
                 // Esperar a que el mensaje se añada antes de hacer scroll

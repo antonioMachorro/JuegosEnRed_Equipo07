@@ -14,6 +14,9 @@ import LobbyScene from './scenes/LobbyScene.js';
 import LoginScene from './scenes/LoginScene.js';
 import CreateAccScene from './scenes/CreateAccScene.js';
 import ConnectionManager from './ConnectionManager.js';
+import RoomScene from './scenes/RoomScene.js';
+import RoomSelectScene from './scenes/RoomSelectScene.js';
+import RoomCreateScene from './scenes/RoomCreateScene.js';
 
 
 
@@ -24,7 +27,8 @@ const config = {
     width: 1920, //Cambiar la ventana de juego aqui y en el archivo CSS
     height: 1080,
     parent: 'gameContainer',  // Contenedor en el HTML
-    scene: [TitleMenu, LoginScene, MainMenuScene, GameScene, LobbyScene, GameModeScene, RoleSelectScene, PauseScene, VictoryScene, CreditsScene, OptionsScene, CreateAccScene, ConnectionError],
+    scene: [TitleMenu, LoginScene, MainMenuScene, GameScene, LobbyScene, GameModeScene, RoleSelectScene, RoomScene, 
+            RoomSelectScene, RoomCreateScene, PauseScene, VictoryScene, CreditsScene, OptionsScene, CreateAccScene, ConnectionError],
     pixelArt: true,
     physics: {
         default: 'arcade',
@@ -43,5 +47,5 @@ const game = new Phaser.Game(config);
 
 game.audioManager = new AudioManager(game);
 
-game.connectionManager = new ConnectionManager();
+game.connectionManager = new ConnectionManager(game);
 //game.connectionManager.startPolling();

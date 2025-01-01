@@ -4,6 +4,8 @@ class BaseScene extends Phaser.Scene {
     }
 
     create() {
+
+
         this.input.on('pointerdown', () => {
             this.game.connectionManager.sendUpdate();
             if(this.game.connectionManager.getUsername()) {

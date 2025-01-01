@@ -16,14 +16,14 @@ class MainMenuScene extends BaseScene {
         this.load.image('online', './Interfaz/enlinea.png');
         this.load.image('offline', './Interfaz/offline.png');
         this.load.image('borrar', './Interfaz/borrarAcc.png');
-        this.load.image("marcoPause", "./Interfaz/marcoPause.png");
+        this.load.image('marcoPause', './Interfaz/marcoPause.png');
     }
 
     create() {
 
         super.create();
 
-        this.userCountText = null;
+        //this.userCountText = null;
         this.serverStatusLabel = null;
         this.serverStatusImage = null;
 
@@ -136,10 +136,22 @@ class MainMenuScene extends BaseScene {
             });
         });
         
+        this.userCountText = this.add.text(615, 340, 'Usuarios conectados:', {
+            fontFamily: 'retro-computer',
+            fontSize: '16px',
+            fill: '#ffffff'
+        })
 
-        this.startUserActivity();
-        this.fetchConnectedUsers();
-        this.serverStatus();
+        this.serverStatusLabel = this.add.text(615, 360, 'Estado del servidor:', {
+            fontFamily: 'retro-computer',
+            fontSize: '16px',
+            fill: '#ffffff'
+        });
+
+        this.game.events.on('server-status-updated', this.updateServerStatus, this);
+        //this.game.events.on('user-status-updated', this.updateServerStatus, this);
+        this.game.events.on('connected-users-updated', this.updateUserCount, this);
+
     }
 
     async deleteButton(password) {
@@ -191,6 +203,7 @@ class MainMenuScene extends BaseScene {
         sendActivityLoop();
     }
 
+    /*
     async fetchConnectedUsers() {
 
         this.fetchIntervalId = setInterval(async () => {
@@ -202,18 +215,21 @@ class MainMenuScene extends BaseScene {
                     this.updateUserCount(connectedUsers);
                 } else {
                     console.error('Error fetching connected users:', response.statusText);
+                    this.updateUserCount(0);
                 }
             } catch (error) {
                 console.error('Error connecting to server:', error);
+                this.updateUserCount(0);
             }
         }, 1000);
     }
+*/
 
     updateUserCount(count) {
-        if (this.userCountText) {
-            this.userCountText.setText(`Usuarios conectados: ${count}`);
+        if (this.userCountNum) {
+            this.userCountNum.setText(count);
         } else {
-            this.userCountText = this.add.text(615, 340, `Usuarios conectados: ${count}`, {
+            this.userCountNum = this.add.text(this.userCountText.x + this.userCountText.width + 10, this.userCountText.y, count, {
                 fontFamily: 'retro-computer',
                 fontSize: '16px',
                 fill: '#ffffff'
@@ -235,8 +251,10 @@ class MainMenuScene extends BaseScene {
     }
     
 
+    /*
     async serverStatus() {
         this.fetchIntervalId = setInterval(async () => {
+            console.log("Checking the server status.");
             try {
                 const response = await fetch('/api/status/connection'); // Llama al endpoint
                 if (response.ok) {
@@ -250,31 +268,43 @@ class MainMenuScene extends BaseScene {
             } catch (error) {
                 this.updateServerStatus("Error de conexión");
                 console.error('Error connecting to server:', error);
+                console.log("Launching error scene:");
+                this.scene.pause();
                 this.scene.launch('ConnectionError', { originScene: 'MainMenuScene' }); // Cambiar a la escena de Error de conexión
             }
         }, 1000);
     }
+        */
     
     updateServerStatus(status) {
-        // Verificar si el texto base ya existe, si no, crearlo
-        if (!this.serverStatusLabel) {
-            this.serverStatusLabel = this.add.text(615, 360, 'Estado del servidor:', {
-                fontFamily: 'retro-computer',
-                fontSize: '16px',
-                fill: '#ffffff'
-            });
-        }
-    
         // Elimina la imagen anterior si existe
         if (this.serverStatusImage) {
             this.serverStatusImage.destroy();
         }
     
+        if(status) {
+            this.serverStatusImage = this.add.image(this.serverStatusLabel.x + this.serverStatusLabel.width + 10, 368, 'online').setScale(0.8);
+        } else {
+            this.serverStatusImage = this.add.image(this.serverStatusLabel.x + this.serverStatusLabel.width + 10, 368, 'offline').setScale(0.8);
+            this.game.connectionManager.stopPolling();
+            console.log("Launching Connection Error scene...");
+            this.launchConnectionErrorScene();
+        }
+
+        /*
         // Determina qué imagen mostrar según el estado
-        const imageKey = status === "Connected to server." ? 'online' : 'offline';
+        const imageKey = status ? 'online' : 'offline';
     
         // Crear la imagen correspondiente justo al lado del texto
-        this.serverStatusImage = this.add.image(870, 368, imageKey).setScale(0.8);
+        this.serverStatusImage = this.add.image(this.serverStatusLabel.x + this.serverStatusLabel.width + 10, 368, imageKey).setScale(0.8);
+        */
+    }
+
+    launchConnectionErrorScene() {
+        if (this.scene.isActive('MainMenuScene')) {
+            this.scene.pause('MainMenuScene');
+            this.scene.launch('ConnectionError', { originScene: 'MainMenuScene' });
+        }
     }
 
     async logoutUser() {

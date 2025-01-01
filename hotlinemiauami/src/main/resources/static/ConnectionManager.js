@@ -1,7 +1,9 @@
 class ConnectionManager {
-    constructor() {
+    constructor(game) {
+        this.game = game;
         this.serverStatus = true;
         this.activeStatus = true;
+        this.connectedUsers = 0;
         this.pollInterval = null;
         this.username = null;
     }
@@ -13,47 +15,87 @@ class ConnectionManager {
         console.log("Starting connection poll...");
         this.pollInterval = setInterval(async () => {
             console.log("Connection poll again...");
-            try {
-                const serverResponse = await fetch('/api/status/connection');
-                if (serverResponse.ok) {
-                    if (!this.serverStatus) {
-                        console.log('Server reconnected');
-                    }
-                    this.serverStatus = true;
-                } else {
-                    throw new Error('Server unreachable');
-                }
-
+            await this.fetchServerStatus();
+            if(this.serverStatus) {
+                console.log("Entering user fetches...");
                 if(this.username) {
-                    const activeResponse = await fetch('/api/status/users');
-                    if(activeResponse.ok) {
-                        const { connectedUsers } = await activeResponse.json();
-                        if(connectedUsers.includes(this.username)) {
-                            this.activeStatus = true;
-                        } else {
-                            console.warn('User is innactive.');
-                            this.activeStatus = false;
-                            this.stopPolling();
-                        }
-                    } else {
-                        throw new Error('Server unreachable');
-                    }
+                    this.fetchActiveStatus();
                 }
-
-            } catch (error) {
-                if (this.serverStatus) {
-                    console.log('Server disconnected');
-                }
-                this.serverStatus = false;
-                this.activeStatus = false;
-            }
-
-            if(this.activeStatus && this.serverStatus) {
-                console.log('ONLINE');
+                this.fetchConnectedUsers();
             } else {
-                console.log('OFFLINE');
+                this.connectedUsers = 0
+                this.game.events.emit('connected-users-updated', this.connectedUsers);
             }
-        }, 4000);
+        }, 1000);
+    }
+
+    async fetchServerStatus() {
+        try {
+            const serverResponse = await fetch('/api/status/connection');
+            if (serverResponse.ok) {
+                if (!this.serverStatus) {
+                    console.log('Server reconnected');
+                }
+                this.serverStatus = true;
+                this.game.events.emit('server-status-updated', this.serverStatus);
+            } else {
+                this.serverStatus = false;
+                this.game.events.emit('server-status-updated', this.serverStatus);
+                throw new Error('Server unreachable');
+            }
+        } catch(error) {
+            if (this.serverStatus) {
+                console.log('Server disconnected');
+            }
+            this.serverStatus = false;
+            this.game.events.emit('server-status-updated', this.serverStatus);
+        }
+    }
+
+    async fetchActiveStatus() {
+        try {
+            const usersResponse = await fetch('/api/status/users');
+            if(usersResponse.ok) {
+                const { connectedUsers } = await usersResponse.json();
+                if(connectedUsers.includes(this.username)) {
+                    this.activeStatus = true;
+                    this.game.events.emit('user-status-updated', this.activeStatus);
+                } else {
+                    console.warn('User is innactive.');
+                    this.activeStatus = false;
+                    this.stopPolling();
+                    this.game.events.emit('user-status-updated', this.activeStatus);
+                }
+            } else {
+                this.activeStatus = false;
+                this.game.events.emit('user-status-updated', this.activeStatus);
+                throw new Error('Server unreachable');
+            }
+        } catch (error) {
+            console.log("Error fetching users:", error);
+            this.activeStatus = false;
+            this.game.events.emit('user-status-updated', this.activeStatus);
+        }
+    }
+
+    async fetchConnectedUsers() {
+        try {
+            const usersResponse = await fetch('/api/status/connected-users');
+            if (usersResponse.ok) {
+                const data = await usersResponse.json();
+                const connectedUsers = data.connectedUsers;
+                this.connectedUsers = connectedUsers;
+                this.game.events.emit('connected-users-updated', this.connectedUsers);
+            } else {
+                console.error('Error fetching connected users:', usersResponse.statusText);
+                this.connectedUsers = 0;
+                this.game.events.emit('connected-users-updated', this.connectedUsers);
+            }
+        } catch (error) {
+            console.error('Error connecting to server:', error);
+            this.connectedUsers = 0
+            this.game.events.emit('connected-users-updated', this.connectedUsers);
+        }
     }
 
     stopPolling() {

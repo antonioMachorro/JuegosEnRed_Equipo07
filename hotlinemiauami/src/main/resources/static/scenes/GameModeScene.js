@@ -38,7 +38,7 @@ class GameModeScene extends Phaser.Scene {
             .setOrigin(0.5)
             .setInteractive();
         redButton.on('pointerdown', () => {
-            this.scene.start('LobbyScene');
+            this.scene.start('RoomScene');
         });
         
 
