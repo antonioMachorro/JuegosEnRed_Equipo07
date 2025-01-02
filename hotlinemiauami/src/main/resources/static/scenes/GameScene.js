@@ -158,6 +158,8 @@ class GameScene extends Phaser.Scene {
     }
       */
 
+
+    {
     this.input.keyboard.on('keydown', (event) => {
       const key = event.code;
       if (key in this.keyStates) {
@@ -518,6 +520,7 @@ class GameScene extends Phaser.Scene {
 
     this.floor3ClosedDoor.setVisible(false);
     this.floor3ClosedDoor.body.enable = false;
+  }
 
     //Variable de puerta
     this.puerta1IsClosed = false;
@@ -972,7 +975,10 @@ class GameScene extends Phaser.Scene {
       this.scene.pause();
     });
 
-    //Animations
+
+    // Animaciones
+    {
+    //Animaciones policia
     this.anims.create({
       key: "police_idle",
       frames: this.anims.generateFrameNames("policia", {
@@ -1027,6 +1033,63 @@ class GameScene extends Phaser.Scene {
         frameRate: 15,
         repeat: -1,
       });
+
+      this.anims.create({
+        key: "police_idle_shine",
+        frames: this.anims.generateFrameNames("policia", {
+          prefix: "idleshine",
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 6,
+        repeat: -1,
+      });
+
+      this.anims.create({
+        key: "police_run_shine",
+        frames: this.anims.generateFrameNames("policia", {
+          prefix: "runshine",
+          end: 5,
+          zeroPad: 3,
+        }),
+        frameRate: 6,
+        repeat: -1,
+      });
+
+      this.anims.create({
+        key: "police_jump_shine",
+        frames: this.anims.generateFrameNames("policia", {
+          prefix: "jumpshine",
+          end: 8,
+          zeroPad: 3,
+        }),
+        frameRate: 10,
+        repeat: -1,
+      });
+
+      this.anims.create({
+        key: "police_wall_shine",
+        frames: this.anims.generateFrameNames("policia", {
+          prefix: "wallshine",
+          end: 3,
+          zeroPad: 3,
+        }),
+        frameRate: 6,
+        repeat: -1,
+      });
+
+      this.anims.create({
+        key: "police_wall_jump_shine",
+        frames: this.anims.generateFrameNames("policia", {
+          prefix: "walljumpshine",
+          end: 9,
+          zeroPad: 3,
+        }),
+        frameRate: 15,
+        repeat: -1,
+      });
+
+
 
     //Animaciones ladron
     this.anims.create({
@@ -1146,6 +1209,8 @@ class GameScene extends Phaser.Scene {
         frameRate: 8,
         repeat: -1,
     });
+
+    }
 
     // Generar un objeto Modificador en una posición aleatoria
     this.spawnRandomModifier();
