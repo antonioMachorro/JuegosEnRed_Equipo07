@@ -6,25 +6,33 @@ class RoomSelectScene extends Phaser.Scene {
     }
 
     preload() {
-
+        this.load.image('menuPrincipal', './Interfaz/fondo2.png');
+        this.load.image('menuPrincipal', './Interfaz/menuPrincipal.png');
+        this.load.image('volver', './Interfaz/volver.png');
+        this.load.image('marcoPause', './Interfaz/marcoPause.png');
+        this.load.image('crearSala', './Interfaz/crearSala.png');
     }
 
     create() {
 
         const {width, height} = this.scale;
 
-        this.add.text(width/2, 50, 'Selecciona un lobby...', {
+        this.Interfaz = this.add.image(960, 500, 'menuPrincipal').setScale(3.8);
+        this.Interfaz = this.add.image(960, 540, 'marcoPause').setScale(3.2);
+
+        this.add.text(width/2, 280, 'Selecciona un lobby...', {
             fontFamily: 'retro-computer',
-            fontSize: '32px',
+            fontSize: '48px',
             fill: '#fff',
         }).setOrigin(0.5);
 
         const listContainer = this.add.rectangle(
             width * 0.5,
-            height * 0.55,
-            width * 0.8,
-            height * 0.6,
-            0xffecd6
+            height * 0.5,
+            width * 0.4,
+            height * 0.28,
+            0xfff,
+            0
         ).setOrigin(0.5);
 
         this.roomListContainer = this.add.container(listContainer.x - (listContainer.displayWidth/2), 
@@ -37,7 +45,7 @@ class RoomSelectScene extends Phaser.Scene {
         const mask = maskShape.createGeometryMask();
         this.roomListContainer.setMask(mask);
 
-        const refreshButton = this.add.text(100, 100, 'Refresh', {
+        const refreshButton = this.add.text(width/2, 800, 'Refresh', {
             fontFamily: 'retro-computer',
             fontSize: '32px',
             fill: '#fff',
@@ -64,6 +72,14 @@ class RoomSelectScene extends Phaser.Scene {
 
             this.roomListContainer.y = (listContainer.y - listContainer.displayHeight / 2) + this.scrollY;
         });
+
+             const returnButton = this.add.image(960,1000, 'volver')
+             .setScale(2.0)
+             .setOrigin(0.5)
+             .setInteractive();
+             returnButton.on('pointerdown', () => {
+                 this.scene.start('RoomScene');
+             });
 
         this.loadRoomData();
     }
@@ -125,7 +141,7 @@ class RoomSelectScene extends Phaser.Scene {
             const textStyle = { 
                 fontFamily: 'retro-computer',
                 fontSize: '14px',
-                color: '#000000'
+                color: '#000'
             }
 
             const roomId = this.add.text(10, 15, room.roomId, textStyle);

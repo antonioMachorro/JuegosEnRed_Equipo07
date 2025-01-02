@@ -4,20 +4,40 @@ class RoomCreateScene extends Phaser.Scene {
     }
 
     preload() {
-
+        this.load.image('menuPrincipal', './Interfaz/menuPrincipal.png');
+        this.load.image('volver', './Interfaz/volver.png');
+        this.load.image('marcoPause', './Interfaz/marcoPause.png');
+        this.load.image('crearBoton', './Interfaz/crearBoton.png');
     }
 
     create() {
         const {width, height} = this.scale;
+
+        const camera = this.cameras.main;
+                camera.setBounds(370, 210, 960, 540);
+                camera.setZoom(2.6);
+
+        this.Interfaz = this.add.image(960, 540, 'menuPrincipal');
+        this.Interfaz = this.add.image(960, 540, 'marcoPause');
+
+        // Botón para volver
+        const returnButton = this.add.image(960,720, 'volver')
+        .setScale(0.8)
+        .setOrigin(0.5)
+        .setInteractive();
+        returnButton.on('pointerdown', () => {
+            this.scene.start('RoomScene');
+        });
+
 
         const userData = this.registry.get('userData');
         if(!userData || !userData.username) {
             console.warn("No hay usuario guardado en el registro!");
         }
 
-        this.add.text(width/2, height/2 - 100, 'Ingresa el nombre del lobby...', {
+        this.add.text(width/2, 460, 'Introduce el nombre de la sala...', {
             fontFamily: 'retro-computer',
-            fontSize: '82px',
+            fontSize: '16px',
             fill: '#fff',
         }).setOrigin(0.5);
 
@@ -32,10 +52,8 @@ class RoomCreateScene extends Phaser.Scene {
         this.roomNameInput.style.padding = '8px';
         document.body.appendChild(this.roomNameInput);
 
-        this.createButton = this.add.text(width/2, height/2 + 50, 'CREAR', {
-            fontFamily: 'retro-computer',
-            fontSize: '82px',
-            fill: '#fff',
+        this.createButton = this.add.image(width/2, height/2 + 50, 'crearBoton', {
+   
         }).setOrigin(0.5)
         .setInteractive()
         .on('pointerdown', () => {

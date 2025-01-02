@@ -24,11 +24,11 @@ html, body {
 
 #chat-container {
     position: absolute;
-    top: 50%;
-    left: 40%;
+    top: 55%;
+    left: 30%;
     transform: translate(-50%, -50%);
-    width: 600px;
-    height: 450px;
+    width: 350px;
+    height: 400px;
     background:  #2e003e;
     border: none;
     border-radius: 0px;

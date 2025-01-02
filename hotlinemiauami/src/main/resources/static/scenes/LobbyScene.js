@@ -8,6 +8,8 @@ class LobbyScene extends Phaser.Scene {
         // Cargar imágenes y sprites
         this.load.image('fondo', './Interfaz/champSelect.png');
         this.load.image('volver', './Interfaz/volver.png');
+        this.load.image('listo', './Interfaz/listoPartida.png');
+        this.load.image('cancelar', './Interfaz/cancelarPartida.png');
 
         this.load.atlas(
             "policia",
@@ -132,21 +134,33 @@ class LobbyScene extends Phaser.Scene {
             repeat: -1,
         });
 
-        const policia = this.add.sprite(1125, 550, "policia");
+        const policia = this.add.sprite(975, 600, "policia");
         policia.play("police_run");
 
-        const ladron = this.add.sprite(1200, 550, "ladron");
+        const ladron = this.add.sprite(1175, 600, "ladron");
         ladron.play("thief_run");
 
-        this.player1Text = this.add.text(width/2 - 200, 400, 'Jugador 1: ???', {
+        this.salaText = this.add.text(width/2 - 30, 415, 'SALA', {
             fontFamily: 'retro-computer',
-            fontSize: '16px',
+            fontSize: '24px',
             color: '#ffffff'
         });
 
-        this.player2Text = this.add.text(width/2 + 200, 400, 'Jugador 2: ???', {
+        this.salaText = this.add.text(width/2 - 210, 415, 'CHAT', {
             fontFamily: 'retro-computer',
-            fontSize: '16px',
+            fontSize: '24px',
+            color: '#ffffff'
+        });
+
+        this.player1Text = this.add.text(900, 475, 'Jugador 1: ???', {
+            fontFamily: 'retro-computer',
+            fontSize: '12px',
+            color: '#ffffff'
+        });
+
+        this.player2Text = this.add.text(900, 525, 'Jugador 2: ???', {
+            fontFamily: 'retro-computer',
+            fontSize: '12px',
             color: '#ffffff'
         });
 
@@ -184,26 +198,14 @@ class LobbyScene extends Phaser.Scene {
         this.initChat(userData.username);
         //this.fetchMessages();
 
-        const chatText = this.add.text(845, 395, 'Chat', {
-            fontFamily: 'retro-computer',
-            fontSize: '16px',
-            fill: '#ffffff'
-        }).setOrigin(0.5);
-
-        const idText = this.add.text(chatText.x + 200, chatText.y, `ROOM ID: ${data.roomData.roomId}`, {
+        const roomNameText = this.add.text(1100,400, `ROOM: ${data.roomData.roomName}`, {
             fontFamily: 'retro-computer', 
-            fontSize: '8px', 
-            fill: '#ffffff' 
-        }).setOrigin(0.5);
-
-        const roomNameText = this.add.text(idText.x, idText.y + 20, `ROOM: ${data.roomData.roomName}`, {
-            fontFamily: 'retro-computer', 
-            fontSize: '8px', 
+            fontSize: '12px', 
             fill: '#ffffff' 
         }).setOrigin(0.5);
 
         //Boton para alistarse
-        this.readyButton = this.add.text(width/2, returnButton.y - 100, '[LISTO]', {
+        this.readyButton = this.add.image(1075, 600, 'listo', {
             fontFamily: 'retro-computer',
             fontSize: '16px',
             color: '#ffffff'
