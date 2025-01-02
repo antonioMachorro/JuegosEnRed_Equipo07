@@ -21,7 +21,7 @@ class ConnectionManager {
                 if(this.username) {
                     this.fetchActiveStatus();
                 }
-                this.fetchConnectedUsers();
+                //this.fetchConnectedUsers();
             } else {
                 this.connectedUsers = 0
                 this.game.events.emit('connected-users-updated', this.connectedUsers);

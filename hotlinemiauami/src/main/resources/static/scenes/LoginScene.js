@@ -174,7 +174,7 @@ class LoginScene extends Phaser.Scene {
 
         this.registry.set("userData", { username: data.username });
         this.game.connectionManager.setUsername(data.username);
-        this.game.connectionManager.startPolling();
+        //this.game.connectionManager.startPolling();
 
         this.scene.start("MainMenuScene");
       } else if (response.status === 404) {

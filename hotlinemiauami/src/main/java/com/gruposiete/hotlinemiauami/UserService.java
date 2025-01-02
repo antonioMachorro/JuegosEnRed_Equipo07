@@ -29,7 +29,7 @@ public class UserService {
     @Value("${data.folder:data}")  // Default to "data/" if not specified
     private String dataFolder;
 
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
 
     public UserService(UserDAO userDAO, ApiStatusService apiStatusService) {
         this.userDAO = userDAO;
