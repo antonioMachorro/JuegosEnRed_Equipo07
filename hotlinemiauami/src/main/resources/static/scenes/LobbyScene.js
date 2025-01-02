@@ -39,6 +39,36 @@ class LobbyScene extends Phaser.Scene {
             const message = event.data;
             console.log("Received message: ", message);
 
+            let messObj;
+            try {
+                messObj = JSON.parse(message);
+            } catch(error) {
+                console.warn("Non-JSON message: ", message);
+                this.appendChatMessage(message);
+                return;
+            }
+
+            if(messObj.type === "ROOM_UPDATED") {
+                this.roomData.creatorUsername = messObj.creatorUsername;
+                this.roomData.secondUsername = messObj.secondUsername;
+                this.roomData.creatorReady = messObj.creatorReady;
+                this.roomData.secondReady = messObj.secondReady;
+                this.updateReadyLabels();
+
+                if(this.roomData.creatorReady && this.roomData.secondReady) {
+                    this.scene.start('GameScene', {
+                        roomData: this.roomData,
+                        userData: data.userData
+                    });
+                }
+            } else if(messObj.type === "CHAT") {
+                const chat = `${messObj.username}: ${messObj.content}`;
+                this.appendChatMessage(chat);
+            } else {
+                this.appendChatMessage(message);
+            }
+
+            /*
             const chatMessages = document.getElementById('chat-messages');
             if(chatMessages) {
                 const div = document.createElement('div');
@@ -46,6 +76,7 @@ class LobbyScene extends Phaser.Scene {
                 chatMessages.appendChild(div);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
+            */
         };
 
         this.chatSocket.onclose = (evt) => {
@@ -53,6 +84,7 @@ class LobbyScene extends Phaser.Scene {
         }
 
         console.log(data.roomData);
+        this.roomData = data.roomData;
 
         // Camara
         const camera = this.cameras.main;
@@ -106,6 +138,20 @@ class LobbyScene extends Phaser.Scene {
         const ladron = this.add.sprite(1200, 550, "ladron");
         ladron.play("thief_run");
 
+        this.player1Text = this.add.text(width/2 - 200, 400, 'Jugador 1: ???', {
+            fontFamily: 'retro-computer',
+            fontSize: '16px',
+            color: '#ffffff'
+        });
+
+        this.player2Text = this.add.text(width/2 + 200, 400, 'Jugador 2: ???', {
+            fontFamily: 'retro-computer',
+            fontSize: '16px',
+            color: '#ffffff'
+        });
+
+        this.updateReadyLabels();
+
         // Limpiar el chat y ocultarlo cuando se cierra la escena
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
 
@@ -155,8 +201,33 @@ class LobbyScene extends Phaser.Scene {
             fontSize: '8px', 
             fill: '#ffffff' 
         }).setOrigin(0.5);
+
+        //Boton para alistarse
+        this.readyButton = this.add.text(width/2, returnButton.y - 100, '[LISTO]', {
+            fontFamily: 'retro-computer',
+            fontSize: '16px',
+            color: '#ffffff'
+        }).setOrigin(0.5)
+        .setInteractive()
+        .on('pointerdown', () => {
+            const msg = {
+                type: "SET_READY",
+                username: data.userData.username,
+                isReady: true
+            };
+            this.chatSocket.send(JSON.stringify(msg));
+        });
     }
 
+    updateReadyLabels() {
+        const player2 = this.roomData.secondUsername || "[Esperando...]";
+
+        const player1Status = this.roomData.creatorReady ? "(LISTO)" : "(No listo...)";
+        const player2Status = this.roomData.secondReady ? "(LISTO)" : "(No listo...)";
+
+        this.player1Text.setText(`Jugador 1: ${this.roomData.creatorUsername} --- ${player1Status}`);
+        this.player2Text.setText(`Jugador 2: ${player2} --- ${player2Status}`);
+    }
 
     showChat() {
         const chatContainer = document.getElementById('chat-container');
@@ -210,10 +281,16 @@ class LobbyScene extends Phaser.Scene {
         // Envio de mensajes
         newChat.addEventListener('keydown', async (event) => {
             if (event.key === 'Enter' && newChat.value.trim() !== '') {
+                console.log("Sending chat...");
                 const message = newChat.value.trim();
                 newChat.value = ''; // Limpiar el campo de entrada
 
-                this.chatSocket.send(`${username}: ${message}`);
+                const chatMessage = {
+                    type: "CHAT",
+                    username: username,
+                    content: message
+                };
+                this.chatSocket.send(JSON.stringify(chatMessage));
 
                 // Enviar el mensaje al servidor
                 /*
@@ -246,6 +323,16 @@ class LobbyScene extends Phaser.Scene {
 
             }
         });
+    }
+
+    appendChatMessage(msg) {
+        const chatMessages = document.getElementById('chat-messages');
+        if(chatMessages) {
+            const div = document.createElement('div');
+            div.textContent = msg;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
     }
 
     // Función para filtrar palabras malsonantes

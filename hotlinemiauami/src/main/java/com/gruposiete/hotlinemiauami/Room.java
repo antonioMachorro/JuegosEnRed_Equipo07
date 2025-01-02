@@ -10,6 +10,9 @@ public class Room {
     private String secondUsername;
     private boolean fullRoom;
 
+    private boolean creatorReady;
+    private boolean secondReady;
+
     @JsonCreator
     public Room(@JsonProperty("roomId") String roomId,
                 @JsonProperty("roomName") String roomName,
@@ -63,4 +66,19 @@ public class Room {
         this.fullRoom = fullRoom;
     }
 
+    public boolean getCreatorReady() {
+        return this.creatorReady;
+    }
+
+    public void setCreatorReady(boolean creatorReady) {
+        this.creatorReady = creatorReady;
+    }
+
+    public boolean getSecondReady() {
+        return this.secondReady;
+    }
+
+    public void setSecondReady(boolean secondReady) {
+        this.secondReady = secondReady;
+    }
 }
