@@ -128,7 +128,7 @@ public class RoomChatWebSocketHandler extends TextWebSocketHandler {
         broadcastRoomUpdate(roomId, room);
     }
 
-    private void broadcastRoomUpdate(String roomId, Room room) throws IOException {
+    public void broadcastRoomUpdate(String roomId, Room room) throws IOException {
         ObjectNode update = objectMapper.createObjectNode();
         update.put("type", "ROOM_UPDATED");
         update.put("roomId", room.getRoomId());

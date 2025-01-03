@@ -1,5 +1,6 @@
 package com.gruposiete.hotlinemiauami;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class RoomController {
     
     @Autowired
     private RoomService roomService;
+
+    @Autowired
+    private RoomChatWebSocketHandler roomChatWebSocketHandler;
 
     public RoomController(RoomService roomService) {
         this.roomService = roomService;
@@ -50,6 +54,13 @@ public class RoomController {
         if(joinedRoom == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        try {
+            roomChatWebSocketHandler.broadcastRoomUpdate(roomId, joinedRoom);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return ResponseEntity.ok(joinedRoom);
     }
 
@@ -77,6 +88,13 @@ public class RoomController {
         if(room == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        try {
+            roomChatWebSocketHandler.broadcastRoomUpdate(roomId, room);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
         return ResponseEntity.ok(room);
     }
     

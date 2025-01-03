@@ -103,7 +103,25 @@ class LobbyScene extends Phaser.Scene {
             .setInteractive();
 
         returnButton.on('pointerdown', () => {
-            this.scene.start('GameModeScene');
+            try {
+                const response = fetch(`/rooms/${this.roomData.roomId}/leave`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: userData.username
+                    }),
+                });
+
+                if (!response.ok) {
+                    console.error("Error al salir de la sala: ", response.text());
+                }
+            } catch (error) {
+                console.error("Error al conectar con servidor: ", error);
+            } finally {
+                this.scene.start('GameModeScene');
+            }
         });
 
         //Limpiar el chat antes de mostrarlo
