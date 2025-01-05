@@ -35,6 +35,15 @@ class LobbyScene extends Phaser.Scene {
 
         this.chatSocket.onopen = () => {
             console.log("Websocket connected to room Id: ", data.roomData.roomId);
+
+            // Mensaje de usuario se conectó al chat 
+            const enteredMessage = {
+                type: "CHAT",
+                username: userData.username,
+                content: "entró al chat.",
+                isSystem: true
+            };
+            this.chatSocket.send(JSON.stringify(enteredMessage));
         };
 
         this.chatSocket.onmessage = (event) => {
@@ -64,8 +73,12 @@ class LobbyScene extends Phaser.Scene {
                     });
                 }
             } else if(messObj.type === "CHAT") {
-                const chat = `${messObj.username}: ${messObj.content}`;
-                this.appendChatMessage(chat);
+                if(messObj.isSystem){
+                    this.appendSystemMessage(`${messObj.username} ${messObj.content}`);
+                } else {
+                    const chat = `${messObj.username}: ${messObj.content}`;
+                    this.appendChatMessage(chat);
+                }
             } else {
                 this.appendChatMessage(message);
             }
@@ -277,7 +290,7 @@ class LobbyScene extends Phaser.Scene {
         const newChat = chatInput.cloneNode(true);
         chatInput.parentNode.replaceChild(newChat, chatInput);
 
-        // Mensaje de usuario se conectó al chat 
+        /*
         try {
             const response = fetch('/api/chat', {
                 method: 'POST',
@@ -297,6 +310,7 @@ class LobbyScene extends Phaser.Scene {
         } catch (error) {
             console.error("Error al conectar con servidor: ", error);
         }
+        */
 
         // Envio de mensajes
         newChat.addEventListener('keydown', async (event) => {
@@ -354,6 +368,17 @@ class LobbyScene extends Phaser.Scene {
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
     }
+
+    appendSystemMessage(msg) {
+        const chatMessages = document.getElementById('chat-messages');
+        if (chatMessages) {
+          const div = document.createElement('div');
+          div.textContent = `{${msg}}`;
+          div.style.color = '#D478E9'; 
+          chatMessages.appendChild(div);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+      }
 
     // Función para filtrar palabras malsonantes
     filterProfanity(message) {

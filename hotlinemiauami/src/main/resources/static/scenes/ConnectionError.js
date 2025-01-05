@@ -8,7 +8,7 @@ class ConnectionError extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('marco', './Interfaz/marcoPause.png');
+        this.load.image('marcoPause', './Interfaz/marcoPause.png');
         this.load.image("volver", "./Interfaz/volver.png");
     }
 
@@ -20,7 +20,7 @@ class ConnectionError extends Phaser.Scene {
         this.overlay.fillStyle(0xff176c, 0.3);
         this.overlay.fillRect(0, 0, width, height);
 
-        this.interfaceFondoPause = this.add.image(960,500,'marco').setScale(3);
+        this.interfaceFondoPause = this.add.image(960,500,'marcoPause').setScale(3);
 
        // Titulo
         const errorTitulo = this.add.text(width / 2, 300, 'ERROR DE CONEXIÓN', {
@@ -47,10 +47,9 @@ class ConnectionError extends Phaser.Scene {
         
         continueButton.on('pointerdown', () => {
             this.scene.stop(); // Detener la escena de error
-            this.scene.start(this.originScene); // Cambia directamente a la escena original
+            this.game.connectionManager.startPolling(1000);
+            this.scene.resume(this.originScene); // Cambia directamente a la escena original
         });
-
-
     }
 }
 

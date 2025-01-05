@@ -2,12 +2,11 @@ class ConnectionManager {
     constructor(game) {
         this.game = game;
         this.serverStatus = true;
-        this.activeStatus = true;
-        this.connectedUsers = 0;
         this.pollInterval = null;
-        this.username = null;
+        this.alreadyDisconnected = false;
     }
 
+    /*
     startPolling() {
         
         if(this.pollInterval) return;
@@ -28,8 +27,39 @@ class ConnectionManager {
             }
         }, 1000);
     }
+    */
+
+    startPolling(interval = 1000) {
+        this.stopPolling();
+        this.alreadyDisconnected = false;
+
+        console.log("Starting poll...")
+
+        this.fetchServerStatus();
+
+        this.pollInterval = setInterval(() => {
+            this.fetchServerStatus();
+        }, interval)
+    }
+
+    stopPolling() {
+        if(this.pollInterval) {
+
+            console.log("Stopping poll...");
+
+            clearInterval(this.pollInterval);
+            this.pollInterval = null;
+        }
+    }
+
+
 
     async fetchServerStatus() {
+
+        if(this.alreadyDisconnected) {
+            return;
+        }
+
         try {
             const serverResponse = await fetch('/api/status/connection');
             if (serverResponse.ok) {
@@ -39,15 +69,18 @@ class ConnectionManager {
                 this.serverStatus = true;
                 this.game.events.emit('server-status-updated', this.serverStatus);
             } else {
-                this.serverStatus = false;
-                this.game.events.emit('server-status-updated', this.serverStatus);
-                throw new Error('Server unreachable');
+                this.handleOffline();
             }
         } catch(error) {
-            if (this.serverStatus) {
-                console.log('Server disconnected');
-            }
+            this.handleOffline();
+        }
+    }
+
+    handleOffline() {
+        if(!this.alreadyDisconnected) {
+            console.log('Server disconnected');
             this.serverStatus = false;
+            this.alreadyDisconnected = true;
             this.game.events.emit('server-status-updated', this.serverStatus);
         }
     }
@@ -95,14 +128,6 @@ class ConnectionManager {
             console.error('Error connecting to server:', error);
             this.connectedUsers = 0
             this.game.events.emit('connected-users-updated', this.connectedUsers);
-        }
-    }
-
-    stopPolling() {
-        if (this.pollInterval) {
-            clearInterval(this.pollInterval);
-            this.pollInterval = null;
-            console.log("Polling stopped...");
         }
     }
 

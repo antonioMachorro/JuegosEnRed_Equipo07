@@ -1,4 +1,6 @@
-class GameModeScene extends Phaser.Scene {
+import BaseScene from "./BaseScene.js";
+
+class GameModeScene extends BaseScene {
     constructor() {
         super({ key: 'GameModeScene' });
     }
@@ -13,6 +15,8 @@ class GameModeScene extends Phaser.Scene {
 
     create() {
         const { width, height } = this.scale;
+
+        super.create();
 
         this.add.image(960,540,'mododejuego');
 

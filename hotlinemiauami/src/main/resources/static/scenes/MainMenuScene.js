@@ -23,7 +23,8 @@ class MainMenuScene extends BaseScene {
 
         super.create();
 
-        //this.userCountText = null;
+        this.userCountText = null;
+        this.userCountNum = null;
         this.serverStatusLabel = null;
         this.serverStatusImage = null;
 
@@ -142,15 +143,22 @@ class MainMenuScene extends BaseScene {
             fill: '#ffffff'
         })
 
+        /*
         this.serverStatusLabel = this.add.text(615, 360, 'Estado del servidor:', {
             fontFamily: 'retro-computer',
             fontSize: '16px',
             fill: '#ffffff'
-        });
+        });*/
 
         this.game.events.on('server-status-updated', this.updateServerStatus, this);
         //this.game.events.on('user-status-updated', this.updateServerStatus, this);
         this.game.events.on('connected-users-updated', this.updateUserCount, this);
+        this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            console.log("MainMenuScene shutting down, clearing interval");
+            clearInterval(this.fetchIntervalId);
+        });
+
+        this.fetchConnectedUsers();
 
     }
 
@@ -203,7 +211,6 @@ class MainMenuScene extends BaseScene {
         sendActivityLoop();
     }
 
-    /*
     async fetchConnectedUsers() {
 
         this.fetchIntervalId = setInterval(async () => {
@@ -223,7 +230,6 @@ class MainMenuScene extends BaseScene {
             }
         }, 1000);
     }
-*/
 
     updateUserCount(count) {
         if (this.userCountNum) {
@@ -278,6 +284,17 @@ class MainMenuScene extends BaseScene {
     
     updateServerStatus(status) {
         // Elimina la imagen anterior si existe
+
+        if(!status) {
+            console.warn("Server offline!");
+            this.scene.launch('ConnectionError', {originScene: this.scene.key});
+            this.game.connectionManager.stopPolling();
+            this.scene.pause(this.scene.key);
+        } else {
+            console.log("Server is online again!");
+        }
+
+        /*
         if (this.serverStatusImage) {
             this.serverStatusImage.destroy();
         }
