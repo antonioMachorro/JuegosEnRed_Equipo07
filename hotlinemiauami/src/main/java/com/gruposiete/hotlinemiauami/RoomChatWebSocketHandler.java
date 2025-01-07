@@ -78,7 +78,6 @@ public class RoomChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        System.out.println("Message received: " + message.getPayload());
         String payload = message.getPayload();
         JsonNode json = objectMapper.readTree(payload);
 
@@ -89,6 +88,27 @@ public class RoomChatWebSocketHandler extends TextWebSocketHandler {
                 break;
             case "SET_READY":
                 handleSetReady(session, json);
+                break;
+            case "LOCAL_PLAYER_UPDATE":
+                handleLocalPlayerUpdate(session, json);
+                break;
+            case "SPAWN_ITEM":
+                handleItemSpawn(session, json);
+                break;
+            case "SCENE_READY":
+                handleSceneReady(session, json);
+                break;
+            case "COLLECT_ITEM":
+                handleCollectItem(session, json);
+                break;
+            case "ITEM_USED":
+                handleUseItem(session, json);
+                break;
+            case "TRAMPILLA_USED":
+                handleTrampilla(session, json);
+                break;
+            case "DOOR_USED":
+                handleDoor(session, json);
                 break;
             default:
                 break;
@@ -126,6 +146,173 @@ public class RoomChatWebSocketHandler extends TextWebSocketHandler {
         }
 
         broadcastRoomUpdate(roomId, room);
+    }
+
+    public void handleLocalPlayerUpdate(WebSocketSession session, JsonNode json) throws IOException {
+        String roomId = (String) session.getAttributes().get("roomId");
+        if(roomId == null) {
+            return;
+        }
+
+        boolean isPolice = json.get("isPolice").asBoolean();
+        double x = json.get("x").asDouble();
+        double y = json.get("y").asDouble();
+        boolean facingRight = json.get("facingRight").asBoolean();
+        String animKey = json.get("animKey").asText();
+
+        ObjectNode update = objectMapper.createObjectNode();
+        update.put("type", "OTHER_PLAYER_UPDATE");
+        update.put("isPolice", isPolice);
+        update.put("x", x);
+        update.put("y", y);
+        update.put("facingRight", facingRight);
+        update.put("animKey", animKey);
+
+        Set<WebSocketSession> sessions = roomSessions.get(roomId);
+        if(sessions == null) return;
+
+        TextMessage msg = new TextMessage(update.toString());
+        for(WebSocketSession ws : sessions) {
+            if(ws.isOpen() && ws != session) {
+                ws.sendMessage(msg);
+            }
+        }
+    }
+
+    public void handleItemSpawn(WebSocketSession session, JsonNode json) throws IOException{
+        String roomId = (String) session.getAttributes().get("roomId");
+        if(roomId == null) {
+            return;
+        }
+
+        double x = json.get("x").asDouble();
+        double y = json.get("y").asDouble();
+
+        ObjectNode spawn = objectMapper.createObjectNode();
+        spawn.put("type", "SPAWN_ITEM");
+        spawn.put("x", x);
+        spawn.put("y", y);
+
+        Set<WebSocketSession> sessions = roomSessions.get(roomId);
+        if(sessions == null) return;
+
+        TextMessage msg = new TextMessage(spawn.toString());
+        for(WebSocketSession ws : sessions) {
+            if(ws.isOpen() && ws != session) {
+                ws.sendMessage(msg);
+            }
+        }
+    }
+
+    public void handleSceneReady(WebSocketSession session, JsonNode json) throws IOException{
+        String roomId = (String) session.getAttributes().get("roomId");
+        if(roomId == null) {
+            return;
+        }
+
+        ObjectNode ready = objectMapper.createObjectNode();
+        ready.put("type", "SCENE_READY");
+
+        Set<WebSocketSession> sessions = roomSessions.get(roomId);
+        if(sessions == null) return;
+
+        TextMessage msg = new TextMessage(ready.toString());
+        for(WebSocketSession ws : sessions) {
+            if(ws.isOpen() && ws != session) {
+                ws.sendMessage(msg);
+            }
+        }
+    }
+
+    public void handleCollectItem(WebSocketSession session, JsonNode json) throws IOException{
+        String roomId = (String) session.getAttributes().get("roomId");
+        if(roomId == null) {
+            return;
+        }
+
+        String itemType = json.get("item").asText();
+
+        ObjectNode item = objectMapper.createObjectNode();
+        item.put("type", "COLLECT_ITEM");
+        item.put("item", itemType);
+
+        Set<WebSocketSession> sessions = roomSessions.get(roomId);
+        if(sessions == null) return;
+
+        TextMessage msg = new TextMessage(item.toString());
+        for(WebSocketSession ws : sessions) {
+            if(ws.isOpen() && ws != session) {
+                ws.sendMessage(msg);
+            }
+        }
+    }
+
+    public void handleUseItem(WebSocketSession session, JsonNode json) throws IOException{
+        String roomId = (String) session.getAttributes().get("roomId");
+        if(roomId == null) {
+            return;
+        }
+
+        ObjectNode item = objectMapper.createObjectNode();
+        item.put("type", "ITEM_USED");
+
+        Set<WebSocketSession> sessions = roomSessions.get(roomId);
+        if(sessions == null) return;
+
+        TextMessage msg = new TextMessage(item.toString());
+        for(WebSocketSession ws : sessions) {
+            if(ws.isOpen() && ws != session) {
+                ws.sendMessage(msg);
+            }
+        }
+    }
+
+    public void handleTrampilla(WebSocketSession session, JsonNode json) throws IOException{
+        String roomId = (String) session.getAttributes().get("roomId");
+        if(roomId == null) {
+            return;
+        }
+
+        int trampillaId = json.get("trampillaId").asInt();
+
+        ObjectNode trampilla = objectMapper.createObjectNode();
+        trampilla.put("type", "TRAMPILLA_USED");
+        trampilla.put("trampillaId", trampillaId);
+
+        Set<WebSocketSession> sessions = roomSessions.get(roomId);
+        if(sessions == null) return;
+
+        TextMessage msg = new TextMessage(trampilla.toString());
+        for(WebSocketSession ws : sessions) {
+            if(ws.isOpen() && ws != session) {
+                ws.sendMessage(msg);
+            }
+        }
+    }
+
+    public void handleDoor(WebSocketSession session, JsonNode json) throws IOException{
+        String roomId = (String) session.getAttributes().get("roomId");
+        if(roomId == null) {
+            return;
+        }
+
+        String door = json.get("door").asText();
+        String action = json.get("action").asText();
+
+        ObjectNode doorMsg = objectMapper.createObjectNode();
+        doorMsg.put("type", "DOOR_USED");
+        doorMsg.put("door", door);
+        doorMsg.put("action", action);
+
+        Set<WebSocketSession> sessions = roomSessions.get(roomId);
+        if(sessions == null) return;
+
+        TextMessage msg = new TextMessage(doorMsg.toString());
+        for(WebSocketSession ws : sessions) {
+            if(ws.isOpen() && ws != session) {
+                ws.sendMessage(msg);
+            }
+        }
     }
 
     public void broadcastRoomUpdate(String roomId, Room room) throws IOException {

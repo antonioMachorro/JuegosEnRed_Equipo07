@@ -1,6 +1,9 @@
 class GameScene extends Phaser.Scene {
-  constructor() {
-    super({ key: "GameScene" });
+  constructor(config = {}) {
+    super({ key: config.key || "GameScene" });
+
+    this.isOnline = false; 
+
     this.keyStates = {
       KeyW: false,
       KeyA: false,
@@ -43,8 +46,6 @@ class GameScene extends Phaser.Scene {
     this.load.image("trampilla", "./Objetos/trampilla.png");
     this.load.image("cajaItems", "./Objetos/cajaItems.png");
     this.load.image("escenario", "./Objetos/escenario.png");
-    this.load.image("openDoor", "./Objetos/openDoor.png");
-    this.load.image("closedDoor", "./Objetos/closeddoor.png");
     this.load.image("Marcador", "./Escenario/Marcador.png");
 
     this.load.image("carcelAbierta", "./Objetos/carcelAbierta.png");
@@ -93,8 +94,6 @@ class GameScene extends Phaser.Scene {
 
   create() {
 
-    console.warn("THIS IS NEW SHIT");
-
     // Ajustar la cámara
     const camera = this.cameras.main;
     camera.setBounds(370, 210, 960, 540);
@@ -123,41 +122,6 @@ class GameScene extends Phaser.Scene {
         imagen: "rosquilla",
       },
     };
-
-    
-    // Controles del jugador (policía y ladrón)
-    /*
-    if (this.registry.get("player1IsPolice")) {
-      this.policeControls = this.input.keyboard.addKeys({
-        up: "W",
-        left: "A",
-        down: "S",
-        right: "D",
-      });
-      this.policeInteract = this.input.keyboard.addKey(
-        Phaser.Input.Keyboard.KeyCodes.SPACE
-      );
-      this.thiefControls = this.input.keyboard.createCursorKeys();
-      this.thiefInteract = this.input.keyboard.addKey(
-        Phaser.Input.Keyboard.KeyCodes.SHIFT
-      );
-    } else {
-      this.policeControls = this.input.keyboard.createCursorKeys();
-      this.policeInteract = this.input.keyboard.addKey(
-        Phaser.Input.Keyboard.KeyCodes.SHIFT
-      );
-      this.thiefControls = this.input.keyboard.addKeys({
-        up: "W",
-        left: "A",
-        down: "S",
-        right: "D",
-      });
-      this.thiefInteract = this.input.keyboard.addKey(
-        Phaser.Input.Keyboard.KeyCodes.SPACE
-      );
-    }
-      */
-
 
     {
     this.input.keyboard.on('keydown', (event) => {
@@ -577,12 +541,26 @@ class GameScene extends Phaser.Scene {
               this.sound.play("teletransporte");
               this.teleportLadron(this.ObjectTrampilla2); // Teletransporta al ladrón a la trampilla 2
               this.startTrampillaCooldown(); // Activar el cooldown
+
+              if (this.isOnline) {
+                this.socket.send(JSON.stringify({
+                    type: 'TRAMPILLA_USED',
+                    trampillaId: 1
+                }));
+              }
           }
         } else {
           if (this.keyStates['Space'] && this.canUseTrampilla) {
             this.sound.play("teletransporte");
             this.teleportLadron(this.ObjectTrampilla2); // Teletransporta al ladrón a la trampilla 2
             this.startTrampillaCooldown(); // Activar el cooldown
+
+            if (this.isOnline) {
+              this.socket.send(JSON.stringify({
+                  type: 'TRAMPILLA_USED',
+                  trampillaId: 1
+              }));
+            }
           }
         }
       },
@@ -599,12 +577,26 @@ class GameScene extends Phaser.Scene {
               this.sound.play("teletransporte");
               this.teleportLadron(this.ObjectTrampilla1); // Teletransporta al ladrón a la trampilla 2
               this.startTrampillaCooldown(); // Activar el cooldown
+
+              if (this.isOnline) {
+                this.socket.send(JSON.stringify({
+                    type: 'TRAMPILLA_USED',
+                    trampillaId: 1
+                }));
+              }
           }
         } else {
           if (this.keyStates['Space'] && this.canUseTrampilla) {
             this.sound.play("teletransporte");
             this.teleportLadron(this.ObjectTrampilla1); // Teletransporta al ladrón a la trampilla 2
             this.startTrampillaCooldown(); // Activar el cooldown
+
+            if (this.isOnline) {
+              this.socket.send(JSON.stringify({
+                  type: 'TRAMPILLA_USED',
+                  trampillaId: 1
+              }));
+            }
           }
         }
       },
@@ -620,12 +612,26 @@ class GameScene extends Phaser.Scene {
                 this.sound.play("teletransporte");
                 this.teleportLadron(this.ObjectTrampilla4); // Teletransporta al ladrón a la trampilla 2
                 this.startTrampillaCooldown1(); // Activar el cooldown
+
+                if (this.isOnline) {
+                  this.socket.send(JSON.stringify({
+                      type: 'TRAMPILLA_USED',
+                      trampillaId: 2
+                  }));
+                }
             }
           } else {
             if (this.keyStates['Space'] && this.canUseTrampilla1) {
               this.sound.play("teletransporte");
               this.teleportLadron(this.ObjectTrampilla4); // Teletransporta al ladrón a la trampilla 2
               this.startTrampillaCooldown1(); // Activar el cooldown
+
+              if (this.isOnline) {
+                this.socket.send(JSON.stringify({
+                    type: 'TRAMPILLA_USED',
+                    trampillaId: 2
+                }));
+              }
             }
           }
         },
@@ -641,12 +647,26 @@ class GameScene extends Phaser.Scene {
                 this.sound.play("teletransporte");
                 this.teleportLadron(this.ObjectTrampilla3); // Teletransporta al ladrón a la trampilla 2
                 this.startTrampillaCooldown1(); // Activar el cooldown
+
+                if (this.isOnline) {
+                  this.socket.send(JSON.stringify({
+                      type: 'TRAMPILLA_USED',
+                      trampillaId: 2
+                  }));
+                }
             }
           } else {
             if (this.keyStates['Space'] && this.canUseTrampilla1) {
               this.sound.play("teletransporte");
               this.teleportLadron(this.ObjectTrampilla3); // Teletransporta al ladrón a la trampilla 2
               this.startTrampillaCooldown1(); // Activar el cooldown
+
+              if (this.isOnline) {
+                this.socket.send(JSON.stringify({
+                    type: 'TRAMPILLA_USED',
+                    trampillaId: 2
+                }));
+              }
             }
           }
         },
@@ -663,12 +683,26 @@ class GameScene extends Phaser.Scene {
                 this.sound.play("teletransporte");
                 this.teleportLadron(this.ObjectVentilacion2); // Teletransporta al ladrón a la trampilla 2
                 this.startTrampillaCooldown2(); // Activar el cooldown
+
+                if (this.isOnline) {
+                  this.socket.send(JSON.stringify({
+                      type: 'TRAMPILLA_USED',
+                      trampillaId: 3
+                  }));
+                }
             }
           } else {
             if (this.keyStates['Space'] && this.canUseTrampilla2) {
               this.sound.play("teletransporte");
               this.teleportLadron(this.ObjectVentilacion2); // Teletransporta al ladrón a la trampilla 2
               this.startTrampillaCooldown2(); // Activar el cooldown
+
+              if (this.isOnline) {
+                this.socket.send(JSON.stringify({
+                    type: 'TRAMPILLA_USED',
+                    trampillaId: 3
+                }));
+              }
             }
           }
         },
@@ -685,12 +719,26 @@ class GameScene extends Phaser.Scene {
                 this.sound.play("teletransporte");
                 this.teleportLadron(this.ObjectVentilacion1); // Teletransporta al ladrón a la trampilla 2
                 this.startTrampillaCooldown2(); // Activar el cooldown
+
+                if (this.isOnline) {
+                  this.socket.send(JSON.stringify({
+                      type: 'TRAMPILLA_USED',
+                      trampillaId: 3
+                  }));
+                }
             }
           } else {
             if (this.keyStates['Space'] && this.canUseTrampilla2) {
               this.sound.play("teletransporte");
               this.teleportLadron(this.ObjectVentilacion1); // Teletransporta al ladrón a la trampilla 2
               this.startTrampillaCooldown2(); // Activar el cooldown
+
+              if (this.isOnline) {
+                this.socket.send(JSON.stringify({
+                    type: 'TRAMPILLA_USED',
+                    trampillaId: 3
+                }));
+              }
             }
           }
         },
@@ -705,46 +753,30 @@ class GameScene extends Phaser.Scene {
 
           this.sound.play("activar_trampa");
 
-          this.carcelOpenDoor.setVisible(false);
-          this.carcelOpenDoor.body.enable = false;
+          this.handleDoorAction('carcel', 'close');
 
-          this.carcelClosedDoor.setVisible(true);
-          this.carcelClosedDoor.body.enable = true;
-
-          this.carcelIsClosed = true;
-
-          this.time.delayedCall(10000, () => {
-            this.carcelOpenDoor.setVisible(true);
-            this.carcelOpenDoor.body.enable = true;
-
-            this.carcelClosedDoor.setVisible(false);
-            this.carcelClosedDoor.body.enable = false;
-
-            this.carcelIsClosed = false;
-          });
+          if (this.isOnline) {
+            this.socket.send(JSON.stringify({
+                type: 'DOOR_USED',
+                door: 'carcel',
+                action: 'close'
+            }));
+          }
         }
       } else {
         if (this.keyStates['Space'] && !this.carcelIsClosed) {
 
           this.sound.play("activar_trampa");
 
-          this.carcelOpenDoor.setVisible(false);
-          this.carcelOpenDoor.body.enable = false;
+          this.handleDoorAction('carcel', 'close');
 
-          this.carcelClosedDoor.setVisible(true);
-          this.carcelClosedDoor.body.enable = true;
-
-          this.carcelIsClosed = true;
-
-          this.time.delayedCall(10000, () => {
-            this.carcelOpenDoor.setVisible(true);
-            this.carcelOpenDoor.body.enable = true;
-
-            this.carcelClosedDoor.setVisible(false);
-            this.carcelClosedDoor.body.enable = false;
-
-            this.carcelIsClosed = false;
-          });
+          if (this.isOnline) {
+            this.socket.send(JSON.stringify({
+                type: 'DOOR_USED',
+                door: 'carcel',
+                action: 'close'
+            }));
+          }
         }
       }
     });
@@ -755,46 +787,30 @@ class GameScene extends Phaser.Scene {
 
           this.sound.play("activar_trampa");
 
-          this.floor1OpenDoor.setVisible(false);
-          this.floor1OpenDoor.body.enable = false;
+          this.handleDoorAction('floor1', 'close');
 
-          this.floor1ClosedDoor.setVisible(true);
-          this.floor1ClosedDoor.body.enable = true;
-
-          this.puerta1IsClosed = true;
-
-          this.time.delayedCall(10000, () => {
-              this.floor1OpenDoor.setVisible(true);
-              this.floor1OpenDoor.body.enable = true;
-
-              this.floor1ClosedDoor.setVisible(false);
-              this.floor1ClosedDoor.body.enable = false;
-
-              this.puerta1IsClosed = false;
-          });
+          if (this.isOnline) {
+            this.socket.send(JSON.stringify({
+                type: 'DOOR_USED',
+                door: 'floor1',
+                action: 'close'
+            }));
+          }
         }
       } else {
         if (this.keyStates['Space'] && !this.puerta1IsClosed) {
 
           this.sound.play("activar_trampa");
 
-          this.floor1OpenDoor.setVisible(false);
-          this.floor1OpenDoor.body.enable = false;
+          this.handleDoorAction('floor1', 'close');
 
-          this.floor1ClosedDoor.setVisible(true);
-          this.floor1ClosedDoor.body.enable = true;
-
-          this.puerta1IsClosed = true;
-
-          this.time.delayedCall(10000, () => {
-              this.floor1OpenDoor.setVisible(true);
-              this.floor1OpenDoor.body.enable = true;
-
-              this.floor1ClosedDoor.setVisible(false);
-              this.floor1ClosedDoor.body.enable = false;
-
-              this.puerta1IsClosed = false;
-          });
+          if (this.isOnline) {
+            this.socket.send(JSON.stringify({
+                type: 'DOOR_USED',
+                door: 'floor1',
+                action: 'close'
+            }));
+          }
         }
       }
     });
@@ -805,46 +821,30 @@ class GameScene extends Phaser.Scene {
 
             this.sound.play("activar_trampa");
 
-            this.floor2OpenDoor.setVisible(false);
-            this.floor2OpenDoor.body.enable = false;
+            this.handleDoorAction('floor2', 'close');
 
-            this.floor2ClosedDoor.setVisible(true);
-            this.floor2ClosedDoor.body.enable = true;
-
-            this.puerta2IsClosed = true;
-
-            this.time.delayedCall(10000, () => {
-                this.floor2OpenDoor.setVisible(true);
-                this.floor2OpenDoor.body.enable = true;
-
-                this.floor2ClosedDoor.setVisible(false);
-                this.floor2ClosedDoor.body.enable = false;
-
-                this.puerta2IsClosed = false;
-            });
+            if (this.isOnline) {
+              this.socket.send(JSON.stringify({
+                  type: 'DOOR_USED',
+                  door: 'floor2',
+                  action: 'close'
+              }));
+            }
         }
       } else {
         if (this.keyStates['Space'] && !this.puerta2IsClosed) {
 
           this.sound.play("activar_trampa");
 
-          this.floor2OpenDoor.setVisible(false);
-          this.floor2OpenDoor.body.enable = false;
+          this.handleDoorAction('floor2', 'close');
 
-          this.floor2ClosedDoor.setVisible(true);
-          this.floor2ClosedDoor.body.enable = true;
-
-          this.puerta2IsClosed = true;
-
-          this.time.delayedCall(10000, () => {
-              this.floor2OpenDoor.setVisible(true);
-              this.floor2OpenDoor.body.enable = true;
-
-              this.floor2ClosedDoor.setVisible(false);
-              this.floor2ClosedDoor.body.enable = false;
-
-              this.puerta2IsClosed = false;
-          });
+          if (this.isOnline) {
+            this.socket.send(JSON.stringify({
+                type: 'DOOR_USED',
+                door: 'floor2',
+                action: 'close'
+            }));
+          }
         }
       }
     });
@@ -855,46 +855,30 @@ class GameScene extends Phaser.Scene {
 
           this.sound.play("activar_trampa");
 
-          this.floor3OpenDoor.setVisible(false);
-          this.floor3OpenDoor.body.enable = false;
+          this.handleDoorAction('floor3', 'close');
 
-          this.floor3ClosedDoor.setVisible(true);
-          this.floor3ClosedDoor.body.enable = true;
-
-          this.puerta3IsClosed = true;
-
-          this.time.delayedCall(10000, () => {
-              this.floor3OpenDoor.setVisible(true);
-              this.floor3OpenDoor.body.enable = true;
-
-              this.floor3ClosedDoor.setVisible(false);
-              this.floor3ClosedDoor.body.enable = false;
-
-              this.puerta3IsClosed = false;
-          });
+          if (this.isOnline) {
+            this.socket.send(JSON.stringify({
+                type: 'DOOR_USED',
+                door: 'floor3',
+                action: 'close'
+            }));
+          }
         }
       } else {
         if (this.keyStates['Space'] && !this.puerta3IsClosed) {
 
           this.sound.play("activar_trampa");
 
-          this.floor3OpenDoor.setVisible(false);
-          this.floor3OpenDoor.body.enable = false;
+          this.handleDoorAction('floor3', 'close');
 
-          this.floor3ClosedDoor.setVisible(true);
-          this.floor3ClosedDoor.body.enable = true;
-
-          this.puerta3IsClosed = true;
-
-          this.time.delayedCall(10000, () => {
-              this.floor3OpenDoor.setVisible(true);
-              this.floor3OpenDoor.body.enable = true;
-
-              this.floor3ClosedDoor.setVisible(false);
-              this.floor3ClosedDoor.body.enable = false;
-
-              this.puerta3IsClosed = false;
-          });
+          if (this.isOnline) {
+            this.socket.send(JSON.stringify({
+                type: 'DOOR_USED',
+                door: 'floor3',
+                action: 'close'
+            }));
+          }
         }
       }
     });
@@ -1238,6 +1222,10 @@ class GameScene extends Phaser.Scene {
   }
 
   spawnRandomModifier() {
+
+    if(this.isOnline){
+      return;
+    }
     // Seleccionar una posición aleatoria de la pool
     //const randomPos = Phaser.Utils.Array.RemoveRandomElement(this.positionPool);
     if (this.policiaInventory == null) {
@@ -1265,19 +1253,31 @@ class GameScene extends Phaser.Scene {
   }
 
   collectModifier() {
-    // Seleccionar un modificador aleatorio de la pool
-    const randomModifier = Phaser.Utils.Array.GetRandom(this.objectPool);
-    const key = this.items[randomModifier];
-    this.policiaInventory = randomModifier;
+    if(!this.isOnline) {
+      // Seleccionar un modificador aleatorio de la pool
+      const randomModifier = Phaser.Utils.Array.GetRandom(this.objectPool);
+      this.setModifier(randomModifier);
+
+    } else if(this.isOnline && this.registry.get('player1IsPolice')){
+      const randomModifier = Phaser.Utils.Array.GetRandom(this.objectPool);
+
+      this.socket.send(JSON.stringify({
+        type: 'COLLECT_ITEM',
+        item: randomModifier,
+      }));
+
+      this.setModifier(randomModifier);
+    }
+
     this.sound.play("agarrar_objeto");
-
-    // Actualizar el texto de inventario en pantalla
-    //this.inventoryText.setText('Inventario: ' + randomModifier);
-    this.objectIcono = this.add.sprite(this.itemPos, 354, 'bonificadores');
-    this.objectIcono.anims.play(this.policiaInventory);
-
     // Eliminar el sprite del modificador del juego
     this.currentModifier.destroy();
+  }
+
+  setModifier(item) {
+    this.policiaInventory = item;
+    this.objectIcono = this.add.sprite(this.itemPos, 354, 'bonificadores');
+    this.objectIcono.anims.play(this.policiaInventory);
   }
 
   useModifier() {
@@ -1292,7 +1292,13 @@ class GameScene extends Phaser.Scene {
       )
       .setOrigin(0.5)
       .setScale(1);
-    
+
+    if(this.isOnline && this.registry.get('player1IsPolice')) {
+      this.socket.send(JSON.stringify({
+        type: 'ITEM_USED',
+      }));
+    }
+
     itemImage.anims.play(this.policiaInventory);
 
     this.tweens.add({
@@ -1301,7 +1307,6 @@ class GameScene extends Phaser.Scene {
       ease: "Power1",
       duration: 500,
       onComplete: () => {
-        console.log("DONE");
         this.tweens.add({
           targets: itemImage,
           alpha: 0,
@@ -1314,7 +1319,20 @@ class GameScene extends Phaser.Scene {
       },
     });
 
-    switch (this.policiaInventory) {
+    this.modifierEffect(this.policiaInventory);
+
+    // Limpiar el inventario después de usar el modificador
+    this.policiaInventory = null;
+    this.objectIcono.destroy();
+
+    // Generar un nuevo modificador después de usarlo
+    setTimeout(() => {
+      this.spawnRandomModifier();
+    }, 3000);
+  }
+
+  modifierEffect(item){
+    switch (item) {
       case "reloj":
         this.timeLeft += 20;
         this.timerText.setText(this.formatTime(this.timeLeft));
@@ -1335,15 +1353,6 @@ class GameScene extends Phaser.Scene {
         });
         break;
     }
-
-    // Limpiar el inventario después de usar el modificador
-    this.policiaInventory = null;
-    this.objectIcono.destroy();
-
-    // Generar un nuevo modificador después de usarlo
-    setTimeout(() => {
-      this.spawnRandomModifier();
-    }, 3000);
   }
 
   lanzarRed() {
@@ -1411,217 +1420,9 @@ class GameScene extends Phaser.Scene {
   update(time, delta) {
 
     if(!this.pause) {
-        if(!this.policiaFacingRight && !this.isWallSlideJumpingPolicia) {
-            this.playerPolicia.flipX = true;
-        } else if(this.policiaFacingRight && !this.isWallSlideJumpingPolicia) {
-            this.playerPolicia.flipX = false;
-        }
 
-        if(!this.ladronFacingRight && !this.isWallSlideJumpingLadron) {
-            this.playerLadron.flipX = true;
-        } else if(this.ladronFacingRight && !this.isWallSlideJumpingLadron) {
-            this.playerLadron.flipX = false;
-        }
-
-        // Movimiento del policía
-        if(!this.isWallSlideJumpingPolicia)
-        {
-          if(this.registry.get("player1IsPolice")) {
-            if(this.keyStates['KeyA']) {
-              this.playerPolicia.setVelocityX(-this.PoliciaVelocity * this.time.timeScale);
-              this.policiaFacingRight = false;
-              if(this.playerPolicia.body.touching.down) {
-                  this.playerPolicia.anims.play('police_run', true);
-              }
-            } else if(this.keyStates['KeyD']) {
-              this.playerPolicia.setVelocityX(this.PoliciaVelocity * this.time.timeScale);
-              this.policiaFacingRight = true;
-              if(this.playerPolicia.body.touching.down) {
-                  this.playerPolicia.anims.play('police_run', true);
-              }
-            } else {
-              this.playerPolicia.setVelocityX(0);
-              if(this.playerPolicia.body.touching.down) {
-                  this.playerPolicia.anims.play('police_idle', true);
-              }
-            }
-          } else {
-            if(this.keyStates['ArrowLeft']) {
-              this.playerPolicia.setVelocityX(-this.PoliciaVelocity * this.time.timeScale);
-              this.policiaFacingRight = false;
-              if(this.playerPolicia.body.touching.down) {
-                  this.playerPolicia.anims.play('police_run', true);
-              }
-            } else if(this.keyStates['ArrowRight']) {
-              this.playerPolicia.setVelocityX(this.PoliciaVelocity * this.time.timeScale);
-              this.policiaFacingRight = true;
-              if(this.playerPolicia.body.touching.down) {
-                  this.playerPolicia.anims.play('police_run', true);
-              }
-            } else {
-              this.playerPolicia.setVelocityX(0);
-              if(this.playerPolicia.body.touching.down) {
-                  this.playerPolicia.anims.play('police_idle', true);
-              }
-            }
-          }
-        } else {
-            if(this.wallSlideTimerPolicia && this.wallSlideTimerPolicia.getRemaining() <= 0) {
-                this.isWallSlideJumpingPolicia = false;
-            }
-        }
-
-        // Movimiento del ladrón
-        if(!this.isWallSlideJumpingLadron && this.LadronMovement)
-        {
-          if(this.registry.get("player1IsPolice")) {
-            if (this.keyStates['ArrowLeft']) {
-                this.playerLadron.setVelocityX(-this.LadronVelocity * this.time.timeScale);
-                this.ladronFacingRight = false;
-                if(this.playerLadron.body.touching.down) {
-                    this.playerLadron.anims.play('thief_run', true);
-                }
-            } else if (this.keyStates['ArrowRight']) {
-                this.playerLadron.setVelocityX(this.LadronVelocity * this.time.timeScale);
-                this.ladronFacingRight = true;
-                if(this.playerLadron.body.touching.down) {
-                    this.playerLadron.anims.play('thief_run', true);
-                }
-            } else {
-                this.playerLadron.setVelocityX(0);
-                if(this.playerLadron.body.touching.down) {
-                    this.playerLadron.anims.play('thief_idle', true);
-                }
-            }
-          } else {
-            if (this.keyStates['KeyA']) {
-              this.playerLadron.setVelocityX(-this.LadronVelocity * this.time.timeScale);
-              this.ladronFacingRight = false;
-              if(this.playerLadron.body.touching.down) {
-                  this.playerLadron.anims.play('thief_run', true);
-              }
-          } else if (this.keyStates['KeyD']) {
-              this.playerLadron.setVelocityX(this.LadronVelocity * this.time.timeScale);
-              this.ladronFacingRight = true;
-              if(this.playerLadron.body.touching.down) {
-                  this.playerLadron.anims.play('thief_run', true);
-              }
-          } else {
-              this.playerLadron.setVelocityX(0);
-              if(this.playerLadron.body.touching.down) {
-                  this.playerLadron.anims.play('thief_idle', true);
-              }
-          }
-          }
-        } else {
-            if(this.wallSlideTimerLadron && this.wallSlideTimerLadron.getRemaining() <= 0) {
-                this.isWallSlideJumpingLadron = false;
-            }
-        }
-
-        // Detectar si el jugador está pegado a la pared (si está tocando la pared)
-        this.checkWallSlide(this.playerPolicia);
-        this.checkWallSlide(this.playerLadron);
-
-        if(this.registry.get("player1IsPolice")) {
-          if (this.keyStates['KeyW'] && this.canJumpPolicia) {
-              if (this.isWallSlidingPolicia) {
-                  //Salto de pared
-                  this.handleWallJump(this.playerPolicia);
-              } else if (this.playerPolicia.body.touching.down || this.jumpCountPolicia < this.maxJumpCount) {
-                  this.playerPolicia.anims.play('police_jump', true);
-                  this.playerPolicia.setVelocityY(-350 * this.time.timeScale);
-                  this.jumpCountPolicia++;  // Incrementa el contador de saltos
-              }
-              this.canJumpPolicia = false;  // Desactivar el salto por un tiempo
-              this.time.delayedCall(this.jumpCooldown, () => {
-                  this.canJumpPolicia = true;  // Reactivar el salto después del cooldown
-              });
-          }
-        } else {
-          if (this.keyStates['ArrowUp'] && this.canJumpPolicia) {
-            if (this.isWallSlidingPolicia) {
-                //Salto de pared
-                this.handleWallJump(this.playerPolicia);
-            } else if (this.playerPolicia.body.touching.down || this.jumpCountPolicia < this.maxJumpCount) {
-                this.playerPolicia.anims.play('police_jump', true);
-                this.playerPolicia.setVelocityY(-350 * this.time.timeScale);
-                this.jumpCountPolicia++;  // Incrementa el contador de saltos
-            }
-            this.canJumpPolicia = false;  // Desactivar el salto por un tiempo
-            this.time.delayedCall(this.jumpCooldown, () => {
-                this.canJumpPolicia = true;  // Reactivar el salto después del cooldown
-            });
-          }
-        }
-
-        // Salto del ladrón (doble salto)
-        if(this.registry.get("player1IsPolice")) {
-          if (this.keyStates['ArrowUp'] && this.canJumpLadron) {
-            if (this.isWallSlidingLadron) {
-                //Salto de pared
-                this.handleWallJump(this.playerLadron);
-            } else if (
-                this.playerLadron.body.touching.down ||
-                this.jumpCountLadron < this.maxJumpCount
-            ) {
-                this.playerLadron.anims.play('thief_jump', true);
-                this.playerLadron.setVelocityY(-350 * this.time.timeScale);
-                this.jumpCountLadron++; // Incrementa el contador de saltos
-            }
-            this.canJumpLadron = false; // Desactivar el salto por un tiempo
-            this.time.delayedCall(this.jumpCooldown, () => {
-                this.canJumpLadron = true; // Reactivar el salto después del cooldown
-            });
-          }
-        } else {
-          if (this.keyStates['KeyW'] && this.canJumpLadron) {
-            if (this.isWallSlidingLadron) {
-                //Salto de pared
-                this.handleWallJump(this.playerLadron);
-            } else if (
-                this.playerLadron.body.touching.down ||
-                this.jumpCountLadron < this.maxJumpCount
-            ) {
-                this.playerLadron.anims.play('thief_jump', true);
-                this.playerLadron.setVelocityY(-350 * this.time.timeScale);
-                this.jumpCountLadron++; // Incrementa el contador de saltos
-            }
-            this.canJumpLadron = false; // Desactivar el salto por un tiempo
-            this.time.delayedCall(this.jumpCooldown, () => {
-                this.canJumpLadron = true; // Reactivar el salto después del cooldown
-            });
-          }
-        }
-
-        // Detectar si el ladrón está acelerando
-        /*
-        if (this.thiefControls.down.isDown && !this.isBoosting) {
-        this.isBoosting = true; // Bloquea nuevas aceleraciones
-        this.LadronVelocity += 300; // Incrementa la velocidad
-        this.time.delayedCall(200, () => {
-            this.LadronVelocity -= 300; // Restaura la velocidad normal
-        });
-        // Reinicia la capacidad de acelerar después de 2 segundos
-        this.time.delayedCall(2000, () => {
-            this.isBoosting = false; // Permite volver a acelerar
-        });
-        }
-        */
-
-        // Detectar cuando se presione la tecla Enter
-        if(this.registry.get("player1IsPolice")) {
-          if (this.keyStates['Space'] && this.policiaInventory) {
-            
-              this.sound.play('usar_objeto');
-              this.useModifier();
-          }
-        } else {
-          if (this.keyStates['ShiftRight'] && this.policiaInventory) {
-            this.sound.play('usar_objeto');
-            this.useModifier();
-          }
-        }
+      this.updatePoliceMovement(time, delta);
+      this.updateThiefMovement(time, delta);
 
     } else {
         this.playerLadron.setVelocityX(0);
@@ -1631,6 +1432,222 @@ class GameScene extends Phaser.Scene {
         this.playerPolicia.setVelocityY(0);
         this.playerPolicia.anims.stop();
     }
+  }
+
+  updatePoliceMovement(time, delta) {
+    if(!this.policiaFacingRight && !this.isWallSlideJumpingPolicia) {
+        this.playerPolicia.flipX = true;
+    } else if(this.policiaFacingRight && !this.isWallSlideJumpingPolicia) {
+        this.playerPolicia.flipX = false;
+    }
+
+    if(!this.isWallSlideJumpingPolicia)
+      {
+        if(this.registry.get("player1IsPolice")) {
+          if(this.keyStates['KeyA']) {
+            this.playerPolicia.setVelocityX(-this.PoliciaVelocity * this.time.timeScale);
+            this.policiaFacingRight = false;
+            if(this.playerPolicia.body.touching.down) {
+                this.playerPolicia.anims.play('police_run', true);
+            }
+          } else if(this.keyStates['KeyD']) {
+            this.playerPolicia.setVelocityX(this.PoliciaVelocity * this.time.timeScale);
+            this.policiaFacingRight = true;
+            if(this.playerPolicia.body.touching.down) {
+                this.playerPolicia.anims.play('police_run', true);
+            }
+          } else {
+            this.playerPolicia.setVelocityX(0);
+            if(this.playerPolicia.body.touching.down) {
+                this.playerPolicia.anims.play('police_idle', true);
+            }
+          }
+        } else {
+          if(this.keyStates['ArrowLeft']) {
+            this.playerPolicia.setVelocityX(-this.PoliciaVelocity * this.time.timeScale);
+            this.policiaFacingRight = false;
+            if(this.playerPolicia.body.touching.down) {
+                this.playerPolicia.anims.play('police_run', true);
+            }
+          } else if(this.keyStates['ArrowRight']) {
+            this.playerPolicia.setVelocityX(this.PoliciaVelocity * this.time.timeScale);
+            this.policiaFacingRight = true;
+            if(this.playerPolicia.body.touching.down) {
+                this.playerPolicia.anims.play('police_run', true);
+            }
+          } else {
+            this.playerPolicia.setVelocityX(0);
+            if(this.playerPolicia.body.touching.down) {
+                this.playerPolicia.anims.play('police_idle', true);
+            }
+          }
+        }
+    } else {
+          if(this.wallSlideTimerPolicia && this.wallSlideTimerPolicia.getRemaining() <= 0) {
+              this.isWallSlideJumpingPolicia = false;
+          }
+    }
+
+    this.checkWallSlide(this.playerPolicia);
+
+    if(this.registry.get("player1IsPolice")) {
+      if (this.keyStates['KeyW'] && this.canJumpPolicia) {
+          if (this.isWallSlidingPolicia) {
+              //Salto de pared
+              this.handleWallJump(this.playerPolicia);
+          } else if (this.playerPolicia.body.touching.down || this.jumpCountPolicia < this.maxJumpCount) {
+              this.playerPolicia.anims.play('police_jump', true);
+              this.playerPolicia.setVelocityY(-350 * this.time.timeScale);
+              this.jumpCountPolicia++;  // Incrementa el contador de saltos
+          }
+          this.canJumpPolicia = false;  // Desactivar el salto por un tiempo
+          this.time.delayedCall(this.jumpCooldown, () => {
+              this.canJumpPolicia = true;  // Reactivar el salto después del cooldown
+          });
+      }
+    } else {
+      if (this.keyStates['ArrowUp'] && this.canJumpPolicia) {
+        if (this.isWallSlidingPolicia) {
+            //Salto de pared
+            this.handleWallJump(this.playerPolicia);
+        } else if (this.playerPolicia.body.touching.down || this.jumpCountPolicia < this.maxJumpCount) {
+            this.playerPolicia.anims.play('police_jump', true);
+            this.playerPolicia.setVelocityY(-350 * this.time.timeScale);
+            this.jumpCountPolicia++;  // Incrementa el contador de saltos
+        }
+        this.canJumpPolicia = false;  // Desactivar el salto por un tiempo
+        this.time.delayedCall(this.jumpCooldown, () => {
+            this.canJumpPolicia = true;  // Reactivar el salto después del cooldown
+        });
+      }
+    }
+
+    // Detectar cuando se presione la tecla Enter
+    if(this.registry.get("player1IsPolice")) {
+      if (this.keyStates['Space'] && this.policiaInventory) {
+        
+          this.sound.play('usar_objeto');
+          this.useModifier();
+      }
+    } else {
+      if (this.keyStates['ShiftRight'] && this.policiaInventory) {
+        this.sound.play('usar_objeto');
+        this.useModifier();
+      }
+    }
+  }
+
+  updateThiefMovement(time, delta) {
+    if(!this.ladronFacingRight && !this.isWallSlideJumpingLadron) {
+      this.playerLadron.flipX = true;
+    } else if(this.ladronFacingRight && !this.isWallSlideJumpingLadron) {
+        this.playerLadron.flipX = false;
+    }
+
+    // Movimiento del ladrón
+    if(!this.isWallSlideJumpingLadron && this.LadronMovement)
+    {
+      if(this.registry.get("player1IsPolice")) {
+        if (this.keyStates['ArrowLeft']) {
+            this.playerLadron.setVelocityX(-this.LadronVelocity * this.time.timeScale);
+            this.ladronFacingRight = false;
+            if(this.playerLadron.body.touching.down) {
+                this.playerLadron.anims.play('thief_run', true);
+            }
+        } else if (this.keyStates['ArrowRight']) {
+            this.playerLadron.setVelocityX(this.LadronVelocity * this.time.timeScale);
+            this.ladronFacingRight = true;
+            if(this.playerLadron.body.touching.down) {
+                this.playerLadron.anims.play('thief_run', true);
+            }
+        } else {
+            this.playerLadron.setVelocityX(0);
+            if(this.playerLadron.body.touching.down) {
+                this.playerLadron.anims.play('thief_idle', true);
+            }
+        }
+      } else {
+        if (this.keyStates['KeyA']) {
+          this.playerLadron.setVelocityX(-this.LadronVelocity * this.time.timeScale);
+          this.ladronFacingRight = false;
+          if(this.playerLadron.body.touching.down) {
+              this.playerLadron.anims.play('thief_run', true);
+          }
+      } else if (this.keyStates['KeyD']) {
+          this.playerLadron.setVelocityX(this.LadronVelocity * this.time.timeScale);
+          this.ladronFacingRight = true;
+          if(this.playerLadron.body.touching.down) {
+              this.playerLadron.anims.play('thief_run', true);
+          }
+      } else {
+          this.playerLadron.setVelocityX(0);
+          if(this.playerLadron.body.touching.down) {
+              this.playerLadron.anims.play('thief_idle', true);
+          }
+      }
+      }
+    } else {
+        if(this.wallSlideTimerLadron && this.wallSlideTimerLadron.getRemaining() <= 0) {
+            this.isWallSlideJumpingLadron = false;
+        }
+    }
+
+    // Detectar si el jugador está pegado a la pared (si está tocando la pared)
+    this.checkWallSlide(this.playerLadron);
+
+    // Salto del ladrón (doble salto)
+    if(this.registry.get("player1IsPolice")) {
+      if (this.keyStates['ArrowUp'] && this.canJumpLadron) {
+        if (this.isWallSlidingLadron) {
+            //Salto de pared
+            this.handleWallJump(this.playerLadron);
+        } else if (
+            this.playerLadron.body.touching.down ||
+            this.jumpCountLadron < this.maxJumpCount
+        ) {
+            this.playerLadron.anims.play('thief_jump', true);
+            this.playerLadron.setVelocityY(-350 * this.time.timeScale);
+            this.jumpCountLadron++; // Incrementa el contador de saltos
+        }
+        this.canJumpLadron = false; // Desactivar el salto por un tiempo
+        this.time.delayedCall(this.jumpCooldown, () => {
+            this.canJumpLadron = true; // Reactivar el salto después del cooldown
+        });
+      }
+    } else {
+      if (this.keyStates['KeyW'] && this.canJumpLadron) {
+        if (this.isWallSlidingLadron) {
+            //Salto de pared
+            this.handleWallJump(this.playerLadron);
+        } else if (
+            this.playerLadron.body.touching.down ||
+            this.jumpCountLadron < this.maxJumpCount
+        ) {
+            this.playerLadron.anims.play('thief_jump', true);
+            this.playerLadron.setVelocityY(-350 * this.time.timeScale);
+            this.jumpCountLadron++; // Incrementa el contador de saltos
+        }
+        this.canJumpLadron = false; // Desactivar el salto por un tiempo
+        this.time.delayedCall(this.jumpCooldown, () => {
+            this.canJumpLadron = true; // Reactivar el salto después del cooldown
+        });
+      }
+    }
+
+    // Detectar si el ladrón está acelerando
+    /*
+    if (this.thiefControls.down.isDown && !this.isBoosting) {
+    this.isBoosting = true; // Bloquea nuevas aceleraciones
+    this.LadronVelocity += 300; // Incrementa la velocidad
+    this.time.delayedCall(200, () => {
+        this.LadronVelocity -= 300; // Restaura la velocidad normal
+    });
+    // Reinicia la capacidad de acelerar después de 2 segundos
+    this.time.delayedCall(2000, () => {
+        this.isBoosting = false; // Permite volver a acelerar
+    });
+    }
+    */
   }
 
   shutdown() {
@@ -1837,6 +1854,7 @@ class GameScene extends Phaser.Scene {
   }
 
   startTrampillaCooldown() {
+
     this.canUseTrampilla = false;
     this.ObjectTrampilla1.setTint(0xff0000);
     this.ObjectTrampilla2.setTint(0xff0000);
@@ -1849,6 +1867,7 @@ class GameScene extends Phaser.Scene {
   }
 
   startTrampillaCooldown1() {
+
     this.canUseTrampilla1 = false;
     this.ObjectTrampilla3.setTint(0xff0000);
     this.ObjectTrampilla4.setTint(0xff0000);
@@ -1861,6 +1880,7 @@ class GameScene extends Phaser.Scene {
   }
 
   startTrampillaCooldown2() {
+
     this.canUseTrampilla2 = false;
     this.ObjectVentilacion1.setTint(0xff0000);
     this.ObjectVentilacion2.setTint(0xff0000);
@@ -1870,6 +1890,53 @@ class GameScene extends Phaser.Scene {
       this.ObjectVentilacion2.setTint(0x00ff00);
 
     });
+  }
+
+  handleDoorAction(door, action) {
+    let openDoor, closedDoor, doorVar;
+
+    switch(door) {
+      case 'carcel':
+        openDoor = this.carcelOpenDoor;
+        closedDoor = this.carcelClosedDoor;
+        doorVar = 'carcelIsClosed';
+        break;
+      case 'floor1':
+        openDoor = this.floor1OpenDoor;
+        closedDoor = this.floor1ClosedDoor;
+        doorVar = 'puerta1IsClosed';
+        break;
+      case 'floor2':
+        openDoor = this.floor2OpenDoor;
+        closedDoor = this.floor2ClosedDoor;
+        doorVar = 'puerta2IsClosed';
+        break;
+      case 'floor3':
+        openDoor = this.floor3OpenDoor;
+        closedDoor = this.floor3ClosedDoor;
+        doorVar = 'puerta3IsClosed';
+        break;
+    }
+
+    if(action === 'close') {
+      openDoor.setVisible(false);
+      openDoor.body.enable = false;
+
+      closedDoor.setVisible(true);
+      closedDoor.body.enable = true;
+
+      this[doorVar] = true;
+
+      this.time.delayedCall(10000, () => {
+        openDoor.setVisible(true);
+        openDoor.body.enable = true;
+
+        closedDoor.setVisible(false);
+        closedDoor.body.enable = false;
+
+        this[doorVar] = false;
+      });
+    }
   }
 
   // Resetear los contadores de saltos cuando los personajes tocan el suelo

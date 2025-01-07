@@ -67,9 +67,15 @@ class LobbyScene extends Phaser.Scene {
                 this.updateReadyLabels();
 
                 if(this.roomData.creatorReady && this.roomData.secondReady) {
-                    this.scene.start('GameScene', {
+
+                    const isLocalPolice = (userData.username === this.roomData.creatorUsername);
+                    this.registry.set('player1IsPolice', isLocalPolice);
+
+                    this.scene.start('OnlineGameScene', {
+                        socket: this.chatSocket,
                         roomData: this.roomData,
-                        userData: data.userData
+                        userData: data.userData,
+                        isLocalPolice: isLocalPolice
                     });
                 }
             } else if(messObj.type === "CHAT") {
@@ -290,28 +296,6 @@ class LobbyScene extends Phaser.Scene {
         const newChat = chatInput.cloneNode(true);
         chatInput.parentNode.replaceChild(newChat, chatInput);
 
-        /*
-        try {
-            const response = fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    user: username,
-                    message: "entró al chat",
-                    isSystemMessage: true,
-                }),
-            });
-
-            if (!response.ok) {
-                console.error("Error al enviar el mensaje: ", response.text());
-            }
-        } catch (error) {
-            console.error("Error al conectar con servidor: ", error);
-        }
-        */
-
         // Envio de mensajes
         newChat.addEventListener('keydown', async (event) => {
             if (event.key === 'Enter' && newChat.value.trim() !== '') {
@@ -325,30 +309,6 @@ class LobbyScene extends Phaser.Scene {
                     content: message
                 };
                 this.chatSocket.send(JSON.stringify(chatMessage));
-
-                // Enviar el mensaje al servidor
-                /*
-                try {
-                    const response = await fetch('/api/chat', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            user: username,
-                            message: message,
-                            isSystemMessage: false,
-                        }),
-                    });
-
-                    if (!response.ok) {
-                        console.error("Error al enviar el mensaje: ", await response.text());
-                    }
-                } catch (error) {
-                    console.error("Error al conectar con servidor: ", error);
-                }
-                */
-
 
                 // Esperar a que el mensaje se añada antes de hacer scroll
                 setTimeout(() => {
