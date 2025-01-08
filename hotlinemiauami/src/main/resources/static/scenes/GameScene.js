@@ -38,13 +38,7 @@ class GameScene extends Phaser.Scene {
   preload() {
     this.load.image("escenario", "./Escenario/Escenario.png");
 
-    this.load.image("background", "path/to/background.png");
-    this.load.image("Suelo", "./Objetos/suelo.png");
-    this.load.image("Pared", "./Objetos/Pared.png");
-    this.load.image("Modificador", "./Objetos/modificadores.png");
-    this.load.image("icono", "./Objectos/icono.png");
     this.load.image("trampilla", "./Objetos/trampilla.png");
-    this.load.image("cajaItems", "./Objetos/cajaItems.png");
     this.load.image("escenario", "./Objetos/escenario.png");
     this.load.image("Marcador", "./Escenario/Marcador.png");
 
@@ -128,7 +122,6 @@ class GameScene extends Phaser.Scene {
       const key = event.code;
       if (key in this.keyStates) {
           this.keyStates[key] = true;
-          console.log(`Key down: ${key}`);
       }
     });
 
@@ -1712,6 +1705,10 @@ class GameScene extends Phaser.Scene {
 
         let player1IsPolice = this.registry.get("player1IsPolice");
         this.registry.set("player1IsPolice", !player1IsPolice);
+        if(this.isOnline) {
+          this.onlineWin('ladron');
+          return;
+        }
 
         if (player1IsPolice) {
             const player2Rounds = this.registry.get("player2Rounds") + 1;
@@ -1957,6 +1954,10 @@ class GameScene extends Phaser.Scene {
 
     let player1IsPolice = this.registry.get("player1IsPolice");
     this.registry.set("player1IsPolice", !player1IsPolice);
+    if(this.isOnline) {
+      this.onlineWin('policia');
+      return;
+    }
 
     // Aquí puedes poner lo que deseas hacer cuando los personajes colisionan (por ejemplo, reiniciar el juego o cambiar de escena)
     if (player1IsPolice) {
@@ -1977,6 +1978,33 @@ class GameScene extends Phaser.Scene {
       } else {
         this.playRoundWin("Policía");
       }
+    }
+  }
+
+  onlineWin(winner) {
+    this.registry.set("localIsPolice", !this.localIsPolice);
+
+    const isWinnerPolice = (winner === 'policia');
+    const isLocalWinner = (isWinnerPolice && this.localIsPolice) || (!isWinnerPolice && !this.localIsPolice);
+
+    if(isLocalWinner) {
+      this.incrementScore(this.isPlayer1);
+    } else {
+      this.incrementScore(!this.isPlayer1);
+    }
+  }
+
+  incrementScore(isPlayer1) {
+    const player = isPlayer1 ? "player1Rounds" : "player2Rounds";
+    const playerNum = isPlayer1 ? 1 : 2;
+    const playerRounds = this.registry.get(player) + 1;
+
+    this.registry.set(player, playerRounds);
+
+    if(playerRounds >= 3) {
+      this.playVictory(playerNum);
+    } else {
+      this.playRoundWin(isPlayer1 ? "Policía" : "Ladrón");
     }
   }
 
@@ -2041,13 +2069,40 @@ class GameScene extends Phaser.Scene {
     this.add.image(this.centerX, this.centerY + 200, `victoria_${player}`);
     this.pause = true;
 
-    const nextButton = this.add.image(this.centerX + 300, this.centerY + 360, 'boton_victoria').setInteractive();
+    this.registry.set("player1Rounds", 0);
+    this.registry.set("player2Rounds", 0);
 
-    nextButton.on('pointerdown', () => {
-        this.registry.set("player1Rounds", 0);
-        this.registry.set("player2Rounds", 0);
-        this.scene.start("MainMenuScene");
-    });
+    if(this.isOnline) {
+                
+      const userData = this.registry.get('userData');
+      const roomData = this.roomData;
+
+      this.time.delayedCall(5000, () => {
+
+        if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+
+          this.socket.send(JSON.stringify({
+            type: "SET_READY",
+            username: userData.username,
+            isReady: false
+          }));
+
+          console.log("Closing WebSocket...");
+          this.socket.close();
+        }
+
+        this.scene.start('LobbyScene', {
+            roomData: roomData,
+            userData: userData
+        });
+      });
+    } else {
+      const nextButton = this.add.image(this.centerX + 300, this.centerY + 360, 'boton_victoria').setInteractive();
+
+      nextButton.on('pointerdown', () => {
+          this.scene.start("MainMenuScene");
+      });
+    }
   }
 
 }

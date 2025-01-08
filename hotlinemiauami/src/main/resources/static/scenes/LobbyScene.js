@@ -4,6 +4,15 @@ class LobbyScene extends Phaser.Scene {
         this.fetchIntervalId = null;
     }
 
+    init(data) {
+        if (this.registry.get("localIsPolice") === undefined) {
+            this.registry.set("localIsPolice", undefined);
+        }
+        if (this.registry.get("isPlayer1") === undefined) {
+            this.registry.set("isPlayer1", undefined);
+        }  
+    }
+
     preload() {
         // Cargar imágenes y sprites
         this.load.image('fondo', './Interfaz/champSelect.png');
@@ -44,6 +53,10 @@ class LobbyScene extends Phaser.Scene {
                 isSystem: true
             };
             this.chatSocket.send(JSON.stringify(enteredMessage));
+
+            setTimeout(() => {
+                this.fetchRoomData(this.roomData.roomId);
+            }, 200);
         };
 
         this.chatSocket.onmessage = (event) => {
@@ -70,12 +83,13 @@ class LobbyScene extends Phaser.Scene {
 
                     const isLocalPolice = (userData.username === this.roomData.creatorUsername);
                     this.registry.set('player1IsPolice', isLocalPolice);
+                    this.registry.set('localIsPolice', isLocalPolice);
+                    this.registry.set('isPlayer1', isLocalPolice);
 
                     this.scene.start('OnlineGameScene', {
                         socket: this.chatSocket,
                         roomData: this.roomData,
                         userData: data.userData,
-                        isLocalPolice: isLocalPolice
                     });
                 }
             } else if(messObj.type === "CHAT") {
@@ -85,19 +99,7 @@ class LobbyScene extends Phaser.Scene {
                     const chat = `${messObj.username}: ${messObj.content}`;
                     this.appendChatMessage(chat);
                 }
-            } else {
-                this.appendChatMessage(message);
             }
-
-            /*
-            const chatMessages = document.getElementById('chat-messages');
-            if(chatMessages) {
-                const div = document.createElement('div');
-                div.textContent = message;
-                chatMessages.appendChild(div);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-            */
         };
 
         this.chatSocket.onclose = (evt) => {
@@ -122,6 +124,17 @@ class LobbyScene extends Phaser.Scene {
             .setInteractive();
 
         returnButton.on('pointerdown', () => {
+
+            const exitMessage = {
+                type: "CHAT",
+                username: userData.username,
+                content: "salió al chat.",
+                isSystem: true
+            };
+            this.chatSocket.send(JSON.stringify(exitMessage));
+
+            this.chatSocket.close();
+
             try {
                 const response = fetch(`/rooms/${this.roomData.roomId}/leave`, {
                     method: 'POST',
@@ -287,6 +300,23 @@ class LobbyScene extends Phaser.Scene {
         if (chatMessages) {
             chatMessages.innerHTML = ''; // Vaciar los mensajes del chat
         }
+    }
+
+    fetchRoomData(roomId) {
+        fetch(`/rooms/${roomId}`)
+        .then(response => response.json())
+        .then(room => {
+            if (room) {
+                this.roomData.creatorUsername = room.creatorUsername;
+                this.roomData.secondUsername = room.secondUsername;
+                this.roomData.creatorReady = room.creatorReady;
+                this.roomData.secondReady = room.secondReady;
+                this.updateReadyLabels();
+            }
+        })
+        .catch(error => {
+            console.error("Failed to fetch room data: ", error);
+        });
     }
 
     initChat(username) {

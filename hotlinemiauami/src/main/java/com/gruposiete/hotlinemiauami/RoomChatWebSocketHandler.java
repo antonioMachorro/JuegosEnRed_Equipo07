@@ -205,6 +205,9 @@ public class RoomChatWebSocketHandler extends TextWebSocketHandler {
     }
 
     public void handleSceneReady(WebSocketSession session, JsonNode json) throws IOException{
+
+        System.out.println("RECEIVED SCENE_READY");
+
         String roomId = (String) session.getAttributes().get("roomId");
         if(roomId == null) {
             return;

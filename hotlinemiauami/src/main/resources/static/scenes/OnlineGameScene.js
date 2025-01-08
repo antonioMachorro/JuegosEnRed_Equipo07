@@ -15,12 +15,17 @@ class OnlineGameScene extends GameScene {
         super.create(data);
 
         this.socket = data.socket;
+        this.roomData = data.roomData;
         console.log("Using socket: ", this.socket);
 
-        this.localIsPolice = data.isLocalPolice;
+        this.localIsPolice = this.registry.get('localIsPolice');
+        this.isPlayer1 = this.registry.get('isPlayer1');
+        
         if(this.localIsPolice) {
+            this.playerPolicia.body.setAllowGravity(true);
             this.playerLadron.body.setAllowGravity(false);
         } else {
+            this.playerLadron.body.setAllowGravity(true);
             this.playerPolicia.body.setAllowGravity(false);
         }
 
@@ -40,7 +45,7 @@ class OnlineGameScene extends GameScene {
             }
             if (msg.type === 'SCENE_READY') {
                 console.log("OTHER SCENE IS READY!");
-                if (data.roomData.creatorUsername === data.userData.username) {
+                if (this.roomData.creatorUsername === data.userData.username) {
                     this.spawnRandomModifierOnline();
                 }
             }
@@ -161,7 +166,13 @@ class OnlineGameScene extends GameScene {
     }
 
     spawnItem(x, y) {
-    // Crear un sprite en esa posición con la imagen de 'Modificador'
+
+    console.log(`SPAWNING ITEM IN (${x}, ${y})`);
+
+    if (this.currentModifier) {
+        this.currentModifier.destroy();
+    }
+
     this.currentModifier = this.physics.add.sprite(x, y, 'bonificaciones');
         this.currentModifier.anims.play('item');
         this.currentModifier.body.setAllowGravity(false);
