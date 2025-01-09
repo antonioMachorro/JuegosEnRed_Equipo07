@@ -92,15 +92,17 @@ David Antonio Paz Gullón	[da.paz.2022@alumnos.urjc.es](mailto:da.paz.2022@alumn
 
   [3.17. Pantalla de Error de conexión	](#ajustes)
 
-[4. Arte	](#arte)
+[4. Descripción del protocolo	](#protocolo)
 
-  [4.1. Arte 2D	](#arte-2d)
+[5. Arte	](#arte)
 
-  [4.2. Audio	](#audio)
+  [5.1. Arte 2D	](#arte-2d)
 
-   [4.2.1. Música	](#música)
+  [5.2. Audio	](#audio)
 
-   [4.2.2. Efectos de sonido	](#efectos-de-sonido)
+   [5.2.1. Música	](#música)
+
+   [5.2.2. Efectos de sonido	](#efectos-de-sonido)
 
 [Anexo: Ejecución con .jar	](#arte)
 
@@ -575,6 +577,7 @@ El protocolo de comunicación implementado en Hotline Miauami define las interac
 A continuación, se detalla el intercambio de mensajes, su contenido y propósito dentro del sistema.
 
    **Mensajes Enviados por el Servidor al Cliente**
+   
 **SCENE_READY**
 * **Significado**: Indica que la escena del juego en el cliente está lista para interactuar.
 * **Datos**: Ningún dato adicional.
