@@ -1083,78 +1083,26 @@ class GameScene extends Phaser.Scene {
           this.PoliciaVelocity /= 2;
         });
         break;
-      case "red":
-        this.lanzarRed();
-        break;
+        
+        case "red":
+          this.LadronMovement = false;
+          this.canJumpLadron = false;
+          this.playerLadron.setVelocityX(0);
+          this.playerLadron.setVelocityY(0);
+          this.playerLadron.anims.play('thief_red');
+          this.time.delayedCall(3000, () => {
+              this.LadronMovement = true;
+              this.canJumpLadron = true;
+          });
+          break;
+      
       case "cepo":
         this.LadronVelocity /= 2;
-        this.time.delayedCall(3000, () => {
+        this.time.delayedCall(2000, () => {
           this.LadronVelocity *= 2;
         });
         break;
     }
-  }
-
-  lanzarRed() {
-    let redStartingX = this.policiaFacingRight
-      ? this.playerPolicia.x + 20
-      : this.playerPolicia.x - 20;
-
-    let red = this.physics.add
-      .sprite(redStartingX, this.playerPolicia.y, 'bonificaciones')
-      .setOrigin(0.5);
-    red.anims.play('red');
-    red.body.setAllowGravity(false);
-
-    let launchAnimation = this.tweens.add({
-      targets: red,
-      x: this.policiaFacingRight ? red.x + 100 : red.x - 100,
-      ease: "Power1",
-      duration: 500,
-      onComplete: () => {
-        console.log("DONE");
-        this.tweens.add({
-          targets: red,
-          alpha: 0,
-          duration: 200,
-          ease: "Linear",
-          onComplete: () => {
-            red.destroy();
-          },
-        });
-      },
-    });
-
-    this.physics.add.collider(
-      this.playerLadron,
-      red,
-      () => {
-        launchAnimation.stop();
-        this.tweens.add({
-          targets: red,
-          alpha: 0,
-          duration: 200,
-          ease: "Linear",
-          onComplete: () => {
-            red.destroy();
-          },
-        });
-
-        this.stopThief();
-      },
-      null,
-      this
-    );
-  }
-
-  stopThief() {
-    console.log("STOPING THIEF");
-    this.playerLadron.anims.play('thief_red')
-    this.LadronMovement = false;
-    this.time.delayedCall(2000, () => {
-        console.log("STOPED THIEF");
-        this.LadronMovement = true;
-    });
   }
 
   update(time, delta) {

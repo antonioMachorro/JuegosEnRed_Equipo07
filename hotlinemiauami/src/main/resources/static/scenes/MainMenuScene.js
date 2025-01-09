@@ -17,6 +17,7 @@ class MainMenuScene extends BaseScene {
         this.load.image('offline', './Interfaz/offline.png');
         this.load.image('borrar', './Interfaz/borrarAcc.png');
         this.load.image('marcoPause', './Interfaz/marcoPause.png');
+        this.load.image('tutorial', './Interfaz/tutorial.png');
 
         
         this.load.atlas(
@@ -73,6 +74,7 @@ class MainMenuScene extends BaseScene {
         // Crear botones y hacerlos interactivos
         const playButton = this.add.image(750, 560, 'Jugar').setInteractive();
         const creditsButton = this.add.image(1275, 720, 'Creditos').setInteractive();
+        const tutorialButton = this.add.image(1175, 720, 'tutorial').setInteractive();
         const exitButton = this.add.image(750, 680, 'Salir').setInteractive();
         const optionsButton = this.add.image(772, 620, 'Opciones').setInteractive();
         const deleteButton = this.add.image(1225, 720, 'borrar').setInteractive().setScale(0.1);
@@ -85,6 +87,10 @@ class MainMenuScene extends BaseScene {
         // Configuración de los botones
         creditsButton.on('pointerdown', () => {
             this.scene.start('CreditsScene'); // Cambiar a la escena de Créditos
+        });
+
+        tutorialButton.on('pointerdown', () => {
+            this.scene.start('TutorialScene'); // Cambiar a la escena de Créditos
         });
 
         playButton.on('pointerdown', () => {

@@ -19,7 +19,8 @@ import RoomSelectScene from './scenes/RoomSelectScene.js';
 import RoomCreateScene from './scenes/RoomCreateScene.js';
 import OnlineGameScene from './scenes/OnlineGameScene.js';
 import PlayerOutGameScene from './scenes/PlayerOutGameScene.js';
-
+import TutorialScene from './scenes/TutorialScene.js';
+import ControlesScene from './scenes/ControlesScene.js';
 
 
 
@@ -30,8 +31,7 @@ const config = {
     height: 1080,
     parent: 'gameContainer',  // Contenedor en el HTML
     scene: [TitleMenu, LoginScene, MainMenuScene, GameScene, LobbyScene, GameModeScene, RoleSelectScene, RoomScene, 
-            RoomSelectScene, RoomCreateScene, PauseScene, VictoryScene, CreditsScene, OptionsScene, CreateAccScene, ConnectionError, OnlineGameScene, 
-            PlayerOutGameScene],
+            RoomSelectScene, RoomCreateScene, PauseScene, VictoryScene, CreditsScene, OptionsScene, CreateAccScene, ConnectionError, OnlineGameScene, PlayerOutGameScene, TutorialScene, ControlesScene],
     pixelArt: true,
     physics: {
         default: 'arcade',
