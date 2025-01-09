@@ -14,6 +14,18 @@ class OnlineGameScene extends GameScene {
     create(data) {
         super.create(data);
 
+        // Overlay Cargando
+        this.loadingOverlay = this.add.graphics({ fillStyle: { color: 0x000000, alpha: 0.5 } });
+        this.loadingOverlay.fillRect(0, 0, this.cameras.main.width, this.cameras.main.height);
+        this.loadingOverlay.setDepth(10);
+        this.loadingOverlay.setVisible(true);
+
+        // Mensaje Cargando
+        this.loadingText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 170, 'Cargando...', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+        .setOrigin(0.5)
+        .setDepth(11)
+        .setVisible(true);
+
         this.pause = true;
         this.socket = data.socket;
         this.roomData = data.roomData;
@@ -39,6 +51,8 @@ class OnlineGameScene extends GameScene {
             const msg = JSON.parse(event.data);
 
             this.pause = false;
+            this.loadingOverlay.setVisible(false);
+            this.loadingText.setVisible(false);
 
             if (msg.type === 'ROUND_RESET') {
                 console.log("ROUND RESET RECEIVED");
@@ -61,6 +75,7 @@ class OnlineGameScene extends GameScene {
                     console.log("OTHER SCENE IS READY!");
                     if (this.roomData.creatorUsername === data.userData.username) {
                         this.spawnRandomModifierOnline();
+
                     }
                 }
                 if(msg.type === 'COLLECT_ITEM') {
