@@ -36,47 +36,59 @@ class OnlineGameScene extends GameScene {
 
         this.socket.onmessage = (event) => {
             const msg = JSON.parse(event.data);
-            if(msg.type === 'OTHER_PLAYER_UPDATE') {
-                this.handleOtherPlayerUpdate(msg);
+
+            if (msg.type === 'ROUND_RESET') {
+                console.log("ROUND RESET RECEIVED");
+        
+                this.playerPolicia.setPosition(1215, 705);
+                this.playerLadron.setPosition(740, 580);
+        
+                this.pauseUpdates = false;
             }
-            if(msg.type === 'SPAWN_ITEM') {
-                console.log("RECIEVED SPAWN ITEM MESSAGE");
-                this.spawnItem(msg.x, msg.y);
-            }
-            if (msg.type === 'SCENE_READY') {
-                console.log("OTHER SCENE IS READY!");
-                if (this.roomData.creatorUsername === data.userData.username) {
-                    this.spawnRandomModifierOnline();
+
+            if(!this.pauseUpdates) {
+                if(msg.type === 'OTHER_PLAYER_UPDATE') {
+                    this.handleOtherPlayerUpdate(msg);
                 }
-            }
-            if(msg.type === 'COLLECT_ITEM') {
-                this.setModifier(msg.item);
-            }
-            if(msg.type === 'ITEM_USED') {
-                this.useModifier();
-                setTimeout(() => {
-                    this.spawnRandomModifierOnline();
-                  }, 3000);
-            }
-            if(msg.type === 'TRAMPILLA_USED') {
-                switch(msg.trampillaId) {
-                    case 1:
-                        this.startTrampillaCooldown();
-                        break;
-                    case 2:
-                        this.startTrampillaCooldown1();
-                        break;
-                    case 3:
-                        this.startTrampillaCooldown2();
-                        break;
-                    default:
-                        console.log("No trampilla for this ID.");
-                        break;
+                if(msg.type === 'SPAWN_ITEM') {
+                    console.log("RECIEVED SPAWN ITEM MESSAGE");
+                    this.spawnItem(msg.x, msg.y);
                 }
-            }
-            if(msg.type === 'DOOR_USED') {
-                console.log(`Door: ${msg.door} will ${msg.action}!`);
-                this.handleDoorAction(msg.door, msg.action);
+                if (msg.type === 'SCENE_READY') {
+                    console.log("OTHER SCENE IS READY!");
+                    if (this.roomData.creatorUsername === data.userData.username) {
+                        this.spawnRandomModifierOnline();
+                    }
+                }
+                if(msg.type === 'COLLECT_ITEM') {
+                    this.setModifier(msg.item);
+                }
+                if(msg.type === 'ITEM_USED') {
+                    this.useModifier();
+                    setTimeout(() => {
+                        this.spawnRandomModifierOnline();
+                    }, 3000);
+                }
+                if(msg.type === 'TRAMPILLA_USED') {
+                    switch(msg.trampillaId) {
+                        case 1:
+                            this.startTrampillaCooldown();
+                            break;
+                        case 2:
+                            this.startTrampillaCooldown1();
+                            break;
+                        case 3:
+                            this.startTrampillaCooldown2();
+                            break;
+                        default:
+                            console.log("No trampilla for this ID.");
+                            break;
+                    }
+                }
+                if(msg.type === 'DOOR_USED') {
+                    console.log(`Door: ${msg.door} will ${msg.action}!`);
+                    this.handleDoorAction(msg.door, msg.action);
+                }
             }
         }
     }
@@ -111,6 +123,8 @@ class OnlineGameScene extends GameScene {
                 y: this.playerPolicia.y,
                 facingRight: this.policiaFacingRight,
                 animKey: currentAnim,
+                blockedLeft: this.playerPolicia.body.blocked.left,
+                blockedRight: this.playerPolicia.body.blocked.right,
             };
         } else {
 
@@ -123,6 +137,8 @@ class OnlineGameScene extends GameScene {
                 y: this.playerLadron.y,
                 facingRight: this.ladronFacingRight,
                 animKey: currentAnim,
+                blockedLeft: this.playerLadron.body.blocked.left,
+                blockedRight: this.playerLadron.body.blocked.right,
             };
         }
 
@@ -130,21 +146,42 @@ class OnlineGameScene extends GameScene {
     }
 
     handleOtherPlayerUpdate(msg) {
+
+        if(this.pauseUpdates) return;
+
         if(msg.isPolice) {
            this.playerPolicia.x = msg.x;
            this.playerPolicia.y = msg.y;
            this.playerPolicia.facingRight = msg.facingRight;
-            this.playerPolicia.flipX = !msg.facingRight;
-            if(msg.animKey) {
-                this.playerPolicia.anims.play(msg.animKey, true);
+           if (msg.blockedLeft || msg.blockedRight) {
+                if(msg.blockedLeft) {
+                    this.playerPolicia.flipX = false;
+                } else if(msg.blockedRight) {
+                    this.playerPolicia.flipX = true;
+                }
+                this.playerPolicia.anims.play("police_wall", true);
+            } else {
+                this.playerPolicia.flipX = !msg.facingRight;
+                if(msg.animKey) {
+                    this.playerPolicia.anims.play(msg.animKey, true);
+                }
             }
         } else {
             this.playerLadron.x = msg.x;
             this.playerLadron.y = msg.y;
             this.playerLadron.facingRight = msg.facingRight;
-            this.playerLadron.flipX = !msg.facingRight;
-            if(msg.animKey) {
-                this.playerLadron.anims.play(msg.animKey, true);
+            if (msg.blockedLeft || msg.blockedRight) {
+                if(msg.blockedLeft) {
+                    this.playerLadron.flipX = false;
+                } else if(msg.blockedRight) {
+                    this.playerLadron.flipX = true;
+                }
+                this.playerLadron.anims.play("thief_wall", true);
+            } else {
+                this.playerLadron.flipX = !msg.facingRight;
+                if(msg.animKey) {
+                    this.playerLadron.anims.play(msg.animKey, true);
+                }
             }
         }
     }

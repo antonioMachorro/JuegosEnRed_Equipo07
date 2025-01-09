@@ -110,6 +110,9 @@ public class RoomChatWebSocketHandler extends TextWebSocketHandler {
             case "DOOR_USED":
                 handleDoor(session, json);
                 break;
+            case "ROUND_RESET":
+                handleReset(session, json);
+                break;
             default:
                 break;
         }
@@ -159,6 +162,8 @@ public class RoomChatWebSocketHandler extends TextWebSocketHandler {
         double y = json.get("y").asDouble();
         boolean facingRight = json.get("facingRight").asBoolean();
         String animKey = json.get("animKey").asText();
+        boolean blockedLeft = json.has("blockedLeft") && json.get("blockedLeft").asBoolean();
+        boolean blockedRight = json.has("blockedRight") && json.get("blockedRight").asBoolean();
 
         ObjectNode update = objectMapper.createObjectNode();
         update.put("type", "OTHER_PLAYER_UPDATE");
@@ -167,6 +172,8 @@ public class RoomChatWebSocketHandler extends TextWebSocketHandler {
         update.put("y", y);
         update.put("facingRight", facingRight);
         update.put("animKey", animKey);
+        update.put("blockedLeft", blockedLeft);
+        update.put("blockedRight", blockedRight);
 
         Set<WebSocketSession> sessions = roomSessions.get(roomId);
         if(sessions == null) return;
@@ -215,6 +222,26 @@ public class RoomChatWebSocketHandler extends TextWebSocketHandler {
 
         ObjectNode ready = objectMapper.createObjectNode();
         ready.put("type", "SCENE_READY");
+
+        Set<WebSocketSession> sessions = roomSessions.get(roomId);
+        if(sessions == null) return;
+
+        TextMessage msg = new TextMessage(ready.toString());
+        for(WebSocketSession ws : sessions) {
+            if(ws.isOpen() && ws != session) {
+                ws.sendMessage(msg);
+            }
+        }
+    }
+
+    public void handleReset(WebSocketSession session, JsonNode json) throws IOException{
+        String roomId = (String) session.getAttributes().get("roomId");
+        if(roomId == null) {
+            return;
+        }
+
+        ObjectNode ready = objectMapper.createObjectNode();
+        ready.put("type", "ROUND_RESET");
 
         Set<WebSocketSession> sessions = roomSessions.get(roomId);
         if(sessions == null) return;

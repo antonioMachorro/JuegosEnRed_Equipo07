@@ -61,24 +61,6 @@ class GameScene extends Phaser.Scene {
 
     this.load.image("boton_victoria", "./Interfaz/boton_victoria.png");
 
-    this.load.atlas(
-      "policia",
-      "./Personajes/Policia_Spritesheet.png",
-      "./Personajes/policia_spritesheet.json"
-    );
-
-    this.load.atlas(
-        "ladron",
-        "./Personajes/Ladron_Spritesheet.png",
-        "./Personajes/ladron_spritesheet.json"
-    )
-
-    this.load.atlas(
-        "bonificaciones",
-        "./Objetos/Bonificaciones_Spritesheet.png",
-        "./Objetos/bonificaciones_spritesheet.json"
-      );
-
     this.load.audio("game_music", "./Musica/GAMEPLAYYYY.wav");
     this.load.audio("agarrar_objeto", "./Musica/Sonidos/agarrar_objeto_policia.wav");
     this.load.audio("activar_trampa", "./Musica/Sonidos/ladron_activa_trampa.wav");
@@ -948,246 +930,11 @@ class GameScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     this.input.keyboard.on("keydown-ESC", () => {
-      this.scene.launch("PauseScene");
-      this.scene.pause();
+      if(!this.isOnline) {
+        this.scene.launch("PauseScene");
+        this.scene.pause();
+      }
     });
-
-
-    // Animaciones
-    {
-    //Animaciones policia
-    this.anims.create({
-      key: "police_idle",
-      frames: this.anims.generateFrameNames("policia", {
-        prefix: "idle",
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 6,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "police_run",
-      frames: this.anims.generateFrameNames("policia", {
-        prefix: "run",
-        end: 5,
-        zeroPad: 3,
-      }),
-      frameRate: 6,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "police_jump",
-      frames: this.anims.generateFrameNames("policia", {
-        prefix: "jump",
-        end: 8,
-        zeroPad: 3,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "police_wall",
-      frames: this.anims.generateFrameNames("policia", {
-        prefix: "wall",
-        end: 3,
-        zeroPad: 3,
-      }),
-      frameRate: 6,
-      repeat: -1,
-    });
-
-    this.anims.create({
-        key: "police_walljump",
-        frames: this.anims.generateFrameNames("policia", {
-          prefix: "walljump",
-          end: 9,
-          zeroPad: 3,
-        }),
-        frameRate: 15,
-        repeat: -1,
-      });
-
-      this.anims.create({
-        key: "police_idle_shine",
-        frames: this.anims.generateFrameNames("policia", {
-          prefix: "idleshine",
-          end: 3,
-          zeroPad: 3,
-        }),
-        frameRate: 6,
-        repeat: -1,
-      });
-
-      this.anims.create({
-        key: "police_run_shine",
-        frames: this.anims.generateFrameNames("policia", {
-          prefix: "runshine",
-          end: 5,
-          zeroPad: 3,
-        }),
-        frameRate: 6,
-        repeat: -1,
-      });
-
-      this.anims.create({
-        key: "police_jump_shine",
-        frames: this.anims.generateFrameNames("policia", {
-          prefix: "jumpshine",
-          end: 8,
-          zeroPad: 3,
-        }),
-        frameRate: 10,
-        repeat: -1,
-      });
-
-      this.anims.create({
-        key: "police_wall_shine",
-        frames: this.anims.generateFrameNames("policia", {
-          prefix: "wallshine",
-          end: 3,
-          zeroPad: 3,
-        }),
-        frameRate: 6,
-        repeat: -1,
-      });
-
-      this.anims.create({
-        key: "police_wall_jump_shine",
-        frames: this.anims.generateFrameNames("policia", {
-          prefix: "walljumpshine",
-          end: 9,
-          zeroPad: 3,
-        }),
-        frameRate: 15,
-        repeat: -1,
-      });
-
-
-
-    //Animaciones ladron
-    this.anims.create({
-        key: "thief_idle",
-        frames: this.anims.generateFrameNames("ladron", {
-          prefix: "idle",
-          end: 4,
-          zeroPad: 3,
-        }),
-        frameRate: 6,
-        repeat: -1,
-      });
-  
-      this.anims.create({
-        key: "thief_run",
-        frames: this.anims.generateFrameNames("ladron", {
-          prefix: "run",
-          end: 7,
-          zeroPad: 3,
-        }),
-        frameRate: 6,
-        repeat: -1,
-      });
-  
-      this.anims.create({
-        key: "thief_jump",
-        frames: this.anims.generateFrameNames("ladron", {
-          prefix: "jump",
-          end: 7,
-          zeroPad: 3,
-        }),
-        frameRate: 10,
-        repeat: -1,
-      });
-  
-      this.anims.create({
-        key: "thief_wall",
-        frames: this.anims.generateFrameNames("ladron", {
-          prefix: "wall",
-          end: 4,
-          zeroPad: 3,
-        }),
-        frameRate: 6,
-        repeat: -1,
-      });
-  
-      this.anims.create({
-          key: "thief_walljump",
-          frames: this.anims.generateFrameNames("ladron", {
-            prefix: "walljump",
-            end: 9,
-            zeroPad: 3,
-          }),
-          frameRate: 15,
-          repeat: -1,
-        });
-
-      this.anims.create({
-        key: "thief_red",
-        frames: this.anims.generateFrameNames("ladron", {
-          prefix: "red",
-          end: 4,
-          zeroPad: 3,
-        }),
-        frameRate: 6,
-        repeat: -1,
-      });
-    
-    //Animaciones objetos
-    this.anims.create({
-        key: "rosquilla",
-        frames: this.anims.generateFrameNames("bonificaciones", {
-            prefix: "dona",
-            end: 7,
-            zeroPad: 3,
-        }),
-        repeat: -1,
-    });
-
-    this.anims.create({
-        key: "red",
-        frames: this.anims.generateFrameNames("bonificaciones", {
-            prefix: "red",
-            end: 7,
-            zeroPad: 3,
-        }),
-        repeat: -1,
-    });
-
-    this.anims.create({
-        key: "reloj",
-        frames: this.anims.generateFrameNames("bonificaciones", {
-            prefix: "reloj",
-            end: 7,
-            zeroPad: 3,
-        }),
-        repeat: -1,
-    });
-
-    this.anims.create({
-        key: "cepo",
-        frames: this.anims.generateFrameNames("bonificaciones", {
-            prefix: "cepo",
-            end: 7,
-            zeroPad: 3,
-        }),
-        repeat: -1,
-    });
-
-    this.anims.create({
-        key: "item",
-        frames: this.anims.generateFrameNames("bonificaciones", {
-            prefix: "objeto",
-            end: 4,
-            zeroPad: 3,
-        }),
-        frameRate: 8,
-        repeat: -1,
-    });
-
-    }
 
     // Generar un objeto Modificador en una posición aleatoria
     this.spawnRandomModifier();
@@ -1988,13 +1735,13 @@ class GameScene extends Phaser.Scene {
     const isLocalWinner = (isWinnerPolice && this.localIsPolice) || (!isWinnerPolice && !this.localIsPolice);
 
     if(isLocalWinner) {
-      this.incrementScore(this.isPlayer1);
+      this.incrementScore(this.isPlayer1, winner);
     } else {
-      this.incrementScore(!this.isPlayer1);
+      this.incrementScore(!this.isPlayer1, winner);
     }
   }
 
-  incrementScore(isPlayer1) {
+  incrementScore(isPlayer1, winner) {
     const player = isPlayer1 ? "player1Rounds" : "player2Rounds";
     const playerNum = isPlayer1 ? 1 : 2;
     const playerRounds = this.registry.get(player) + 1;
@@ -2004,7 +1751,7 @@ class GameScene extends Phaser.Scene {
     if(playerRounds >= 3) {
       this.playVictory(playerNum);
     } else {
-      this.playRoundWin(isPlayer1 ? "Policía" : "Ladrón");
+      this.playRoundWin(winner === 'policia' ? "Policía" : "Ladrón");
     }
   }
 
@@ -2058,7 +1805,11 @@ class GameScene extends Phaser.Scene {
 
     this.time.delayedCall(fadeDuration, () => {
       this.time.timeScale = 1;
-      //this.cameras.main.fadeIn(0);
+
+      if (this.isOnline && this.socket && this.socket.readyState === WebSocket.OPEN) {
+        this.socket.send(JSON.stringify({ type: 'ROUND_RESET' }));
+      }
+
       this.scene.restart();
       this.input.keyboard.enabled = true;
     });
