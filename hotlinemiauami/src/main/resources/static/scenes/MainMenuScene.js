@@ -119,7 +119,7 @@ class MainMenuScene extends BaseScene {
                 wordWrap: { width: 600 }
             }).setDepth(2);
 
-            this.add.text(confirmText.x + 20, confirmText.y + 20, 'Escribe tu contraseña para confirmar.', {
+            const writeText =this.add.text(confirmText.x + 20, confirmText.y + 20, 'Escribe tu contraseña para confirmar.', {
                 fontFamily: 'retro-computer',
                 fontSize: '12px',
                 fill: '#ffffff',
@@ -166,6 +166,7 @@ class MainMenuScene extends BaseScene {
 
                     marco.destroy();
                     confirmText.destroy();
+                    writeText.destroy();
                     yesButton.destroy();
                     noButton.destroy();
                     passwordInput.remove();
@@ -177,6 +178,7 @@ class MainMenuScene extends BaseScene {
             noButton.on('pointerdown', () => {
                 marco.destroy();
                 confirmText.destroy();
+                writeText.destroy();
                 yesButton.destroy();
                 noButton.destroy();
                 passwordInput.remove();
