@@ -255,7 +255,7 @@ class LobbyScene extends Phaser.Scene {
         this.initChat(userData.username);
         //this.fetchMessages();
 
-        const roomNameText = this.add.text(1100,400, `ROOM: ${data.roomData.roomName}`, {
+        const roomNameText = this.add.text(1100,400, `SALA: ${data.roomData.roomName}`, {
             fontFamily: 'retro-computer', 
             fontSize: '12px', 
             fill: '#ffffff' 

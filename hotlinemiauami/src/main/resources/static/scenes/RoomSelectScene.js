@@ -20,7 +20,7 @@ class RoomSelectScene extends Phaser.Scene {
         this.Interfaz = this.add.image(960, 500, 'menuPrincipal').setScale(3.8);
         this.Interfaz = this.add.image(960, 540, 'marcoPause').setScale(3.2);
 
-        this.add.text(width/2, 280, 'Selecciona un lobby...', {
+        this.add.text(width/2, 280, 'Selecciona una sala', {
             fontFamily: 'retro-computer',
             fontSize: '48px',
             fill: '#fff',
@@ -45,7 +45,7 @@ class RoomSelectScene extends Phaser.Scene {
         const mask = maskShape.createGeometryMask();
         this.roomListContainer.setMask(mask);
 
-        const refreshButton = this.add.text(width/2, 800, 'Refresh', {
+        const refreshButton = this.add.text(width/2, 800, 'Actualizar', {
             fontFamily: 'retro-computer',
             fontSize: '32px',
             fill: '#fff',

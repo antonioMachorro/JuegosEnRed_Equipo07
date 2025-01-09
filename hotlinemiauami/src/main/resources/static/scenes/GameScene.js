@@ -1807,6 +1807,7 @@ class GameScene extends Phaser.Scene {
       this.time.timeScale = 1;
 
       if (this.isOnline && this.socket && this.socket.readyState === WebSocket.OPEN) {
+        this.pause=true;
         this.socket.send(JSON.stringify({ type: 'ROUND_RESET' }));
       }
 
