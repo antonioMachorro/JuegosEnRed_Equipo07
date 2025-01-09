@@ -97,15 +97,17 @@ class OnlineGameScene extends GameScene {
 
     update(time, delta) {
 
-        if(this.localIsPolice)
-        {
-            this.updatePoliceMovement(time, delta);
+        if(!this.pause) {
+            if(this.localIsPolice)
+            {
+                this.updatePoliceMovement(time, delta);
 
-            this.sendLocalPlayerData(true);
-        } else {
-            this.updateThiefMovement(time, delta);
+                this.sendLocalPlayerData(true);
+            } else {
+                this.updateThiefMovement(time, delta);
 
-            this.sendLocalPlayerData(false);
+                this.sendLocalPlayerData(false);
+            }
         }
     }
 
