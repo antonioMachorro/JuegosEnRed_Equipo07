@@ -131,8 +131,15 @@ class LobbyScene extends Phaser.Scene {
                 content: "salió al chat.",
                 isSystem: true
             };
-            this.chatSocket.send(JSON.stringify(exitMessage));
 
+            const msg = {
+                type: "SET_READY",
+                username: data.userData.username,
+                isReady: false
+            };
+
+            this.chatSocket.send(JSON.stringify(exitMessage));
+            this.chatSocket.send(JSON.stringify(msg));
             this.chatSocket.close();
 
             try {
