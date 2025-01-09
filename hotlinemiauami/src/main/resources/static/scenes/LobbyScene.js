@@ -104,8 +104,7 @@ class LobbyScene extends Phaser.Scene {
 
         this.chatSocket.onclose = (evt) => {
             console.log("Websocket closed: ", evt);
-            alert("Connection to the server was lost. Returning to the main menu.");
-            this.scene.start('MainMenuScene');
+            this.scene.start('GameModeScene');
         }
 
         console.log(data.roomData);

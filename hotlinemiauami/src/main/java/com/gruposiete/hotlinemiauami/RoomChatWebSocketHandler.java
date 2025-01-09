@@ -103,7 +103,6 @@ public class RoomChatWebSocketHandler extends TextWebSocketHandler {
             if(session != null && !sessions.isEmpty()) {
                 ObjectNode disconnected = objectMapper.createObjectNode();
                 disconnected.put("type", "DISCONNECTED");
-                disconnected.put("message", "The other player has disconnected");
 
                 TextMessage msg = new TextMessage(disconnected.toString());
                 for(WebSocketSession ws : sessions) {

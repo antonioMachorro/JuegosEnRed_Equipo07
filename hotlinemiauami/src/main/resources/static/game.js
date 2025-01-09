@@ -30,7 +30,8 @@ const config = {
     height: 1080,
     parent: 'gameContainer',  // Contenedor en el HTML
     scene: [TitleMenu, LoginScene, MainMenuScene, GameScene, LobbyScene, GameModeScene, RoleSelectScene, RoomScene, 
-            RoomSelectScene, RoomCreateScene, PauseScene, VictoryScene, CreditsScene, OptionsScene, CreateAccScene, ConnectionError, OnlineGameScene, PlayerOutGameScene],
+            RoomSelectScene, RoomCreateScene, PauseScene, VictoryScene, CreditsScene, OptionsScene, CreateAccScene, ConnectionError, OnlineGameScene, 
+            PlayerOutGameScene],
     pixelArt: true,
     physics: {
         default: 'arcade',

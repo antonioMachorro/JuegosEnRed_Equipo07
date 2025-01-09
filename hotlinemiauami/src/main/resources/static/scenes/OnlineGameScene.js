@@ -64,8 +64,8 @@ class OnlineGameScene extends GameScene {
             }
 
             if(msg.type === 'DISCONNECTED') {
-                alert(msg.message);
-                this.scene.start('LobbyScene', {
+                this.socket.close();
+                this.scene.start('PlayerOutGameScene', {
                     roomData: this.roomData,
                     userData: this.registry.get('userData'),
                 });
