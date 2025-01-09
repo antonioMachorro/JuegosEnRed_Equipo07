@@ -576,7 +576,9 @@ El protocolo de comunicación implementado en Hotline Miauami define las interac
 
 A continuación, se detalla el intercambio de mensajes, su contenido y propósito dentro del sistema.
 
+
    **Mensajes Enviados por el Servidor al Cliente**
+   
    
 **SCENE_READY**
 * **Significado**: Indica que la escena del juego en el cliente está lista para interactuar.
@@ -613,8 +615,11 @@ A continuación, se detalla el intercambio de mensajes, su contenido y propósit
 	* **content**: Contenido del mensaje.
 	* **isSystem**: Indica si es un mensaje del sistema.
 * **Uso**: Comunicación entre los jugadores dentro del lobby.
+  
 
 	**Mensajes Enviados por el Servidor al Cliente**
+
+  
 **ROUND_RESET**
 * **Significado**: Resetea la posición de los jugadores para iniciar una nueva ronda.
 * **Datos**: Ningún dato adicional.
