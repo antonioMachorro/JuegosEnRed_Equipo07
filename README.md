@@ -379,25 +379,27 @@ En el modo en red, se usarán los siguientes controles:
 
 El diagrama de clases muestra la estructura principal de clases de la aplicación. Se puede encontrar:
 
-  * **Controladores**: como ApiStatusController, UsersController, ChatController, que gestionan las solicitudes HTTP y actúan como intermediarios entre los servicios y la interfaz de usuario.
+  * **Controladores**: como ApiStatusController, UsersController, ChatController y RoomController, que gestionan las solicitudes HTTP y actúan como intermediarios entre los servicios y la interfaz de usuario.
 
-  * **Servicios**: como ApiStatusService y UserService, que contienen la lógica empresarial de la aplicación.
+  * **Servicios**: como ApiStatusService, UserService y RoomService, que contienen la lógica empresarial de la aplicación.
 
   * **Repositorios**: que es UserDAO que proporciona acceso a datos almacenados en JSON para mantener la persistencia de los usuarios.
     
   *  **DTOs** (Data Transfer Objects): como LoginDTO, UserDTO y LogoutDTO que facilitan el intercambio de datos entre capas.
 
-  *  **Entidad:** que es User que es el modelo principal que representa la información de los usuarios
+  *  **Entidad:** que es User que es el modelo principal que representa la información de los usuarios.
   
   *  **Manejador:** Que es WebSocketEchoHandler que maneja las conexiones WebSocket para el intercambio de mensajes en tiempo real.
 
   *  **Main:** Que es HotlineMiauamiApplications que configura y arranca la aplicación SpringBoot.
 
-En cuanto al funcionamiento general, se puede observar cómo los controladores dependen de los servicios para añadir lógica. A su vez, dichos servicios utilizan repositorios para el acceso a datos persistentes. Cuando un cliente interactúa con la aplicación (Inicio de sesión o envío de mensajes) la solicitud pasa por un controlador. Dicho controlador delega la lógica al servicio correspondiente.
+  *  **Config:** Que es WebSocketConfig que registra y configura los manejadores de WebSocket, definiendo las rutas asociadas
 
-Si es necesario, el servicio accede a los datos persistentes a través del UserDAO. Finalmente la respuesta vuelve al cliente a través del controlador.
+En cuanto al funcionamiento general, se puede observar cómo los controladores dependen de los servicios para implementar la lógica de negocio. A su vez, dichos servicios utilizan repositorios para acceder a datos persistentes. 
 
-También hay flujos específicos como el del WebSocket que procesa los mensajes enviados en tiempo real mediante el WebSocketEchoHandler, como la autenticación que se usa validando LoginDTO y UserService (con encriptación de contraseñas) o como la conexión de usuarios que gestiona el estado activo de los usuarios mediante ApiStatusService.
+Cuando un cliente interactúa con la aplicación (creación de salas, envío de mensajes o autenticación), la solicitud pasa por un controlador que delega la lógica al servicio correspondiente. Si es necesario, el servicio accede a los datos persistentes a través del UserDAO. 
+
+Finalmente, la respuesta vuelve al cliente a través del controlador. Además, los flujos de WebSocket permiten la comunicación en tiempo real, como el intercambio de mensajes o la sincronización de estados de sala, utilizando RoomChatWebSocketHandler o WebSocketEchoHandler. También se incluyen flujos como la autenticación, que valida LoginDTO mediante UserService, y el estado activo de los usuarios, gestionado por ApiStatusService.
 
 
 # **3. Interfaz** 
