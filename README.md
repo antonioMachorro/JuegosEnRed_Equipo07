@@ -92,15 +92,17 @@ David Antonio Paz Gullón	[da.paz.2022@alumnos.urjc.es](mailto:da.paz.2022@alumn
 
   [3.17. Pantalla de Error de conexión	](#ajustes)
 
-[4. Arte	](#arte)
+[4. Descripción del protocolo	](#protocolo)
 
-  [4.1. Arte 2D	](#arte-2d)
+[5. Arte	](#arte)
 
-  [4.2. Audio	](#audio)
+  [5.1. Arte 2D	](#arte-2d)
 
-   [4.2.1. Música	](#música)
+  [5.2. Audio	](#audio)
 
-   [4.2.2. Efectos de sonido	](#efectos-de-sonido)
+   [5.2.1. Música	](#música)
+
+   [5.2.2. Efectos de sonido	](#efectos-de-sonido)
 
 [Anexo: Ejecución con .jar	](#arte)
 
@@ -550,16 +552,136 @@ Es la sala multijugador antes del juego para dos jugadores. Hay un chat de texto
 
 ![ErrorConexion](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/ErrorConexion.png)
 
-**3.17. Pantalla de Error de conexión** 
+**3.18. Pantalla juego en red** 
 
    Esta pantalla muestra las distintas opciones de juego en red. Donde los usuarios podrán unirse a una sala si ya está creada o crear una nueva sala si todavía no se ha creado.
 
 ![crearUnirse](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/crearUnirse.png)
 
+**3.19. Pantalla crear sala** 
 
-# **4. Arte**
+   En esta sala se podrán crear salas de juego, los usuarios sólo tendrán que introducir un nombre a la sala y darle al botón de crear. Si los jugadores hacen click en el botón de salir volverán a la sala de selección de tipo de juego.
 
-   **4.1. Arte 2D** 
+![crear](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/crear.png)
+
+**3.20. Pantalla de unirse a una sala** 
+
+   En esta sala los usuarios podrán unirse a una sala que ya se está creada. Simplemente tienen que buscar, o bien, el nombre de la sala o buscar el nombre del usuario que indica el creador de la sala. Esta pantalla también cuenta con un botón de actualizar que servirá para actualizar las salas que ya se han creado.También puede retroceder al menú de pantalla de juego en red haciendo click en el botón de salir.
+
+
+![unirse](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/unirse.png)
+
+# **4. Descripción del protocolo**
+El protocolo de comunicación implementado en Hotline Miauami define las interacciones entre los clientes y el servidor, facilitando la experiencia multijugador en tiempo real. Este protocolo utiliza WebSockets para mensajes instantáneos y HTTP para operaciones complementarias, como la gestión de usuarios y salas. A través de este sistema, se garantiza una sincronización fluida entre los jugadores, permitiendo actualizaciones constantes del estado de los personajes, el uso de ítems y la interacción con elementos del mapa, entre otras funcionalidades esenciales.
+
+A continuación, se detalla el intercambio de mensajes, su contenido y propósito dentro del sistema.
+
+
+   **Mensajes Enviados por el Servidor al Cliente**
+   
+   
+**SCENE_READY**
+* **Significado**: Indica que la escena del juego en el cliente está lista para interactuar.
+* **Datos**: Ningún dato adicional.
+* **Uso**: Se envía cuando se carga la escena de juego.
+
+**LOCAL_PLAYER_UPDATE**
+* **Significado**: Actualiza la posición y estado del jugador local.
+* **Datos**:
+	* **isPolice**: Indica si el jugador es policía o ladrón.
+	* **x, y**: Coordenadas actuales del jugador.
+	* **facingRight**: Dirección hacia la que mira el jugador.
+	* **animKey**: Animación actual.
+	* **blockedLeft, blockedRight**: Estado de colisión lateral del jugador.
+* **Uso**: Se envía en cada ciclo de actualización para sincronizar la posición y el estado del jugador con el servidor.
+  
+**SPAWN_ITEM**
+* **Significado**: Solicita la aparición de un nuevo objeto en una posición aleatoria.
+* **Datos**:
+
+* **Uso**: Se envía cuando es necesario generar un nuevo objeto de bonificación.
+	* **x, y**: Coordenadas actuales del objeto. 
+**SET_READY**
+* **Significado**: Indica que la escena del juego en el cliente está lista para interactuar.
+* **Datos**: 
+	* **username**: Nombre del jugador.
+	* **isReady**: Estado de disponibilidad (true).
+* **Uso**: Se utiliza para señalar la preparación del jugador en el lobby.
+  
+**CHAT**
+* **Significado**: Envío de un mensaje al chat de la sala.
+* **Datos**:
+	* **username**: Nombre del jugador.
+	* **content**: Contenido del mensaje.
+	* **isSystem**: Indica si es un mensaje del sistema.
+* **Uso**: Comunicación entre los jugadores dentro del lobby.
+  
+
+	**Mensajes Enviados por el Servidor al Cliente**
+
+  
+**ROUND_RESET**
+* **Significado**: Resetea la posición de los jugadores para iniciar una nueva ronda.
+* **Datos**: Ningún dato adicional.
+* **Uso**: Sincronización al comienzo de una ronda.
+  
+**OTHER_PLAYER_UPDATE**
+* **Significado**: Actualiza la posición y estado del jugador remoto.
+* **Datos**:
+	* **isPolice, x, y, facingRight, animKey, blockedLeft, blockedRight**(similares a LOCAL_PLAYER_UPDATE).
+* **Uso**: Sincronización de los jugadores en tiempo real.
+  
+**SPAWN_ITEM**
+* **Significado**: Instruye la aparición de un objeto de bonificación en una posición determinada.
+* **Datos**:
+	* **x, y**: Coordenadas del objeto. 
+* **Uso**: Generación de objetos en el juego.
+  
+**COLLECT_ITEM**
+* **Significado**: Indica que un jugador ha recogido un objeto.
+* **Datos**: 
+	* **item**: Tipo o identificador del objeto recogido.
+* **Uso**: Actualización del estado del jugador con el nuevo objeto.
+  
+**ITEM_USED**
+* **Significado**: Notifica que un objeto fue utilizado por un jugador.
+* **Datos**: Ningún dato adicional.
+* **Uso**: Coordinación entre clientes para gestionar el uso de objetos.
+  
+**TRAMPILLA_USED**
+* **Significado**: Informa que se utilizó una trampilla específica.
+* **Datos**:
+	* **trampillaId**: Identificador de la trampilla usada.
+* **Uso**: Activación de efectos relacionados con trampillas.
+  
+**DOOR_USED**
+* **Significado**: Indica que una puerta fue utilizada.
+* **Datos**:
+	* **door**: Identificador de la puerta.
+	* **action**: Acción ejecutada (abrir/cerrar).
+* **Uso**: Control de estados de puertas en la escena.
+  
+**ROOM_UPDATED**
+* **Significado**: Actualización de los datos de la sala.
+* **Datos**:
+	* **creatorUsername**: Información de jugador.
+	* **secondUsername**: Información de jugador.
+	* **creatorReady**: Información de estado.
+	* **secondReady**: Información de estado.
+* **Uso**: Gestión de estados en el lobby.
+  
+**CHAT**
+* **Significado**: Mensaje del chat enviado por otro jugador o el sistema.
+* **Datos**:
+	* **username**
+	* **content**
+	* **isSystem** (similares a CHAT enviado por el cliente).
+* **Uso**: Comunicación dentro del chat de la sala.
+
+
+# **5. Arte**
+
+   **5.1. Arte 2D** 
 
 **Concepto General**
 
@@ -669,9 +791,9 @@ También se ha implementado una animación de un destello, como retroalimentaci�
 
 ## 
 
-**4.2. Audio** 
+**5.2. Audio** 
 
-**4.2.1. Música**  
+**5.2.1. Música**  
 
 *“Hotline Miauami”* cuenta con música de **Persecución Synthwave (Retrowave)** 
 
@@ -683,7 +805,7 @@ Se han producido canciones para:
 
 * **Gameplay:** La música es más intensa y dinámica aportando a los jugadores tensión sonora que acompaña muy bien a lo que está sucediendo en pantalla. De nuevo, el uso de sintetizadores graves y percusión acorde hacen una experiencia sonora equilibrada con lo que se está viendo por pantalla.
 
-**4.2.2. Efectos de sonido**
+**5.2.2. Efectos de sonido**
 
 Los efectos sonoros son esenciales para proporcionar retroalimentación al jugador. Acompañan perfectamente al gameplay y son pequeños detalles que aportan dinamismo a la partida y los menús. El juego cuenta con efectos de sonido para:
 
