@@ -38,6 +38,8 @@ class OnlineGameScene extends GameScene {
         this.socket.onmessage = (event) => {
             const msg = JSON.parse(event.data);
 
+            this.pause = false;
+
             if (msg.type === 'ROUND_RESET') {
                 console.log("ROUND RESET RECEIVED");
         
@@ -57,7 +59,6 @@ class OnlineGameScene extends GameScene {
                 }
                 if (msg.type === 'SCENE_READY') {
                     console.log("OTHER SCENE IS READY!");
-                    this.pause = false;
                     if (this.roomData.creatorUsername === data.userData.username) {
                         this.spawnRandomModifierOnline();
                     }
