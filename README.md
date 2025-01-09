@@ -568,8 +568,14 @@ Es la sala multijugador antes del juego para dos jugadores. Hay un chat de texto
 
    En esta sala los usuarios podrán unirse a una sala que ya se está creada. Simplemente tienen que buscar, o bien, el nombre de la sala o buscar el nombre del usuario que indica el creador de la sala. Esta pantalla también cuenta con un botón de actualizar que servirá para actualizar las salas que ya se han creado.También puede retroceder al menú de pantalla de juego en red haciendo click en el botón de salir.
 
-
 ![unirse](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/unirse.png)
+
+**3.21. Menú Tutorial Juego** 
+
+   En este menú el jugador podrá informarse sobre los objetivos y acciones del juego, así como los controles para controlar a los dos personajes.
+
+![tutorialJuego](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/tutorialJuego.png) ![tutorialControles](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/tutorialControles.png)
+
 
 # **4. Descripción del protocolo**
 El protocolo de comunicación implementado en Hotline Miauami define las interacciones entre los clientes y el servidor, facilitando la experiencia multijugador en tiempo real. Este protocolo utiliza WebSockets para mensajes instantáneos y HTTP para operaciones complementarias, como la gestión de usuarios y salas. A través de este sistema, se garantiza una sincronización fluida entre los jugadores, permitiendo actualizaciones constantes del estado de los personajes, el uso de ítems y la interacción con elementos del mapa, entre otras funcionalidades esenciales.
