@@ -39,7 +39,7 @@ class LobbyScene extends Phaser.Scene {
 
         console.log(window.location.hostname);
 
-        const wsUrl = `ws://${window.location.hostname}:8080/ws/room/${data.roomData.roomId}`;
+        const wsUrl = `ws://${window.location.hostname}:8080/ws/room/${data.roomData.roomId}?username=${userData.username}`;
         this.chatSocket = new WebSocket(wsUrl);
 
         this.chatSocket.onopen = () => {
@@ -104,6 +104,8 @@ class LobbyScene extends Phaser.Scene {
 
         this.chatSocket.onclose = (evt) => {
             console.log("Websocket closed: ", evt);
+            alert("Connection to the server was lost. Returning to the main menu.");
+            this.scene.start('MainMenuScene');
         }
 
         console.log(data.roomData);

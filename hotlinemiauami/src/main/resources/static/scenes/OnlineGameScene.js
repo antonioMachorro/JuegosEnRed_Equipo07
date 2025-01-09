@@ -63,6 +63,14 @@ class OnlineGameScene extends GameScene {
                 this.pauseUpdates = false;
             }
 
+            if(msg.type === 'DISCONNECTED') {
+                alert(msg.message);
+                this.scene.start('LobbyScene', {
+                    roomData: this.roomData,
+                    userData: this.registry.get('userData'),
+                });
+            }
+
             if(!this.pauseUpdates) {
                 if(msg.type === 'OTHER_PLAYER_UPDATE') {
                     this.handleOtherPlayerUpdate(msg);

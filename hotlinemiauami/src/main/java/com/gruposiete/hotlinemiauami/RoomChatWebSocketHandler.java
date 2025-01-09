@@ -1,6 +1,7 @@
 package com.gruposiete.hotlinemiauami;
 
 import java.io.IOException;
+import java.net.http.WebSocket;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,7 +63,27 @@ public class RoomChatWebSocketHandler extends TextWebSocketHandler {
         String[] segments = path.split("/");
         String roomId = segments[segments.length - 1];
 
+        String query = session.getUri().getQuery();
+        String username = null;
+
+        if(query != null) {
+            for(String param : query.split("&")) {
+                String[] keyValue = param.split("=");
+                if(keyValue.length == 2 && keyValue[0].equals("username")) {
+                    username = keyValue[1];
+                    break;
+                }
+            }
+        }
+
+        if (username == null) {
+            throw new IllegalArgumentException("Username is required in the WebSocket query parameters.");
+        } else {
+            System.out.println(username);
+        }
+
         session.getAttributes().put("roomId", roomId);
+        session.getAttributes().put("username", username);
 
         addSessionToRoom(roomId, session);
     }
@@ -70,8 +91,33 @@ public class RoomChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String roomId = (String) session.getAttributes().get("roomId");
-        if(roomId != null) {
+        String username = (String) session.getAttributes().get("username");
+
+        if(roomId != null && username != null) {
+
+            Room updatedRoom = roomService.leaveRoom(roomId, username);
+
             removeSessionFromRoom(roomId, session);
+
+            Set<WebSocketSession> sessions = roomSessions.get(roomId);
+            if(session != null && !sessions.isEmpty()) {
+                ObjectNode disconnected = objectMapper.createObjectNode();
+                disconnected.put("type", "DISCONNECTED");
+                disconnected.put("message", "The other player has disconnected");
+
+                TextMessage msg = new TextMessage(disconnected.toString());
+                for(WebSocketSession ws : sessions) {
+                    if(ws.isOpen()) {
+                        ws.sendMessage(msg);
+                    }
+                }
+            }
+
+            if (updatedRoom != null) {
+                broadcastRoomUpdate(roomId, updatedRoom);
+            } else {
+                roomSessions.remove(roomId);
+            }
         }
         super.afterConnectionClosed(session, status);
     }
