@@ -513,12 +513,13 @@ En esta pantalla también aparecen los usuarios conectados y el estado del servi
 
 ![MenuOpciones](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/MenuOpciones.png)
 
-**3.13. Juego en Red**
+**3.13. Sala multijugador**
 
-   Es el lobby en el que se implementará el juego para dos jugadores desde clientes distintos, por el momento se ha creado un chat de texto donde los jugadores que están conectados al servidor podrán comunicarse por mensajes, también hay un filtro de palabras malsonantes, si uno de los jugadores escribe “cooked” en el chat aparecerán asteriscos.
+Es la sala multijugador antes del juego para dos jugadores. Hay un chat de texto por el que se pueden comunicar los jugadores. Las salas están limitadas a dos personas y las dos tienen que darle al botón “Listo” para comenzar la partida.
 
 
-![JuegoRed](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/JuegoRed.png)
+
+![JuegoRed](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/salaIn.png)
 
 
 **3.14. Créditos** 
