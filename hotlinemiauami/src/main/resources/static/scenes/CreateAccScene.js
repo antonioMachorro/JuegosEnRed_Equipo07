@@ -194,7 +194,6 @@ class CreateAccScene extends Phaser.Scene {
             }
         } catch (error) {
             console.error("Error during creation:", error);
-            alert("Error de conexión.");
         } finally {
             this.showLoading(false);
         }

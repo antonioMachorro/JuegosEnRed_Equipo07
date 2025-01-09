@@ -42,6 +42,25 @@ class MainMenuScene extends BaseScene {
 
         super.create();
 
+        // Overlay mensajes
+        this.alertsOverlay = this.add.graphics({ fillStyle: { color: 0x000000, alpha: 0.65 } });
+        this.alertsOverlay.fillRect(this.cameras.main.centerX - 400, this.cameras.main.centerY + 150, 800, 40);
+        this.alertsOverlay.setDepth(10);
+        this.alertsOverlay.setVisible(false);
+
+        // Mensaje Ajustes guardados
+        this.eliminatedText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 170, 'Cuenta eliminada exitosamente', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+          .setOrigin(0.5)
+          .setDepth(11)
+          .setVisible(false);
+
+         // Mensaje Credenciales invalidas
+        this.invalidCredentialsText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 170, 'Credenciales inválidas', { fontFamily: 'retro-computer', fontfontSize: '32px', fill: '#ffffff' })
+            .setOrigin(0.5)
+            .setDepth(11)
+            .setVisible(false);
+
+
         this.userCountText = null;
         this.userCountNum = null;
         this.serverStatusLabel = null;
@@ -133,7 +152,9 @@ class MainMenuScene extends BaseScene {
 
                 const password = passwordInput.value;
                 if(password === '') {
-                    alert("Invalid credentials.");
+                    this.clearAlerts();
+                    this.alertsOverlay.setVisible(true);
+                    this.invalidCredentialsText.setVisible(true);
                 } else {
                     await this.deleteButton(password);
 
@@ -434,7 +455,9 @@ class MainMenuScene extends BaseScene {
               });
     
             if (response.ok) {
-                alert('Cuenta eliminada exitosamente');
+                clearAlerts();
+                this.alertsOverlay.setVisible(true);
+                this.eliminatedText.setVisible(true);
                 // Limpia los datos del usuario en el registro
                 this.registry.set('userData', null);
                 // Redirigir al menú inicial
@@ -577,6 +600,13 @@ class MainMenuScene extends BaseScene {
             this.scene.pause('MainMenuScene');
             this.scene.launch('ConnectionError', { originScene: 'MainMenuScene' });
         }
+    }
+
+    clearAlerts() {
+        // Borrar las alertas de la pantalla
+        this.alertsOverlay.setVisible(false);
+        this.eliminatedText.setVisible(false);
+        this.invalidCredentialsText.setVisible(false);
     }
 
     async logoutUser() {

@@ -29,6 +29,36 @@ class OptionsScene extends Phaser.Scene {
         })
         .setOrigin(0.5);
   
+      // Overlay mensajes
+      this.alertsOverlay = this.add.graphics({ fillStyle: { color: 0x000000, alpha: 0.65 } });
+      this.alertsOverlay.fillRect(0, this.cameras.main.centerY + 420, 2000, 80);
+      this.alertsOverlay.setDepth(10);
+      this.alertsOverlay.setVisible(false);
+
+        // Mensaje Ajustes guardados
+        this.savedText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 465, 'Ajustes guardados con éxito', { fontFamily: 'retro-computer', fontSize: '50px', fill: '#ffffff' })
+          .setOrigin(0.5)
+          .setDepth(11)
+          .setVisible(false);
+
+        // Mensaje Error al guardar
+        this.errorText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 465, 'Error al guardar ajustes', { fontFamily: 'retro-computer', fontSize: '50px', fill: '#ffffff' })
+          .setOrigin(0.5)
+          .setDepth(11)
+          .setVisible(false);
+
+        // Mensaje No cambios realizados
+        this.noChangesText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 465, 'No has realizado ningún cambio', { fontFamily: 'retro-computer', fontSize: '50px', fill: '#ffffff' })
+          .setOrigin(0.5)
+          .setDepth(11)
+          .setVisible(false);
+
+        // Mensaje Usuario no encontrado
+        this.userNotFoundText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY + 465, 'Usuario no encontrado', { fontFamily: 'retro-computer', fontSize: '50px', fill: '#ffffff' })
+          .setOrigin(0.5)
+          .setDepth(11)
+          .setVisible(false);
+
       // Mostrar el volumen actual
       const initialVolume = this.game.audioManager.getVolume();
       this.volumeText = this.add
@@ -103,6 +133,16 @@ class OptionsScene extends Phaser.Scene {
       });
     }
   
+    clearAlerts() {
+      // Borrar las alertas de la pantalla
+      this.alertsOverlay.setVisible(false);
+      this.savedText.setVisible(false);
+      this.errorText.setVisible(false);
+      this.noChangesText.setVisible(false);
+      this.userNotFoundText.setVisible(false);
+    }
+
+
     /**
      * Cambia el volumen del juego
      * @param {number} delta Cambio incremental del volumen (positivo o negativo)
@@ -162,7 +202,9 @@ class OptionsScene extends Phaser.Scene {
       }
   
       if (Object.keys(updateData).length === 0) {
-        alert("No has realizado ningún cambio.");
+        this.clearAlerts();
+        this.alertsOverlay.setVisible(true);
+        this.noChangesText.setVisible(true);
         return;
       }
   
@@ -175,19 +217,27 @@ class OptionsScene extends Phaser.Scene {
       })
         .then((response) => {
           if (response.ok) {
-            alert("Ajustes guardados con éxito.");
+            this.clearAlerts();
+            this.alertsOverlay.setVisible(true);
+            this.savedText.setVisible(true);
             this.passwordField.value = "";
           } else if (response.status === 404) {
-            alert("Usuario no encontrado.");
+            this.clearAlerts();
+            this.alertsOverlay.setVisible(true);
+            this.userNotFoundText.setVisible(true);
           } else {
+            this.clearAlerts();
+            this.alertsOverlay.setVisible(true);
+            this.errorText.setVisible(true);
             response.text().then((text) => {
-              alert(`Error al guardar ajustes: ${text}`);
             });
           }
         })
         .catch((error) => {
           console.error("Error al guardar ajustes:", error);
-          alert("Error de conexión con el servidor.");
+          this.clearAlerts();
+          this.alertsOverlay.setVisible(true);
+          this.errorText.setVisible(true);
         });
     }
   

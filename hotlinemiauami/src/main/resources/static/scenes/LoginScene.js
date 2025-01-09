@@ -149,7 +149,6 @@ class LoginScene extends Phaser.Scene {
           return;
         }
       } else {
-        alert("Error fetching users.")
         throw new Error("An error ocurred during fetching users.");
       }
 
