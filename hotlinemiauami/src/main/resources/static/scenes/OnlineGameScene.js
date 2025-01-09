@@ -14,6 +14,7 @@ class OnlineGameScene extends GameScene {
     create(data) {
         super.create(data);
 
+        this.pause = true;
         this.socket = data.socket;
         this.roomData = data.roomData;
         console.log("Using socket: ", this.socket);
@@ -56,6 +57,7 @@ class OnlineGameScene extends GameScene {
                 }
                 if (msg.type === 'SCENE_READY') {
                     console.log("OTHER SCENE IS READY!");
+                    this.pause = false;
                     if (this.roomData.creatorUsername === data.userData.username) {
                         this.spawnRandomModifierOnline();
                     }
