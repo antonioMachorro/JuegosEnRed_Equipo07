@@ -513,12 +513,13 @@ En esta pantalla también aparecen los usuarios conectados y el estado del servi
 
 ![MenuOpciones](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/MenuOpciones.png)
 
-**3.13. Juego en Red**
+**3.13. Sala multijugador**
 
-   Es el lobby en el que se implementará el juego para dos jugadores desde clientes distintos, por el momento se ha creado un chat de texto donde los jugadores que están conectados al servidor podrán comunicarse por mensajes, también hay un filtro de palabras malsonantes, si uno de los jugadores escribe “cooked” en el chat aparecerán asteriscos.
+Es la sala multijugador antes del juego para dos jugadores. Hay un chat de texto por el que se pueden comunicar los jugadores. Las salas están limitadas a dos personas y las dos tienen que darle al botón “Listo” para comenzar la partida.
 
 
-![JuegoRed](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/JuegoRed.png)
+
+![salaIn](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/salaIn.png)
 
 
 **3.14. Créditos** 
@@ -548,6 +549,13 @@ En esta pantalla también aparecen los usuarios conectados y el estado del servi
    Esta pantalla aparece automáticamente cuando se pierde la conexión con el servidor. Nos muestra un mensaje de error y un botón de reintentar que vuelve a la pantalla anterior para comprobar si ha vuelto la conexión.
 
 ![ErrorConexion](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/ErrorConexion.png)
+
+**3.17. Pantalla de Error de conexión** 
+
+   Esta pantalla muestra las distintas opciones de juego en red. Donde los usuarios podrán unirse a una sala si ya está creada o crear una nueva sala si todavía no se ha creado.
+
+![crearUnirse](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/crearUnirse.png)
+
 
 # **4. Arte**
 
