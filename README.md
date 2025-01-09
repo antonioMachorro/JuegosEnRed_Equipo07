@@ -519,7 +519,7 @@ Es la sala multijugador antes del juego para dos jugadores. Hay un chat de texto
 
 
 
-![JuegoRed](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/salaIn.png)
+![salaIn](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/salaIn.png)
 
 
 **3.14. Créditos** 
@@ -549,6 +549,13 @@ Es la sala multijugador antes del juego para dos jugadores. Hay un chat de texto
    Esta pantalla aparece automáticamente cuando se pierde la conexión con el servidor. Nos muestra un mensaje de error y un botón de reintentar que vuelve a la pantalla anterior para comprobar si ha vuelto la conexión.
 
 ![ErrorConexion](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/ErrorConexion.png)
+
+**3.17. Pantalla de Error de conexión** 
+
+   Esta pantalla muestra las distintas opciones de juego en red. Donde los usuarios podrán unirse a una sala si ya está creada o crear una nueva sala si todavía no se ha creado.
+
+![crearUnirse](https://raw.githubusercontent.com/antonioMachorro/JuegosEnRed_Equipo07/main/ImagenesREADME/crearUnirse.png)
+
 
 # **4. Arte**
 
